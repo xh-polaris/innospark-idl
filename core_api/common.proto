@@ -130,8 +130,9 @@ message GetHistoryResp {
     int32 feedback = 13; // 反馈类型
     int32 userType = 14; // 用户类型, 如system, assistant, user
   }
-  repeated MessageList messageList = 1;
-  bool hasMore = 2;
+  basic.Response resp = 1;
+  repeated MessageList messageList = 2;
+  bool hasMore = 3;
 }
 
 // 获取智能体列表
@@ -145,7 +146,8 @@ message ListAgentsResp {
     string botName = 3;
     string botDescription = 4;
   }
-  repeated Agent agents = 1;
+  basic.Response resp = 1;
+  repeated Agent agents = 2;
 }
 
 // 反馈, 包括点赞, 点踩, 删除等
@@ -154,7 +156,8 @@ message FeedbackReq {
     int32 type = 1;
     string content = 2;
   }
-  string action = 1;
-  string messageId = 2;
-  Feedback feedback = 3;
+  basic.Response resp = 1;
+  string action = 2;
+  string messageId = 3;
+  Feedback feedback = 4;
 }
