@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package core_api;
+
+option go_package = "core_api";
+
+import "basic/page.proto";
+import "google/protobuf/struct.proto";
+
+/* 通用Message类定义 */
+
+/* 接口请求与响应定义 */
+/* 请求与响应必须相邻定义, 且符合如下规范: */
+/* 只有code和msg的响应, 使用re.Response, 无需重复定义 */
+/* 请求以Req结尾, 响应以Resp结尾, 除此外同一接口请求与响应命名相同 */
+/* 根据含义确定前缀: 获取单个[Get], 分页获取[List], 更新[Update], 删除[Delete] */
+/* 形如GetInfo的接口, 存在重复命名的可能, 需要加上所属模块以区分, 如GetUserInfo|GetBotInfo */
+/* 字段较复杂且可能出现多处重用的, 即使有字段冗余也可以使用通用Message类作为字段 */

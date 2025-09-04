@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package basic;
+
+option go_package = "basic";
+
+message Page {
+  optional int64 page = 1;
+  optional int64 size = 2;
+  optional string lastToken = 3;
+  optional bool backward = 4;
+  optional int64 offset = 5;
+}
