@@ -1,0 +1,57 @@
+name: Generate Golang Code By Kitex
+
+# 向idl分支push时会触发这个workflow
+on:
+  push:
+    branches: [ "idl" ]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      # 检出当前仓库的 main 分支(生成代码存放的分支)
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main  # 检出 main 分支到默认目录（当前工作区）
+          path: .    # 覆盖默认路径，确保后续操作在 main 分支目录
+
+      # 将当前仓库的idl分支(也就是接口定义分支)加入到action runner的工作目录
+      - name: Checkout IDL branch
+        uses: actions/checkout@v3
+        with:
+          ref: idl
+          path: ./idl
+
+      # 配置 Go 环境
+      - name: Setup Golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.24"
+
+      # 安装代码生成工具
+      - name: Install Protobuf Compiler
+        run: |
+          go install github.com/zeromicro/go-zero/tools/goctl@latest
+          go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
+          goctl env check --install --verbose --force
+
+      # 指定生成代码的目录为 psych-idl, 然后生成代码
+      - name: Update
+        run: |
+          rm -rf kitex_gen
+          export IDL_DIR=./idl
+          chmod 755 /home/runner/go/bin/protoc
+          sh build.sh
+
+      # 提交生成后的代码到main分支
+      - name: Commit And Push
+        run: |
+          git config --global user.email "bot@xhpolaris.com"
+          git config --global user.name "${{ github.actor }}"
+          git add kitex_gen
+          git commit -m "${{ github.event.head_commit.message }}"
+          git push origin main
