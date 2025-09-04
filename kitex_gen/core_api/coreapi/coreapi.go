@@ -3,15 +3,56 @@
 package coreapi
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
+	streaming "github.com/cloudwego/kitex/pkg/streaming"
+	proto "github.com/cloudwego/prutal"
+	basic "github.com/xh-polaris/innospark-idl/kitex_gen/basic"
 	core_api "github.com/xh-polaris/innospark-idl/kitex_gen/core_api"
 )
 
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
-var serviceMethods = map[string]kitex.MethodInfo{}
+var serviceMethods = map[string]kitex.MethodInfo{
+	"Completion": kitex.NewMethodInfo(
+		completionHandler,
+		newCompletionArgs,
+		newCompletionResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingServer),
+	),
+	"ListHistory": kitex.NewMethodInfo(
+		listHistoryHandler,
+		newListHistoryArgs,
+		newListHistoryResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"GetHistory": kitex.NewMethodInfo(
+		getHistoryHandler,
+		newGetHistoryArgs,
+		newGetHistoryResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"ListAgents": kitex.NewMethodInfo(
+		listAgentsHandler,
+		newListAgentsArgs,
+		newListAgentsResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"Feedback": kitex.NewMethodInfo(
+		feedbackHandler,
+		newFeedbackArgs,
+		newFeedbackResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+}
 
 var (
 	coreApiServiceInfo                = NewServiceInfo()
@@ -36,7 +77,7 @@ func serviceInfoForClient() *kitex.ServiceInfo {
 
 // NewServiceInfo creates a new ServiceInfo containing all methods
 func NewServiceInfo() *kitex.ServiceInfo {
-	return newServiceInfo(false, true, true)
+	return newServiceInfo(true, true, true)
 }
 
 // NewServiceInfo creates a new ServiceInfo containing non-streaming methods
@@ -77,6 +118,574 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
+func completionHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	streamingArgs, ok := arg.(*streaming.Args)
+	if !ok {
+		return errInvalidMessageType
+	}
+	st := streamingArgs.Stream
+	stream := &coreApiCompletionServer{st}
+	req := new(core_api.CompletionReq)
+	if err := st.RecvMsg(req); err != nil {
+		return err
+	}
+	return handler.(core_api.CoreApi).Completion(req, stream)
+}
+
+type coreApiCompletionClient struct {
+	streaming.Stream
+}
+
+func (x *coreApiCompletionClient) DoFinish(err error) {
+	if finisher, ok := x.Stream.(streaming.WithDoFinish); ok {
+		finisher.DoFinish(err)
+	} else {
+		panic(fmt.Sprintf("streaming.WithDoFinish is not implemented by %T", x.Stream))
+	}
+}
+func (x *coreApiCompletionClient) Recv() (*core_api.SSEEvent, error) {
+	m := new(core_api.SSEEvent)
+	return m, x.Stream.RecvMsg(m)
+}
+
+type coreApiCompletionServer struct {
+	streaming.Stream
+}
+
+func (x *coreApiCompletionServer) Send(m *core_api.SSEEvent) error {
+	return x.Stream.SendMsg(m)
+}
+
+func newCompletionArgs() interface{} {
+	return &CompletionArgs{}
+}
+
+func newCompletionResult() interface{} {
+	return &CompletionResult{}
+}
+
+type CompletionArgs struct {
+	Req *core_api.CompletionReq
+}
+
+func (p *CompletionArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CompletionArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.CompletionReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CompletionArgs_Req_DEFAULT *core_api.CompletionReq
+
+func (p *CompletionArgs) GetReq() *core_api.CompletionReq {
+	if !p.IsSetReq() {
+		return CompletionArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CompletionArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CompletionArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CompletionResult struct {
+	Success *core_api.SSEEvent
+}
+
+var CompletionResult_Success_DEFAULT *core_api.SSEEvent
+
+func (p *CompletionResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CompletionResult) Unmarshal(in []byte) error {
+	msg := new(core_api.SSEEvent)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CompletionResult) GetSuccess() *core_api.SSEEvent {
+	if !p.IsSetSuccess() {
+		return CompletionResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CompletionResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.SSEEvent)
+}
+
+func (p *CompletionResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CompletionResult) GetResult() interface{} {
+	return p.Success
+}
+
+func listHistoryHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.ListHistoryReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).ListHistory(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *ListHistoryArgs:
+		success, err := handler.(core_api.CoreApi).ListHistory(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*ListHistoryResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newListHistoryArgs() interface{} {
+	return &ListHistoryArgs{}
+}
+
+func newListHistoryResult() interface{} {
+	return &ListHistoryResult{}
+}
+
+type ListHistoryArgs struct {
+	Req *core_api.ListHistoryReq
+}
+
+func (p *ListHistoryArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *ListHistoryArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.ListHistoryReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var ListHistoryArgs_Req_DEFAULT *core_api.ListHistoryReq
+
+func (p *ListHistoryArgs) GetReq() *core_api.ListHistoryReq {
+	if !p.IsSetReq() {
+		return ListHistoryArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *ListHistoryArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ListHistoryArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type ListHistoryResult struct {
+	Success *core_api.ListHistoryResp
+}
+
+var ListHistoryResult_Success_DEFAULT *core_api.ListHistoryResp
+
+func (p *ListHistoryResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *ListHistoryResult) Unmarshal(in []byte) error {
+	msg := new(core_api.ListHistoryResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *ListHistoryResult) GetSuccess() *core_api.ListHistoryResp {
+	if !p.IsSetSuccess() {
+		return ListHistoryResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *ListHistoryResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.ListHistoryResp)
+}
+
+func (p *ListHistoryResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ListHistoryResult) GetResult() interface{} {
+	return p.Success
+}
+
+func getHistoryHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.GetHistoryReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).GetHistory(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *GetHistoryArgs:
+		success, err := handler.(core_api.CoreApi).GetHistory(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*GetHistoryResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newGetHistoryArgs() interface{} {
+	return &GetHistoryArgs{}
+}
+
+func newGetHistoryResult() interface{} {
+	return &GetHistoryResult{}
+}
+
+type GetHistoryArgs struct {
+	Req *core_api.GetHistoryReq
+}
+
+func (p *GetHistoryArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *GetHistoryArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.GetHistoryReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var GetHistoryArgs_Req_DEFAULT *core_api.GetHistoryReq
+
+func (p *GetHistoryArgs) GetReq() *core_api.GetHistoryReq {
+	if !p.IsSetReq() {
+		return GetHistoryArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *GetHistoryArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *GetHistoryArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type GetHistoryResult struct {
+	Success *core_api.GetHistoryResp
+}
+
+var GetHistoryResult_Success_DEFAULT *core_api.GetHistoryResp
+
+func (p *GetHistoryResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *GetHistoryResult) Unmarshal(in []byte) error {
+	msg := new(core_api.GetHistoryResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *GetHistoryResult) GetSuccess() *core_api.GetHistoryResp {
+	if !p.IsSetSuccess() {
+		return GetHistoryResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *GetHistoryResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.GetHistoryResp)
+}
+
+func (p *GetHistoryResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *GetHistoryResult) GetResult() interface{} {
+	return p.Success
+}
+
+func listAgentsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.ListAgentsReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).ListAgents(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *ListAgentsArgs:
+		success, err := handler.(core_api.CoreApi).ListAgents(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*ListAgentsResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newListAgentsArgs() interface{} {
+	return &ListAgentsArgs{}
+}
+
+func newListAgentsResult() interface{} {
+	return &ListAgentsResult{}
+}
+
+type ListAgentsArgs struct {
+	Req *core_api.ListAgentsReq
+}
+
+func (p *ListAgentsArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *ListAgentsArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.ListAgentsReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var ListAgentsArgs_Req_DEFAULT *core_api.ListAgentsReq
+
+func (p *ListAgentsArgs) GetReq() *core_api.ListAgentsReq {
+	if !p.IsSetReq() {
+		return ListAgentsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *ListAgentsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ListAgentsArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type ListAgentsResult struct {
+	Success *core_api.ListAgentsResp
+}
+
+var ListAgentsResult_Success_DEFAULT *core_api.ListAgentsResp
+
+func (p *ListAgentsResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *ListAgentsResult) Unmarshal(in []byte) error {
+	msg := new(core_api.ListAgentsResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *ListAgentsResult) GetSuccess() *core_api.ListAgentsResp {
+	if !p.IsSetSuccess() {
+		return ListAgentsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *ListAgentsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.ListAgentsResp)
+}
+
+func (p *ListAgentsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ListAgentsResult) GetResult() interface{} {
+	return p.Success
+}
+
+func feedbackHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.FeedbackReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).Feedback(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *FeedbackArgs:
+		success, err := handler.(core_api.CoreApi).Feedback(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*FeedbackResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newFeedbackArgs() interface{} {
+	return &FeedbackArgs{}
+}
+
+func newFeedbackResult() interface{} {
+	return &FeedbackResult{}
+}
+
+type FeedbackArgs struct {
+	Req *core_api.FeedbackReq
+}
+
+func (p *FeedbackArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *FeedbackArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.FeedbackReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var FeedbackArgs_Req_DEFAULT *core_api.FeedbackReq
+
+func (p *FeedbackArgs) GetReq() *core_api.FeedbackReq {
+	if !p.IsSetReq() {
+		return FeedbackArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *FeedbackArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *FeedbackArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type FeedbackResult struct {
+	Success *basic.Response
+}
+
+var FeedbackResult_Success_DEFAULT *basic.Response
+
+func (p *FeedbackResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *FeedbackResult) Unmarshal(in []byte) error {
+	msg := new(basic.Response)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *FeedbackResult) GetSuccess() *basic.Response {
+	if !p.IsSetSuccess() {
+		return FeedbackResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *FeedbackResult) SetSuccess(x interface{}) {
+	p.Success = x.(*basic.Response)
+}
+
+func (p *FeedbackResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *FeedbackResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -85,4 +694,65 @@ func newServiceClient(c client.Client) *kClient {
 	return &kClient{
 		c: c,
 	}
+}
+
+func (p *kClient) Completion(ctx context.Context, req *core_api.CompletionReq) (CoreApi_CompletionClient, error) {
+	streamClient, ok := p.c.(client.Streaming)
+	if !ok {
+		return nil, fmt.Errorf("client not support streaming")
+	}
+	res := new(streaming.Result)
+	err := streamClient.Stream(ctx, "Completion", nil, res)
+	if err != nil {
+		return nil, err
+	}
+	stream := &coreApiCompletionClient{res.Stream}
+
+	if err := stream.Stream.SendMsg(req); err != nil {
+		return nil, err
+	}
+	if err := stream.Stream.Close(); err != nil {
+		return nil, err
+	}
+	return stream, nil
+}
+
+func (p *kClient) ListHistory(ctx context.Context, Req *core_api.ListHistoryReq) (r *core_api.ListHistoryResp, err error) {
+	var _args ListHistoryArgs
+	_args.Req = Req
+	var _result ListHistoryResult
+	if err = p.c.Call(ctx, "ListHistory", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetHistory(ctx context.Context, Req *core_api.GetHistoryReq) (r *core_api.GetHistoryResp, err error) {
+	var _args GetHistoryArgs
+	_args.Req = Req
+	var _result GetHistoryResult
+	if err = p.c.Call(ctx, "GetHistory", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq) (r *core_api.ListAgentsResp, err error) {
+	var _args ListAgentsArgs
+	_args.Req = Req
+	var _result ListAgentsResult
+	if err = p.c.Call(ctx, "ListAgents", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq) (r *basic.Response, err error) {
+	var _args FeedbackArgs
+	_args.Req = Req
+	var _result FeedbackResult
+	if err = p.c.Call(ctx, "Feedback", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
 }

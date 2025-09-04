@@ -3,17 +3,42 @@
 package coreapi
 
 import (
+	"context"
 	client "github.com/cloudwego/kitex/client"
+	callopt "github.com/cloudwego/kitex/client/callopt"
+	streamcall "github.com/cloudwego/kitex/client/callopt/streamcall"
+	streamclient "github.com/cloudwego/kitex/client/streamclient"
+	streaming "github.com/cloudwego/kitex/pkg/streaming"
+	transport "github.com/cloudwego/kitex/transport"
+	basic "github.com/xh-polaris/innospark-idl/kitex_gen/basic"
+	core_api "github.com/xh-polaris/innospark-idl/kitex_gen/core_api"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
+	Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...callopt.Option) (stream CoreApi_CompletionClient, err error)
+	ListHistory(ctx context.Context, Req *core_api.ListHistoryReq, callOptions ...callopt.Option) (r *core_api.ListHistoryResp, err error)
+	GetHistory(ctx context.Context, Req *core_api.GetHistoryReq, callOptions ...callopt.Option) (r *core_api.GetHistoryResp, err error)
+	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
+	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error)
+}
+
+// StreamClient is designed to provide Interface for Streaming APIs.
+type StreamClient interface {
+	Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionClient, err error)
+}
+
+type CoreApi_CompletionClient interface {
+	streaming.Stream
+	Recv() (*core_api.SSEEvent, error)
 }
 
 // NewClient creates a client for the service defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
+
+	options = append(options, client.WithTransportProtocol(transport.GRPC))
 
 	options = append(options, opts...)
 
@@ -37,4 +62,64 @@ func MustNewClient(destService string, opts ...client.Option) Client {
 
 type kCoreApiClient struct {
 	*kClient
+}
+
+func (p *kCoreApiClient) Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...callopt.Option) (stream CoreApi_CompletionClient, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Completion(ctx, Req)
+}
+
+func (p *kCoreApiClient) ListHistory(ctx context.Context, Req *core_api.ListHistoryReq, callOptions ...callopt.Option) (r *core_api.ListHistoryResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.ListHistory(ctx, Req)
+}
+
+func (p *kCoreApiClient) GetHistory(ctx context.Context, Req *core_api.GetHistoryReq, callOptions ...callopt.Option) (r *core_api.GetHistoryResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetHistory(ctx, Req)
+}
+
+func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.ListAgents(ctx, Req)
+}
+
+func (p *kCoreApiClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Feedback(ctx, Req)
+}
+
+// NewStreamClient creates a stream client for the service's streaming APIs defined in IDL.
+func NewStreamClient(destService string, opts ...streamclient.Option) (StreamClient, error) {
+	var options []client.Option
+	options = append(options, client.WithDestService(destService))
+	options = append(options, client.WithTransportProtocol(transport.GRPC))
+	options = append(options, streamclient.GetClientOptions(opts)...)
+
+	kc, err := client.NewClient(serviceInfoForStreamClient(), options...)
+	if err != nil {
+		return nil, err
+	}
+	return &kCoreApiStreamClient{
+		kClient: newServiceClient(kc),
+	}, nil
+}
+
+// MustNewStreamClient creates a stream client for the service's streaming APIs defined in IDL.
+// It panics if any error occurs.
+func MustNewStreamClient(destService string, opts ...streamclient.Option) StreamClient {
+	kc, err := NewStreamClient(destService, opts...)
+	if err != nil {
+		panic(err)
+	}
+	return kc
+}
+
+type kCoreApiStreamClient struct {
+	*kClient
+}
+
+func (p *kCoreApiStreamClient) Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionClient, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, streamcall.GetCallOptions(callOptions))
+	return p.kClient.Completion(ctx, Req)
 }

@@ -2,5 +2,22 @@
 
 package core_api
 
+import (
+	"context"
+	"github.com/xh-polaris/innospark-idl/kitex_gen/basic"
+
+	"github.com/cloudwego/kitex/pkg/streaming"
+)
+
 type CoreApi interface {
+	Completion(req *CompletionReq, stream CoreApi_CompletionServer) (err error)
+	ListHistory(ctx context.Context, req *ListHistoryReq) (res *ListHistoryResp, err error)
+	GetHistory(ctx context.Context, req *GetHistoryReq) (res *GetHistoryResp, err error)
+	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
+	Feedback(ctx context.Context, req *FeedbackReq) (res *basic.Response, err error)
+}
+
+type CoreApi_CompletionServer interface {
+	streaming.Stream
+	Send(*SSEEvent) error
 }
