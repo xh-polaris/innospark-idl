@@ -6,6 +6,22 @@ option go_package = "core_api";
 
 import "core_api/common.proto";
 import "basic/http.proto";
+import "basic/re.proto";
 
 service CoreApi {
+  rpc Completion(CompletionReq) returns (stream SSEEvent){
+    option(http.post) = "/v1/completion";
+  }
+  rpc ListHistory(ListHistoryReq) returns (ListHistoryResp) {
+    option(http.post) = "/history/list";
+  }
+  rpc GetHistory(GetHistoryReq) returns (GetHistoryResp) {
+    option(http.post) = "/history/get";
+  }
+  rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
+    option(http.post) = "/agents/list";
+  }
+  rpc Feedback(FeedbackReq) returns (basic.Response) {
+    option(http.post) = "/feedback";
+  }
 }
