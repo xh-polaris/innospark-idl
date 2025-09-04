@@ -523,8 +523,9 @@ func (x *GetHistoryReq) GetConversationId() string {
 }
 
 type GetHistoryResp struct {
-	MessageList []*GetHistoryResp_MessageList `protobuf:"bytes,1,rep,name=messageList" json:"messageList,omitempty"`
-	HasMore     bool                          `protobuf:"varint,2,opt,name=hasMore" json:"hasMore,omitempty"`
+	Resp        *basic.Response               `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	MessageList []*GetHistoryResp_MessageList `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
+	HasMore     bool                          `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
 }
 
 func (x *GetHistoryResp) Reset() { *x = GetHistoryResp{} }
@@ -532,6 +533,13 @@ func (x *GetHistoryResp) Reset() { *x = GetHistoryResp{} }
 func (x *GetHistoryResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
 func (x *GetHistoryResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *GetHistoryResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
 
 func (x *GetHistoryResp) GetMessageList() []*GetHistoryResp_MessageList {
 	if x != nil {
@@ -706,7 +714,8 @@ func (x *ListAgentsReq) GetPage() *basic.Page {
 }
 
 type ListAgentsResp struct {
-	Agents []*ListAgentsResp_Agent `protobuf:"bytes,1,rep,name=agents" json:"agents,omitempty"`
+	Resp   *basic.Response         `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Agents []*ListAgentsResp_Agent `protobuf:"bytes,2,rep,name=agents" json:"agents,omitempty"`
 }
 
 func (x *ListAgentsResp) Reset() { *x = ListAgentsResp{} }
@@ -714,6 +723,13 @@ func (x *ListAgentsResp) Reset() { *x = ListAgentsResp{} }
 func (x *ListAgentsResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
 func (x *ListAgentsResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ListAgentsResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
 
 func (x *ListAgentsResp) GetAgents() []*ListAgentsResp_Agent {
 	if x != nil {
@@ -765,9 +781,10 @@ func (x *ListAgentsResp_Agent) GetBotDescription() string {
 
 // 反馈, 包括点赞, 点踩, 删除等
 type FeedbackReq struct {
-	Action    string                `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
-	MessageId string                `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`
-	Feedback  *FeedbackReq_Feedback `protobuf:"bytes,3,opt,name=feedback" json:"feedback,omitempty"`
+	Resp      *basic.Response       `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Action    string                `protobuf:"bytes,2,opt,name=action" json:"action,omitempty"`
+	MessageId string                `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
+	Feedback  *FeedbackReq_Feedback `protobuf:"bytes,4,opt,name=feedback" json:"feedback,omitempty"`
 }
 
 func (x *FeedbackReq) Reset() { *x = FeedbackReq{} }
@@ -775,6 +792,13 @@ func (x *FeedbackReq) Reset() { *x = FeedbackReq{} }
 func (x *FeedbackReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
 func (x *FeedbackReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *FeedbackReq) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
 
 func (x *FeedbackReq) GetAction() string {
 	if x != nil {
