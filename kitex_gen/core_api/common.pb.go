@@ -145,11 +145,10 @@ func (x *SSEEvent) GetEventType() int32 {
 // 消息元数据
 type EventMeta struct {
 	MessageId        string `protobuf:"bytes,1,opt,name=messageId" json:"messageId,omitempty"`                // 消息id
-	LocalMessageId   string `protobuf:"bytes,2,opt,name=localMessageId" json:"localMessageId,omitempty"`      // 本地消息id
-	ConversationId   string `protobuf:"bytes,3,opt,name=conversationId" json:"conversationId,omitempty"`      // 对话id
-	SectionId        string `protobuf:"bytes,4,opt,name=sectionId" json:"sectionId,omitempty"`                // 段id
-	MessageIndex     int32  `protobuf:"varint,5,opt,name=messageIndex" json:"messageIndex,omitempty"`         // 消息索引
-	ConversationType int32  `protobuf:"varint,6,opt,name=conversationType" json:"conversationType,omitempty"` // 对话类型
+	ConversationId   string `protobuf:"bytes,2,opt,name=conversationId" json:"conversationId,omitempty"`      // 对话id
+	SectionId        string `protobuf:"bytes,3,opt,name=sectionId" json:"sectionId,omitempty"`                // 段id
+	MessageIndex     int32  `protobuf:"varint,4,opt,name=messageIndex" json:"messageIndex,omitempty"`         // 消息索引
+	ConversationType int32  `protobuf:"varint,5,opt,name=conversationType" json:"conversationType,omitempty"` // 对话类型
 }
 
 func (x *EventMeta) Reset() { *x = EventMeta{} }
@@ -161,13 +160,6 @@ func (x *EventMeta) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) 
 func (x *EventMeta) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
-	}
-	return ""
-}
-
-func (x *EventMeta) GetLocalMessageId() string {
-	if x != nil {
-		return x.LocalMessageId
 	}
 	return ""
 }
@@ -230,15 +222,14 @@ func (x *EventModel) GetBotName() string {
 type EventChat struct {
 	Message          *EventChat_Message `protobuf:"bytes,1,opt,name=message" json:"message,omitempty"`                    // 消息内容
 	MessageId        string             `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`                // 消息id
-	LocalMessageId   string             `protobuf:"bytes,3,opt,name=localMessageId" json:"localMessageId,omitempty"`      // 本地消息id
-	ConversationId   string             `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`      // 对话id
-	SectionId        string             `protobuf:"bytes,5,opt,name=sectionId" json:"sectionId,omitempty"`                // 段id
-	ReplyId          string             `protobuf:"bytes,6,opt,name=replyId" json:"replyId,omitempty"`                    // 回复id
-	IsDelta          bool               `protobuf:"varint,7,opt,name=isDelta" json:"isDelta,omitempty"`                   // 是否增量
-	Status           int32              `protobuf:"varint,8,opt,name=status" json:"status,omitempty"`                     // 状态
-	InputContentType int32              `protobuf:"varint,9,opt,name=inputContentType" json:"inputContentType,omitempty"` // 输入内容类型
-	MessageIndex     int32              `protobuf:"varint,10,opt,name=messageIndex" json:"messageIndex,omitempty"`        // 消息索引
-	BotId            string             `protobuf:"bytes,11,opt,name=botId" json:"botId,omitempty"`                       // 模型id
+	ConversationId   string             `protobuf:"bytes,3,opt,name=conversationId" json:"conversationId,omitempty"`      // 对话id
+	SectionId        string             `protobuf:"bytes,4,opt,name=sectionId" json:"sectionId,omitempty"`                // 段id
+	ReplyId          string             `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"`                    // 回复id
+	IsDelta          bool               `protobuf:"varint,6,opt,name=isDelta" json:"isDelta,omitempty"`                   // 是否增量
+	Status           int32              `protobuf:"varint,7,opt,name=status" json:"status,omitempty"`                     // 状态
+	InputContentType int32              `protobuf:"varint,8,opt,name=inputContentType" json:"inputContentType,omitempty"` // 输入内容类型
+	MessageIndex     int32              `protobuf:"varint,9,opt,name=messageIndex" json:"messageIndex,omitempty"`         // 消息索引
+	BotId            string             `protobuf:"bytes,10,opt,name=botId" json:"botId,omitempty"`                       // 模型id
 }
 
 func (x *EventChat) Reset() { *x = EventChat{} }
@@ -257,13 +248,6 @@ func (x *EventChat) GetMessage() *EventChat_Message {
 func (x *EventChat) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
-	}
-	return ""
-}
-
-func (x *EventChat) GetLocalMessageId() string {
-	if x != nil {
-		return x.LocalMessageId
 	}
 	return ""
 }
@@ -366,7 +350,6 @@ type CompletionReq struct {
 	CompletionOption *CompletionOption `protobuf:"bytes,2,opt,name=completionOption" json:"completionOption,omitempty"` // 对话配置
 	BotId            string            `protobuf:"bytes,3,opt,name=botId" json:"botId,omitempty"`                       // 使用的模型id
 	ConversationId   string            `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`     // 对话id
-	LocalMessageId   string            `protobuf:"bytes,5,opt,name=localMessageId" json:"localMessageId,omitempty"`     // 本地消息id
 }
 
 func (x *CompletionReq) Reset() { *x = CompletionReq{} }
@@ -399,13 +382,6 @@ func (x *CompletionReq) GetBotId() string {
 func (x *CompletionReq) GetConversationId() string {
 	if x != nil {
 		return x.ConversationId
-	}
-	return ""
-}
-
-func (x *CompletionReq) GetLocalMessageId() string {
-	if x != nil {
-		return x.LocalMessageId
 	}
 	return ""
 }
@@ -576,17 +552,16 @@ type GetHistoryResp_MessageList struct {
 	ConversationId string              `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
 	SectionId      string              `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
 	MessageId      string              `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
-	LocalMessageId string              `protobuf:"bytes,4,opt,name=localMessageId" json:"localMessageId,omitempty"`
-	Index          int32               `protobuf:"varint,5,opt,name=index" json:"index,omitempty"`
-	ReplyId        string              `protobuf:"bytes,6,opt,name=replyId" json:"replyId,omitempty"` // 回复id
-	Status         int32               `protobuf:"varint,7,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
-	CreateTime     int64               `protobuf:"varint,8,opt,name=createTime" json:"createTime,omitempty"`
-	MessageType    int32               `protobuf:"varint,9,opt,name=messageType" json:"messageType,omitempty"`
-	ContentType    int32               `protobuf:"varint,10,opt,name=contentType" json:"contentType,omitempty"`
-	Content        string              `protobuf:"bytes,11,opt,name=content" json:"content,omitempty"` // json string
-	Ext            *GetHistoryResp_Ext `protobuf:"bytes,12,opt,name=ext" json:"ext,omitempty"`
-	Feedback       int32               `protobuf:"varint,13,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
-	UserType       int32               `protobuf:"varint,14,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
+	Index          int32               `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
+	ReplyId        string              `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
+	Status         int32               `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
+	CreateTime     int64               `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
+	MessageType    int32               `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
+	ContentType    int32               `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
+	Content        string              `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
+	Ext            *GetHistoryResp_Ext `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
+	Feedback       int32               `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
+	UserType       int32               `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
 }
 
 func (x *GetHistoryResp_MessageList) Reset() { *x = GetHistoryResp_MessageList{} }
@@ -614,13 +589,6 @@ func (x *GetHistoryResp_MessageList) GetSectionId() string {
 func (x *GetHistoryResp_MessageList) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
-	}
-	return ""
-}
-
-func (x *GetHistoryResp_MessageList) GetLocalMessageId() string {
-	if x != nil {
-		return x.LocalMessageId
 	}
 	return ""
 }
@@ -781,10 +749,9 @@ func (x *ListAgentsResp_Agent) GetBotDescription() string {
 
 // 反馈, 包括点赞, 点踩, 删除等
 type FeedbackReq struct {
-	Resp      *basic.Response       `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	Action    string                `protobuf:"bytes,2,opt,name=action" json:"action,omitempty"`
-	MessageId string                `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
-	Feedback  *FeedbackReq_Feedback `protobuf:"bytes,4,opt,name=feedback" json:"feedback,omitempty"`
+	Action    string                `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
+	MessageId string                `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`
+	Feedback  *FeedbackReq_Feedback `protobuf:"bytes,3,opt,name=feedback" json:"feedback,omitempty"`
 }
 
 func (x *FeedbackReq) Reset() { *x = FeedbackReq{} }
@@ -792,13 +759,6 @@ func (x *FeedbackReq) Reset() { *x = FeedbackReq{} }
 func (x *FeedbackReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
 func (x *FeedbackReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
-
-func (x *FeedbackReq) GetResp() *basic.Response {
-	if x != nil {
-		return x.Resp
-	}
-	return nil
-}
 
 func (x *FeedbackReq) GetAction() string {
 	if x != nil {
@@ -844,4 +804,21 @@ func (x *FeedbackReq_Feedback) GetContent() string {
 		return x.Content
 	}
 	return ""
+}
+
+type FeedbackResp struct {
+	Resp *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+}
+
+func (x *FeedbackResp) Reset() { *x = FeedbackResp{} }
+
+func (x *FeedbackResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *FeedbackResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *FeedbackResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
 }
