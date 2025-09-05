@@ -38,11 +38,10 @@ message SSEEvent {
 // 消息元数据
 message EventMeta {
   string messageId = 1; // 消息id
-  string localMessageId = 2; // 本地消息id
-  string conversationId = 3; // 对话id
-  string sectionId = 4; // 段id
-  int32 messageIndex = 5; // 消息索引
-  int32 conversationType = 6; // 对话类型
+  string conversationId = 2; // 对话id
+  string sectionId = 3; // 段id
+  int32 messageIndex = 4; // 消息索引
+  int32 conversationType = 5; // 对话类型
 }
 
 // 模型信息
@@ -59,15 +58,14 @@ message EventChat {
   }
   Message message = 1; // 消息内容
   string messageId = 2; // 消息id
-  string localMessageId = 3; // 本地消息id
-  string conversationId = 4; // 对话id
-  string sectionId = 5; // 段id
-  string replyId = 6; // 回复id
-  bool isDelta = 7; // 是否增量
-  int32 status = 8; // 状态
-  int32 inputContentType = 9; // 输入内容类型
-  int32 messageIndex = 10; // 消息索引
-  string botId = 11; // 模型id
+  string conversationId = 3; // 对话id
+  string sectionId = 4; // 段id
+  string replyId = 5; // 回复id
+  bool isDelta = 6; // 是否增量
+  int32 status = 7; // 状态
+  int32 inputContentType = 8; // 输入内容类型
+  int32 messageIndex = 9; // 消息索引
+  string botId = 10; // 模型id
 }
 
 // 结束
@@ -87,7 +85,6 @@ message CompletionReq {
   CompletionOption completionOption = 2; // 对话配置
   string botId = 3; // 使用的模型id
   string conversationId = 4; // 对话id
-  string localMessageId = 5; // 本地消息id
 }
 
 // 获取历史记录请求
@@ -118,17 +115,16 @@ message GetHistoryResp {
     string conversationId = 1;
     string sectionId = 2;
     string messageId = 3;
-    string localMessageId = 4;
-    int32 index = 5;
-    string replyId = 6; // 回复id
-    int32 status = 7; // 状态, 目前默认0
-    int64 createTime = 8;
-    int32  messageType = 9;
-    int32 contentType = 10;
-    string content = 11; // json string
-    Ext ext = 12;
-    int32 feedback = 13; // 反馈类型
-    int32 userType = 14; // 用户类型, 如system, assistant, user
+    int32 index = 4;
+    string replyId = 5; // 回复id
+    int32 status = 6; // 状态, 目前默认0
+    int64 createTime = 7;
+    int32 messageType = 8;
+    int32 contentType = 9;
+    string content = 10; // json string
+    Ext ext = 11;
+    int32 feedback = 12; // 反馈类型
+    int32 userType = 13; // 用户类型, 如system, assistant, user
   }
   basic.Response resp = 1;
   repeated MessageList messageList = 2;
@@ -156,8 +152,10 @@ message FeedbackReq {
     int32 type = 1;
     string content = 2;
   }
+  string action = 1;
+  string messageId = 2;
+  Feedback feedback = 3;
+}
+message FeedbackResp {
   basic.Response resp = 1;
-  string action = 2;
-  string messageId = 3;
-  Feedback feedback = 4;
 }
