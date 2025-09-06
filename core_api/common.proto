@@ -16,6 +16,7 @@ message Message {
   int32 contentType = 2;
   repeated string attaches = 3;
   repeated string references = 4;
+  string role = 5;
 }
 
 // 对话配置
@@ -46,8 +47,9 @@ message EventMeta {
 
 // 模型信息
 message EventModel {
-  string botId = 1; // 模型id
-  string botName = 2; // 模型名称
+  string model = 1; // 模型id
+  string botId = 2; // 智能体id
+  string botName = 3; // 模型名称
 }
 
 // 模型内容
@@ -83,7 +85,7 @@ message EventEnd {}
 message CompletionsReq {
   repeated Message messages = 1; // 用户输入消息, 长度应为1
   CompletionsOption completionsOption = 2; // 对话配置
-  string botId = 3; // 使用的模型id
+  string model = 3; // 使用的模型
   string conversationId = 4; // 对话id
   bool withHistory = 5; // 是否携带历史记录
 }
