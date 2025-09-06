@@ -60,12 +60,11 @@ func (x *Message) GetRole() string {
 
 // 对话配置
 type CompletionsOption struct {
-	IsRegen                bool `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`                               // 是否重新生成
-	WithSuggest            bool `protobuf:"varint,2,opt,name=withSuggest" json:"withSuggest,omitempty"`                       // 是否生成建议
-	NeedCreateConversation bool `protobuf:"varint,3,opt,name=needCreateConversation" json:"needCreateConversation,omitempty"` // 是否需要创建新对话
-	IsReplace              bool `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`                           // 是否替换
-	IsDelete               bool `protobuf:"varint,5,opt,name=isDelete" json:"isDelete,omitempty"`                             // 是否删除
-	UseDeepThink           bool `protobuf:"varint,6,opt,name=useDeepThink" json:"useDeepThink,omitempty"`                     // 是否深度思考
+	IsRegen      bool `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`           // 是否重新生成
+	WithSuggest  bool `protobuf:"varint,2,opt,name=withSuggest" json:"withSuggest,omitempty"`   // 是否生成建议
+	IsReplace    bool `protobuf:"varint,3,opt,name=isReplace" json:"isReplace,omitempty"`       // 是否替换
+	UseDeepThink bool `protobuf:"varint,4,opt,name=useDeepThink" json:"useDeepThink,omitempty"` // 是否深度思考
+	Stream       bool `protobuf:"varint,5,opt,name=stream" json:"stream,omitempty"`             // 是否流式
 }
 
 func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
@@ -88,13 +87,6 @@ func (x *CompletionsOption) GetWithSuggest() bool {
 	return false
 }
 
-func (x *CompletionsOption) GetNeedCreateConversation() bool {
-	if x != nil {
-		return x.NeedCreateConversation
-	}
-	return false
-}
-
 func (x *CompletionsOption) GetIsReplace() bool {
 	if x != nil {
 		return x.IsReplace
@@ -102,16 +94,16 @@ func (x *CompletionsOption) GetIsReplace() bool {
 	return false
 }
 
-func (x *CompletionsOption) GetIsDelete() bool {
+func (x *CompletionsOption) GetUseDeepThink() bool {
 	if x != nil {
-		return x.IsDelete
+		return x.UseDeepThink
 	}
 	return false
 }
 
-func (x *CompletionsOption) GetUseDeepThink() bool {
+func (x *CompletionsOption) GetStream() bool {
 	if x != nil {
-		return x.UseDeepThink
+		return x.Stream
 	}
 	return false
 }
@@ -527,7 +519,8 @@ func (x *GetConversationReq) GetConversationId() string {
 type GetConversationResp struct {
 	Resp        *basic.Response                    `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	MessageList []*GetConversationResp_MessageList `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
-	HasMore     bool                               `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
+	RegenList   []*GetConversationResp_MessageList `protobuf:"bytes,3,rep,name=regenList" json:"regenList,omitempty"`
+	HasMore     bool                               `protobuf:"varint,4,opt,name=hasMore" json:"hasMore,omitempty"`
 }
 
 func (x *GetConversationResp) Reset() { *x = GetConversationResp{} }
@@ -546,6 +539,13 @@ func (x *GetConversationResp) GetResp() *basic.Response {
 func (x *GetConversationResp) GetMessageList() []*GetConversationResp_MessageList {
 	if x != nil {
 		return x.MessageList
+	}
+	return nil
+}
+
+func (x *GetConversationResp) GetRegenList() []*GetConversationResp_MessageList {
+	if x != nil {
+		return x.RegenList
 	}
 	return nil
 }
