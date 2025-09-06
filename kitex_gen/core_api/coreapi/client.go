@@ -16,19 +16,19 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...callopt.Option) (stream CoreApi_CompletionClient, err error)
-	ListHistory(ctx context.Context, Req *core_api.ListHistoryReq, callOptions ...callopt.Option) (r *core_api.ListHistoryResp, err error)
-	GetHistory(ctx context.Context, Req *core_api.GetHistoryReq, callOptions ...callopt.Option) (r *core_api.GetHistoryResp, err error)
+	Completions(ctx context.Context, Req *core_api.CompletionsReq, callOptions ...callopt.Option) (stream CoreApi_CompletionsClient, err error)
+	ListConversation(ctx context.Context, Req *core_api.ListConversationReq, callOptions ...callopt.Option) (r *core_api.ListConversationResp, err error)
+	GetConversation(ctx context.Context, Req *core_api.GetConversationReq, callOptions ...callopt.Option) (r *core_api.GetConversationResp, err error)
 	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
 	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error)
 }
 
 // StreamClient is designed to provide Interface for Streaming APIs.
 type StreamClient interface {
-	Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionClient, err error)
+	Completions(ctx context.Context, Req *core_api.CompletionsReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionsClient, err error)
 }
 
-type CoreApi_CompletionClient interface {
+type CoreApi_CompletionsClient interface {
 	streaming.Stream
 	Recv() (*core_api.SSEEvent, error)
 }
@@ -64,19 +64,19 @@ type kCoreApiClient struct {
 	*kClient
 }
 
-func (p *kCoreApiClient) Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...callopt.Option) (stream CoreApi_CompletionClient, err error) {
+func (p *kCoreApiClient) Completions(ctx context.Context, Req *core_api.CompletionsReq, callOptions ...callopt.Option) (stream CoreApi_CompletionsClient, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.Completion(ctx, Req)
+	return p.kClient.Completions(ctx, Req)
 }
 
-func (p *kCoreApiClient) ListHistory(ctx context.Context, Req *core_api.ListHistoryReq, callOptions ...callopt.Option) (r *core_api.ListHistoryResp, err error) {
+func (p *kCoreApiClient) ListConversation(ctx context.Context, Req *core_api.ListConversationReq, callOptions ...callopt.Option) (r *core_api.ListConversationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.ListHistory(ctx, Req)
+	return p.kClient.ListConversation(ctx, Req)
 }
 
-func (p *kCoreApiClient) GetHistory(ctx context.Context, Req *core_api.GetHistoryReq, callOptions ...callopt.Option) (r *core_api.GetHistoryResp, err error) {
+func (p *kCoreApiClient) GetConversation(ctx context.Context, Req *core_api.GetConversationReq, callOptions ...callopt.Option) (r *core_api.GetConversationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetHistory(ctx, Req)
+	return p.kClient.GetConversation(ctx, Req)
 }
 
 func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error) {
@@ -119,7 +119,7 @@ type kCoreApiStreamClient struct {
 	*kClient
 }
 
-func (p *kCoreApiStreamClient) Completion(ctx context.Context, Req *core_api.CompletionReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionClient, err error) {
+func (p *kCoreApiStreamClient) Completions(ctx context.Context, Req *core_api.CompletionsReq, callOptions ...streamcall.Option) (stream CoreApi_CompletionsClient, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, streamcall.GetCallOptions(callOptions))
-	return p.kClient.Completion(ctx, Req)
+	return p.kClient.Completions(ctx, Req)
 }

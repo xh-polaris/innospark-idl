@@ -51,7 +51,7 @@ func (x *Message) GetReferences() []string {
 }
 
 // 对话配置
-type CompletionOption struct {
+type CompletionsOption struct {
 	IsRegen                bool `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`                               // 是否重新生成
 	WithSuggest            bool `protobuf:"varint,2,opt,name=withSuggest" json:"withSuggest,omitempty"`                       // 是否生成建议
 	NeedCreateConversation bool `protobuf:"varint,3,opt,name=needCreateConversation" json:"needCreateConversation,omitempty"` // 是否需要创建新对话
@@ -60,48 +60,48 @@ type CompletionOption struct {
 	UseDeepThink           bool `protobuf:"varint,6,opt,name=useDeepThink" json:"useDeepThink,omitempty"`                     // 是否深度思考
 }
 
-func (x *CompletionOption) Reset() { *x = CompletionOption{} }
+func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
 
-func (x *CompletionOption) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *CompletionsOption) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *CompletionOption) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *CompletionsOption) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *CompletionOption) GetIsRegen() bool {
+func (x *CompletionsOption) GetIsRegen() bool {
 	if x != nil {
 		return x.IsRegen
 	}
 	return false
 }
 
-func (x *CompletionOption) GetWithSuggest() bool {
+func (x *CompletionsOption) GetWithSuggest() bool {
 	if x != nil {
 		return x.WithSuggest
 	}
 	return false
 }
 
-func (x *CompletionOption) GetNeedCreateConversation() bool {
+func (x *CompletionsOption) GetNeedCreateConversation() bool {
 	if x != nil {
 		return x.NeedCreateConversation
 	}
 	return false
 }
 
-func (x *CompletionOption) GetIsReplace() bool {
+func (x *CompletionsOption) GetIsReplace() bool {
 	if x != nil {
 		return x.IsReplace
 	}
 	return false
 }
 
-func (x *CompletionOption) GetIsDelete() bool {
+func (x *CompletionsOption) GetIsDelete() bool {
 	if x != nil {
 		return x.IsDelete
 	}
 	return false
 }
 
-func (x *CompletionOption) GetUseDeepThink() bool {
+func (x *CompletionsOption) GetUseDeepThink() bool {
 	if x != nil {
 		return x.UseDeepThink
 	}
@@ -345,127 +345,137 @@ func (x *EventEnd) Marshal(in []byte) ([]byte, error) { return prutal.MarshalApp
 func (x *EventEnd) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
 // 模型对话请求
-type CompletionReq struct {
-	Messages         []*Message        `protobuf:"bytes,1,rep,name=messages" json:"messages,omitempty"`                 // 用户输入消息, 长度应为1
-	CompletionOption *CompletionOption `protobuf:"bytes,2,opt,name=completionOption" json:"completionOption,omitempty"` // 对话配置
-	BotId            string            `protobuf:"bytes,3,opt,name=botId" json:"botId,omitempty"`                       // 使用的模型id
-	ConversationId   string            `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`     // 对话id
+type CompletionsReq struct {
+	Messages          []*Message         `protobuf:"bytes,1,rep,name=messages" json:"messages,omitempty"`                   // 用户输入消息, 长度应为1
+	CompletionsOption *CompletionsOption `protobuf:"bytes,2,opt,name=completionsOption" json:"completionsOption,omitempty"` // 对话配置
+	BotId             string             `protobuf:"bytes,3,opt,name=botId" json:"botId,omitempty"`                         // 使用的模型id
+	ConversationId    string             `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`       // 对话id
+	WithHistory       bool               `protobuf:"varint,5,opt,name=withHistory" json:"withHistory,omitempty"`            // 是否携带历史记录
 }
 
-func (x *CompletionReq) Reset() { *x = CompletionReq{} }
+func (x *CompletionsReq) Reset() { *x = CompletionsReq{} }
 
-func (x *CompletionReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *CompletionsReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *CompletionReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *CompletionsReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *CompletionReq) GetMessages() []*Message {
+func (x *CompletionsReq) GetMessages() []*Message {
 	if x != nil {
 		return x.Messages
 	}
 	return nil
 }
 
-func (x *CompletionReq) GetCompletionOption() *CompletionOption {
+func (x *CompletionsReq) GetCompletionsOption() *CompletionsOption {
 	if x != nil {
-		return x.CompletionOption
+		return x.CompletionsOption
 	}
 	return nil
 }
 
-func (x *CompletionReq) GetBotId() string {
+func (x *CompletionsReq) GetBotId() string {
 	if x != nil {
 		return x.BotId
 	}
 	return ""
 }
 
-func (x *CompletionReq) GetConversationId() string {
+func (x *CompletionsReq) GetConversationId() string {
 	if x != nil {
 		return x.ConversationId
 	}
 	return ""
 }
 
+func (x *CompletionsReq) GetWithHistory() bool {
+	if x != nil {
+		return x.WithHistory
+	}
+	return false
+}
+
 // 获取历史记录请求
-type ListHistoryReq struct {
+type ListConversationReq struct {
 	Page *basic.Page `protobuf:"bytes,1,opt,name=page" json:"page,omitempty"`
 }
 
-func (x *ListHistoryReq) Reset() { *x = ListHistoryReq{} }
+func (x *ListConversationReq) Reset() { *x = ListConversationReq{} }
 
-func (x *ListHistoryReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *ListConversationReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *ListHistoryReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *ListConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *ListHistoryReq) GetPage() *basic.Page {
+func (x *ListConversationReq) GetPage() *basic.Page {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-type ListHistoryResp struct {
-	Response *basic.Response            `protobuf:"bytes,1,opt,name=response" json:"response,omitempty"`
-	History  []*ListHistoryResp_HisItem `protobuf:"bytes,2,rep,name=history" json:"history,omitempty"`
+type ListConversationResp struct {
+	Response      *basic.Response                          `protobuf:"bytes,1,opt,name=response" json:"response,omitempty"`
+	Conversations []*ListConversationResp_ConversationItem `protobuf:"bytes,2,rep,name=conversations" json:"conversations,omitempty"`
 }
 
-func (x *ListHistoryResp) Reset() { *x = ListHistoryResp{} }
+func (x *ListConversationResp) Reset() { *x = ListConversationResp{} }
 
-func (x *ListHistoryResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *ListConversationResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *ListHistoryResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *ListConversationResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *ListHistoryResp) GetResponse() *basic.Response {
+func (x *ListConversationResp) GetResponse() *basic.Response {
 	if x != nil {
 		return x.Response
 	}
 	return nil
 }
 
-func (x *ListHistoryResp) GetHistory() []*ListHistoryResp_HisItem {
+func (x *ListConversationResp) GetConversations() []*ListConversationResp_ConversationItem {
 	if x != nil {
-		return x.History
+		return x.Conversations
 	}
 	return nil
 }
 
-type ListHistoryResp_HisItem struct {
+type ListConversationResp_ConversationItem struct {
 	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
 	Brief          string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
 	CreateTime     int64  `protobuf:"varint,3,opt,name=createTime" json:"createTime,omitempty"`
 	UpdateTime     int64  `protobuf:"varint,4,opt,name=updateTime" json:"updateTime,omitempty"`
 }
 
-func (x *ListHistoryResp_HisItem) Reset() { *x = ListHistoryResp_HisItem{} }
+func (x *ListConversationResp_ConversationItem) Reset() { *x = ListConversationResp_ConversationItem{} }
 
-func (x *ListHistoryResp_HisItem) Marshal(in []byte) ([]byte, error) {
+func (x *ListConversationResp_ConversationItem) Marshal(in []byte) ([]byte, error) {
 	return prutal.MarshalAppend(in, x)
 }
 
-func (x *ListHistoryResp_HisItem) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *ListConversationResp_ConversationItem) Unmarshal(in []byte) error {
+	return prutal.Unmarshal(in, x)
+}
 
-func (x *ListHistoryResp_HisItem) GetConversationId() string {
+func (x *ListConversationResp_ConversationItem) GetConversationId() string {
 	if x != nil {
 		return x.ConversationId
 	}
 	return ""
 }
 
-func (x *ListHistoryResp_HisItem) GetBrief() string {
+func (x *ListConversationResp_ConversationItem) GetBrief() string {
 	if x != nil {
 		return x.Brief
 	}
 	return ""
 }
 
-func (x *ListHistoryResp_HisItem) GetCreateTime() int64 {
+func (x *ListConversationResp_ConversationItem) GetCreateTime() int64 {
 	if x != nil {
 		return x.CreateTime
 	}
 	return 0
 }
 
-func (x *ListHistoryResp_HisItem) GetUpdateTime() int64 {
+func (x *ListConversationResp_ConversationItem) GetUpdateTime() int64 {
 	if x != nil {
 		return x.UpdateTime
 	}
@@ -473,190 +483,192 @@ func (x *ListHistoryResp_HisItem) GetUpdateTime() int64 {
 }
 
 // 获取历史记录
-type GetHistoryReq struct {
+type GetConversationReq struct {
 	Page           *basic.Page `protobuf:"bytes,1,opt,name=page" json:"page,omitempty"`
 	ConversationId string      `protobuf:"bytes,2,opt,name=conversationId" json:"conversationId,omitempty"`
 }
 
-func (x *GetHistoryReq) Reset() { *x = GetHistoryReq{} }
+func (x *GetConversationReq) Reset() { *x = GetConversationReq{} }
 
-func (x *GetHistoryReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *GetConversationReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *GetHistoryReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *GetConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *GetHistoryReq) GetPage() *basic.Page {
+func (x *GetConversationReq) GetPage() *basic.Page {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-func (x *GetHistoryReq) GetConversationId() string {
+func (x *GetConversationReq) GetConversationId() string {
 	if x != nil {
 		return x.ConversationId
 	}
 	return ""
 }
 
-type GetHistoryResp struct {
-	Resp        *basic.Response               `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	MessageList []*GetHistoryResp_MessageList `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
-	HasMore     bool                          `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
+type GetConversationResp struct {
+	Resp        *basic.Response                    `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	MessageList []*GetConversationResp_MessageList `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
+	HasMore     bool                               `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
 }
 
-func (x *GetHistoryResp) Reset() { *x = GetHistoryResp{} }
+func (x *GetConversationResp) Reset() { *x = GetConversationResp{} }
 
-func (x *GetHistoryResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *GetConversationResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *GetHistoryResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *GetConversationResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *GetHistoryResp) GetResp() *basic.Response {
+func (x *GetConversationResp) GetResp() *basic.Response {
 	if x != nil {
 		return x.Resp
 	}
 	return nil
 }
 
-func (x *GetHistoryResp) GetMessageList() []*GetHistoryResp_MessageList {
+func (x *GetConversationResp) GetMessageList() []*GetConversationResp_MessageList {
 	if x != nil {
 		return x.MessageList
 	}
 	return nil
 }
 
-func (x *GetHistoryResp) GetHasMore() bool {
+func (x *GetConversationResp) GetHasMore() bool {
 	if x != nil {
 		return x.HasMore
 	}
 	return false
 }
 
-type GetHistoryResp_Ext struct {
+type GetConversationResp_Ext struct {
 	BotState string `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
 }
 
-func (x *GetHistoryResp_Ext) Reset() { *x = GetHistoryResp_Ext{} }
+func (x *GetConversationResp_Ext) Reset() { *x = GetConversationResp_Ext{} }
 
-func (x *GetHistoryResp_Ext) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *GetConversationResp_Ext) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
 
-func (x *GetHistoryResp_Ext) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *GetConversationResp_Ext) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *GetHistoryResp_Ext) GetBotState() string {
+func (x *GetConversationResp_Ext) GetBotState() string {
 	if x != nil {
 		return x.BotState
 	}
 	return ""
 }
 
-type GetHistoryResp_MessageList struct {
-	ConversationId string              `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
-	SectionId      string              `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
-	MessageId      string              `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
-	Index          int32               `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
-	ReplyId        string              `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
-	Status         int32               `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
-	CreateTime     int64               `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
-	MessageType    int32               `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
-	ContentType    int32               `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
-	Content        string              `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
-	Ext            *GetHistoryResp_Ext `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
-	Feedback       int32               `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
-	UserType       int32               `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
+type GetConversationResp_MessageList struct {
+	ConversationId string                   `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	SectionId      string                   `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
+	MessageId      string                   `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
+	Index          int32                    `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
+	ReplyId        string                   `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
+	Status         int32                    `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
+	CreateTime     int64                    `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
+	MessageType    int32                    `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
+	ContentType    int32                    `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
+	Content        string                   `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
+	Ext            *GetConversationResp_Ext `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
+	Feedback       int32                    `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
+	UserType       int32                    `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
 }
 
-func (x *GetHistoryResp_MessageList) Reset() { *x = GetHistoryResp_MessageList{} }
+func (x *GetConversationResp_MessageList) Reset() { *x = GetConversationResp_MessageList{} }
 
-func (x *GetHistoryResp_MessageList) Marshal(in []byte) ([]byte, error) {
+func (x *GetConversationResp_MessageList) Marshal(in []byte) ([]byte, error) {
 	return prutal.MarshalAppend(in, x)
 }
 
-func (x *GetHistoryResp_MessageList) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *GetConversationResp_MessageList) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *GetHistoryResp_MessageList) GetConversationId() string {
+func (x *GetConversationResp_MessageList) GetConversationId() string {
 	if x != nil {
 		return x.ConversationId
 	}
 	return ""
 }
 
-func (x *GetHistoryResp_MessageList) GetSectionId() string {
+func (x *GetConversationResp_MessageList) GetSectionId() string {
 	if x != nil {
 		return x.SectionId
 	}
 	return ""
 }
 
-func (x *GetHistoryResp_MessageList) GetMessageId() string {
+func (x *GetConversationResp_MessageList) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
 	}
 	return ""
 }
 
-func (x *GetHistoryResp_MessageList) GetIndex() int32 {
+func (x *GetConversationResp_MessageList) GetIndex() int32 {
 	if x != nil {
 		return x.Index
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetReplyId() string {
+func (x *GetConversationResp_MessageList) GetReplyId() string {
 	if x != nil {
 		return x.ReplyId
 	}
 	return ""
 }
 
-func (x *GetHistoryResp_MessageList) GetStatus() int32 {
+func (x *GetConversationResp_MessageList) GetStatus() int32 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetCreateTime() int64 {
+func (x *GetConversationResp_MessageList) GetCreateTime() int64 {
 	if x != nil {
 		return x.CreateTime
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetMessageType() int32 {
+func (x *GetConversationResp_MessageList) GetMessageType() int32 {
 	if x != nil {
 		return x.MessageType
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetContentType() int32 {
+func (x *GetConversationResp_MessageList) GetContentType() int32 {
 	if x != nil {
 		return x.ContentType
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetContent() string {
+func (x *GetConversationResp_MessageList) GetContent() string {
 	if x != nil {
 		return x.Content
 	}
 	return ""
 }
 
-func (x *GetHistoryResp_MessageList) GetExt() *GetHistoryResp_Ext {
+func (x *GetConversationResp_MessageList) GetExt() *GetConversationResp_Ext {
 	if x != nil {
 		return x.Ext
 	}
 	return nil
 }
 
-func (x *GetHistoryResp_MessageList) GetFeedback() int32 {
+func (x *GetConversationResp_MessageList) GetFeedback() int32 {
 	if x != nil {
 		return x.Feedback
 	}
 	return 0
 }
 
-func (x *GetHistoryResp_MessageList) GetUserType() int32 {
+func (x *GetConversationResp_MessageList) GetUserType() int32 {
 	if x != nil {
 		return x.UserType
 	}

@@ -17,24 +17,24 @@ import (
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
-	"Completion": kitex.NewMethodInfo(
-		completionHandler,
-		newCompletionArgs,
-		newCompletionResult,
+	"Completions": kitex.NewMethodInfo(
+		completionsHandler,
+		newCompletionsArgs,
+		newCompletionsResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingServer),
 	),
-	"ListHistory": kitex.NewMethodInfo(
-		listHistoryHandler,
-		newListHistoryArgs,
-		newListHistoryResult,
+	"ListConversation": kitex.NewMethodInfo(
+		listConversationHandler,
+		newListConversationArgs,
+		newListConversationResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
-	"GetHistory": kitex.NewMethodInfo(
-		getHistoryHandler,
-		newGetHistoryArgs,
-		newGetHistoryResult,
+	"GetConversation": kitex.NewMethodInfo(
+		getConversationHandler,
+		newGetConversationArgs,
+		newGetConversationResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
@@ -118,65 +118,65 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
-func completionHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func completionsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	streamingArgs, ok := arg.(*streaming.Args)
 	if !ok {
 		return errInvalidMessageType
 	}
 	st := streamingArgs.Stream
-	stream := &coreApiCompletionServer{st}
-	req := new(core_api.CompletionReq)
+	stream := &coreApiCompletionsServer{st}
+	req := new(core_api.CompletionsReq)
 	if err := st.RecvMsg(req); err != nil {
 		return err
 	}
-	return handler.(core_api.CoreApi).Completion(req, stream)
+	return handler.(core_api.CoreApi).Completions(req, stream)
 }
 
-type coreApiCompletionClient struct {
+type coreApiCompletionsClient struct {
 	streaming.Stream
 }
 
-func (x *coreApiCompletionClient) DoFinish(err error) {
+func (x *coreApiCompletionsClient) DoFinish(err error) {
 	if finisher, ok := x.Stream.(streaming.WithDoFinish); ok {
 		finisher.DoFinish(err)
 	} else {
 		panic(fmt.Sprintf("streaming.WithDoFinish is not implemented by %T", x.Stream))
 	}
 }
-func (x *coreApiCompletionClient) Recv() (*core_api.SSEEvent, error) {
+func (x *coreApiCompletionsClient) Recv() (*core_api.SSEEvent, error) {
 	m := new(core_api.SSEEvent)
 	return m, x.Stream.RecvMsg(m)
 }
 
-type coreApiCompletionServer struct {
+type coreApiCompletionsServer struct {
 	streaming.Stream
 }
 
-func (x *coreApiCompletionServer) Send(m *core_api.SSEEvent) error {
+func (x *coreApiCompletionsServer) Send(m *core_api.SSEEvent) error {
 	return x.Stream.SendMsg(m)
 }
 
-func newCompletionArgs() interface{} {
-	return &CompletionArgs{}
+func newCompletionsArgs() interface{} {
+	return &CompletionsArgs{}
 }
 
-func newCompletionResult() interface{} {
-	return &CompletionResult{}
+func newCompletionsResult() interface{} {
+	return &CompletionsResult{}
 }
 
-type CompletionArgs struct {
-	Req *core_api.CompletionReq
+type CompletionsArgs struct {
+	Req *core_api.CompletionsReq
 }
 
-func (p *CompletionArgs) Marshal(out []byte) ([]byte, error) {
+func (p *CompletionsArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *CompletionArgs) Unmarshal(in []byte) error {
-	msg := new(core_api.CompletionReq)
+func (p *CompletionsArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.CompletionsReq)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -184,37 +184,37 @@ func (p *CompletionArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var CompletionArgs_Req_DEFAULT *core_api.CompletionReq
+var CompletionsArgs_Req_DEFAULT *core_api.CompletionsReq
 
-func (p *CompletionArgs) GetReq() *core_api.CompletionReq {
+func (p *CompletionsArgs) GetReq() *core_api.CompletionsReq {
 	if !p.IsSetReq() {
-		return CompletionArgs_Req_DEFAULT
+		return CompletionsArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *CompletionArgs) IsSetReq() bool {
+func (p *CompletionsArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *CompletionArgs) GetFirstArgument() interface{} {
+func (p *CompletionsArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type CompletionResult struct {
+type CompletionsResult struct {
 	Success *core_api.SSEEvent
 }
 
-var CompletionResult_Success_DEFAULT *core_api.SSEEvent
+var CompletionsResult_Success_DEFAULT *core_api.SSEEvent
 
-func (p *CompletionResult) Marshal(out []byte) ([]byte, error) {
+func (p *CompletionsResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *CompletionResult) Unmarshal(in []byte) error {
+func (p *CompletionsResult) Unmarshal(in []byte) error {
 	msg := new(core_api.SSEEvent)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
@@ -223,71 +223,71 @@ func (p *CompletionResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *CompletionResult) GetSuccess() *core_api.SSEEvent {
+func (p *CompletionsResult) GetSuccess() *core_api.SSEEvent {
 	if !p.IsSetSuccess() {
-		return CompletionResult_Success_DEFAULT
+		return CompletionsResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *CompletionResult) SetSuccess(x interface{}) {
+func (p *CompletionsResult) SetSuccess(x interface{}) {
 	p.Success = x.(*core_api.SSEEvent)
 }
 
-func (p *CompletionResult) IsSetSuccess() bool {
+func (p *CompletionsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *CompletionResult) GetResult() interface{} {
+func (p *CompletionsResult) GetResult() interface{} {
 	return p.Success
 }
 
-func listHistoryHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func listConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(core_api.ListHistoryReq)
+		req := new(core_api.ListConversationReq)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
-		resp, err := handler.(core_api.CoreApi).ListHistory(ctx, req)
+		resp, err := handler.(core_api.CoreApi).ListConversation(ctx, req)
 		if err != nil {
 			return err
 		}
 		return st.SendMsg(resp)
-	case *ListHistoryArgs:
-		success, err := handler.(core_api.CoreApi).ListHistory(ctx, s.Req)
+	case *ListConversationArgs:
+		success, err := handler.(core_api.CoreApi).ListConversation(ctx, s.Req)
 		if err != nil {
 			return err
 		}
-		realResult := result.(*ListHistoryResult)
+		realResult := result.(*ListConversationResult)
 		realResult.Success = success
 		return nil
 	default:
 		return errInvalidMessageType
 	}
 }
-func newListHistoryArgs() interface{} {
-	return &ListHistoryArgs{}
+func newListConversationArgs() interface{} {
+	return &ListConversationArgs{}
 }
 
-func newListHistoryResult() interface{} {
-	return &ListHistoryResult{}
+func newListConversationResult() interface{} {
+	return &ListConversationResult{}
 }
 
-type ListHistoryArgs struct {
-	Req *core_api.ListHistoryReq
+type ListConversationArgs struct {
+	Req *core_api.ListConversationReq
 }
 
-func (p *ListHistoryArgs) Marshal(out []byte) ([]byte, error) {
+func (p *ListConversationArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *ListHistoryArgs) Unmarshal(in []byte) error {
-	msg := new(core_api.ListHistoryReq)
+func (p *ListConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.ListConversationReq)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -295,38 +295,38 @@ func (p *ListHistoryArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var ListHistoryArgs_Req_DEFAULT *core_api.ListHistoryReq
+var ListConversationArgs_Req_DEFAULT *core_api.ListConversationReq
 
-func (p *ListHistoryArgs) GetReq() *core_api.ListHistoryReq {
+func (p *ListConversationArgs) GetReq() *core_api.ListConversationReq {
 	if !p.IsSetReq() {
-		return ListHistoryArgs_Req_DEFAULT
+		return ListConversationArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *ListHistoryArgs) IsSetReq() bool {
+func (p *ListConversationArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ListHistoryArgs) GetFirstArgument() interface{} {
+func (p *ListConversationArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type ListHistoryResult struct {
-	Success *core_api.ListHistoryResp
+type ListConversationResult struct {
+	Success *core_api.ListConversationResp
 }
 
-var ListHistoryResult_Success_DEFAULT *core_api.ListHistoryResp
+var ListConversationResult_Success_DEFAULT *core_api.ListConversationResp
 
-func (p *ListHistoryResult) Marshal(out []byte) ([]byte, error) {
+func (p *ListConversationResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *ListHistoryResult) Unmarshal(in []byte) error {
-	msg := new(core_api.ListHistoryResp)
+func (p *ListConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.ListConversationResp)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -334,71 +334,71 @@ func (p *ListHistoryResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *ListHistoryResult) GetSuccess() *core_api.ListHistoryResp {
+func (p *ListConversationResult) GetSuccess() *core_api.ListConversationResp {
 	if !p.IsSetSuccess() {
-		return ListHistoryResult_Success_DEFAULT
+		return ListConversationResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *ListHistoryResult) SetSuccess(x interface{}) {
-	p.Success = x.(*core_api.ListHistoryResp)
+func (p *ListConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.ListConversationResp)
 }
 
-func (p *ListHistoryResult) IsSetSuccess() bool {
+func (p *ListConversationResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ListHistoryResult) GetResult() interface{} {
+func (p *ListConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
-func getHistoryHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func getConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(core_api.GetHistoryReq)
+		req := new(core_api.GetConversationReq)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
-		resp, err := handler.(core_api.CoreApi).GetHistory(ctx, req)
+		resp, err := handler.(core_api.CoreApi).GetConversation(ctx, req)
 		if err != nil {
 			return err
 		}
 		return st.SendMsg(resp)
-	case *GetHistoryArgs:
-		success, err := handler.(core_api.CoreApi).GetHistory(ctx, s.Req)
+	case *GetConversationArgs:
+		success, err := handler.(core_api.CoreApi).GetConversation(ctx, s.Req)
 		if err != nil {
 			return err
 		}
-		realResult := result.(*GetHistoryResult)
+		realResult := result.(*GetConversationResult)
 		realResult.Success = success
 		return nil
 	default:
 		return errInvalidMessageType
 	}
 }
-func newGetHistoryArgs() interface{} {
-	return &GetHistoryArgs{}
+func newGetConversationArgs() interface{} {
+	return &GetConversationArgs{}
 }
 
-func newGetHistoryResult() interface{} {
-	return &GetHistoryResult{}
+func newGetConversationResult() interface{} {
+	return &GetConversationResult{}
 }
 
-type GetHistoryArgs struct {
-	Req *core_api.GetHistoryReq
+type GetConversationArgs struct {
+	Req *core_api.GetConversationReq
 }
 
-func (p *GetHistoryArgs) Marshal(out []byte) ([]byte, error) {
+func (p *GetConversationArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *GetHistoryArgs) Unmarshal(in []byte) error {
-	msg := new(core_api.GetHistoryReq)
+func (p *GetConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.GetConversationReq)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -406,38 +406,38 @@ func (p *GetHistoryArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var GetHistoryArgs_Req_DEFAULT *core_api.GetHistoryReq
+var GetConversationArgs_Req_DEFAULT *core_api.GetConversationReq
 
-func (p *GetHistoryArgs) GetReq() *core_api.GetHistoryReq {
+func (p *GetConversationArgs) GetReq() *core_api.GetConversationReq {
 	if !p.IsSetReq() {
-		return GetHistoryArgs_Req_DEFAULT
+		return GetConversationArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *GetHistoryArgs) IsSetReq() bool {
+func (p *GetConversationArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *GetHistoryArgs) GetFirstArgument() interface{} {
+func (p *GetConversationArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type GetHistoryResult struct {
-	Success *core_api.GetHistoryResp
+type GetConversationResult struct {
+	Success *core_api.GetConversationResp
 }
 
-var GetHistoryResult_Success_DEFAULT *core_api.GetHistoryResp
+var GetConversationResult_Success_DEFAULT *core_api.GetConversationResp
 
-func (p *GetHistoryResult) Marshal(out []byte) ([]byte, error) {
+func (p *GetConversationResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *GetHistoryResult) Unmarshal(in []byte) error {
-	msg := new(core_api.GetHistoryResp)
+func (p *GetConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.GetConversationResp)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -445,22 +445,22 @@ func (p *GetHistoryResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *GetHistoryResult) GetSuccess() *core_api.GetHistoryResp {
+func (p *GetConversationResult) GetSuccess() *core_api.GetConversationResp {
 	if !p.IsSetSuccess() {
-		return GetHistoryResult_Success_DEFAULT
+		return GetConversationResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *GetHistoryResult) SetSuccess(x interface{}) {
-	p.Success = x.(*core_api.GetHistoryResp)
+func (p *GetConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.GetConversationResp)
 }
 
-func (p *GetHistoryResult) IsSetSuccess() bool {
+func (p *GetConversationResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *GetHistoryResult) GetResult() interface{} {
+func (p *GetConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -696,17 +696,17 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) Completion(ctx context.Context, req *core_api.CompletionReq) (CoreApi_CompletionClient, error) {
+func (p *kClient) Completions(ctx context.Context, req *core_api.CompletionsReq) (CoreApi_CompletionsClient, error) {
 	streamClient, ok := p.c.(client.Streaming)
 	if !ok {
 		return nil, fmt.Errorf("client not support streaming")
 	}
 	res := new(streaming.Result)
-	err := streamClient.Stream(ctx, "Completion", nil, res)
+	err := streamClient.Stream(ctx, "Completions", nil, res)
 	if err != nil {
 		return nil, err
 	}
-	stream := &coreApiCompletionClient{res.Stream}
+	stream := &coreApiCompletionsClient{res.Stream}
 
 	if err := stream.Stream.SendMsg(req); err != nil {
 		return nil, err
@@ -717,21 +717,21 @@ func (p *kClient) Completion(ctx context.Context, req *core_api.CompletionReq) (
 	return stream, nil
 }
 
-func (p *kClient) ListHistory(ctx context.Context, Req *core_api.ListHistoryReq) (r *core_api.ListHistoryResp, err error) {
-	var _args ListHistoryArgs
+func (p *kClient) ListConversation(ctx context.Context, Req *core_api.ListConversationReq) (r *core_api.ListConversationResp, err error) {
+	var _args ListConversationArgs
 	_args.Req = Req
-	var _result ListHistoryResult
-	if err = p.c.Call(ctx, "ListHistory", &_args, &_result); err != nil {
+	var _result ListConversationResult
+	if err = p.c.Call(ctx, "ListConversation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetHistory(ctx context.Context, Req *core_api.GetHistoryReq) (r *core_api.GetHistoryResp, err error) {
-	var _args GetHistoryArgs
+func (p *kClient) GetConversation(ctx context.Context, Req *core_api.GetConversationReq) (r *core_api.GetConversationResp, err error) {
+	var _args GetConversationArgs
 	_args.Req = Req
-	var _result GetHistoryResult
-	if err = p.c.Call(ctx, "GetHistory", &_args, &_result); err != nil {
+	var _result GetConversationResult
+	if err = p.c.Call(ctx, "GetConversation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

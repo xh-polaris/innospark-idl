@@ -10,14 +10,14 @@ import (
 )
 
 type CoreApi interface {
-	Completion(req *CompletionReq, stream CoreApi_CompletionServer) (err error)
-	ListHistory(ctx context.Context, req *ListHistoryReq) (res *ListHistoryResp, err error)
-	GetHistory(ctx context.Context, req *GetHistoryReq) (res *GetHistoryResp, err error)
+	Completions(req *CompletionsReq, stream CoreApi_CompletionsServer) (err error)
+	ListConversation(ctx context.Context, req *ListConversationReq) (res *ListConversationResp, err error)
+	GetConversation(ctx context.Context, req *GetConversationReq) (res *GetConversationResp, err error)
 	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
 	Feedback(ctx context.Context, req *FeedbackReq) (res *basic.Response, err error)
 }
 
-type CoreApi_CompletionServer interface {
+type CoreApi_CompletionsServer interface {
 	streaming.Stream
 	Send(*SSEEvent) error
 }
