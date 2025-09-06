@@ -9,14 +9,14 @@ import "basic/http.proto";
 import "basic/re.proto";
 
 service CoreApi {
-  rpc Completion(CompletionReq) returns (stream SSEEvent){
-    option(http.post) = "/v1/completion";
+  rpc Completions(CompletionsReq) returns (stream SSEEvent){
+    option(http.post) = "/v1/completions";
   }
-  rpc ListHistory(ListHistoryReq) returns (ListHistoryResp) {
-    option(http.post) = "/history/list";
+  rpc ListConversation(ListConversationReq) returns (ListConversationResp) {
+    option(http.post) = "/conversation/list";
   }
-  rpc GetHistory(GetHistoryReq) returns (GetHistoryResp) {
-    option(http.post) = "/history/get";
+  rpc GetConversation(GetConversationReq) returns (GetConversationResp) {
+    option(http.post) = "/conversation/get";
   }
   rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
     option(http.post) = "/agents/list";
