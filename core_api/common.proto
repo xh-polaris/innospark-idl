@@ -23,10 +23,9 @@ message Message {
 message CompletionsOption {
   bool isRegen = 1; // 是否重新生成
   bool withSuggest = 2; // 是否生成建议
-  bool needCreateConversation = 3; // 是否需要创建新对话
-  bool isReplace = 4; // 是否替换
-  bool isDelete = 5; // 是否删除
-  bool useDeepThink = 6; // 是否深度思考
+  bool isReplace = 3; // 是否替换
+  bool useDeepThink = 4; // 是否深度思考
+  bool stream = 5; // 是否流式
 }
 
 // SSEEvent
@@ -131,7 +130,8 @@ message GetConversationResp {
   }
   basic.Response resp = 1;
   repeated MessageList messageList = 2;
-  bool hasMore = 3;
+  repeated MessageList regenList = 3;
+  bool hasMore = 4;
 }
 
 // 获取智能体列表
