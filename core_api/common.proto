@@ -22,10 +22,11 @@ message Message {
 // 对话配置
 message CompletionsOption {
   bool isRegen = 1; // 是否重新生成
-  bool withSuggest = 2; // 是否生成建议
-  bool isReplace = 3; // 是否替换
-  bool useDeepThink = 4; // 是否深度思考
-  bool stream = 5; // 是否流式
+  optional string selectedRegenId = 2;
+  bool withSuggest = 3; // 是否生成建议
+  bool isReplace = 4; // 是否替换
+  bool useDeepThink = 5; // 是否深度思考
+  bool stream = 6; // 是否流式
 }
 
 // SSEEvent
@@ -86,7 +87,7 @@ message CompletionsReq {
   CompletionsOption completionsOption = 2; // 对话配置
   string model = 3; // 使用的模型
   string conversationId = 4; // 对话id
-  bool withHistory = 5; // 是否携带历史记录
+  optional string replyId = 5; // 回复id
 }
 
 // 获取历史记录请求
@@ -112,13 +113,14 @@ message GetConversationReq {
 message GetConversationResp {
   message Ext {
     string bot_state = 1; // json string, 对应EventModel
+    string brief = 2;
   }
   message MessageList {
     string conversationId = 1;
     string sectionId = 2;
     string messageId = 3;
     int32 index = 4;
-    string replyId = 5; // 回复id
+    optional string replyId = 5; // 回复id
     int32 status = 6; // 状态, 目前默认0
     int64 createTime = 7;
     int32 messageType = 8;
