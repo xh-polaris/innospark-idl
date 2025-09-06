@@ -60,11 +60,12 @@ func (x *Message) GetRole() string {
 
 // 对话配置
 type CompletionsOption struct {
-	IsRegen      bool `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`           // 是否重新生成
-	WithSuggest  bool `protobuf:"varint,2,opt,name=withSuggest" json:"withSuggest,omitempty"`   // 是否生成建议
-	IsReplace    bool `protobuf:"varint,3,opt,name=isReplace" json:"isReplace,omitempty"`       // 是否替换
-	UseDeepThink bool `protobuf:"varint,4,opt,name=useDeepThink" json:"useDeepThink,omitempty"` // 是否深度思考
-	Stream       bool `protobuf:"varint,5,opt,name=stream" json:"stream,omitempty"`             // 是否流式
+	IsRegen         bool    `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"` // 是否重新生成
+	SelectedRegenId *string `protobuf:"bytes,2,opt,name=selectedRegenId" json:"selectedRegenId,omitempty"`
+	WithSuggest     bool    `protobuf:"varint,3,opt,name=withSuggest" json:"withSuggest,omitempty"`   // 是否生成建议
+	IsReplace       bool    `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`       // 是否替换
+	UseDeepThink    bool    `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"` // 是否深度思考
+	Stream          bool    `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`             // 是否流式
 }
 
 func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
@@ -78,6 +79,13 @@ func (x *CompletionsOption) GetIsRegen() bool {
 		return x.IsRegen
 	}
 	return false
+}
+
+func (x *CompletionsOption) GetSelectedRegenId() string {
+	if x != nil && x.SelectedRegenId != nil {
+		return *x.SelectedRegenId
+	}
+	return ""
 }
 
 func (x *CompletionsOption) GetWithSuggest() bool {
@@ -358,7 +366,7 @@ type CompletionsReq struct {
 	CompletionsOption *CompletionsOption `protobuf:"bytes,2,opt,name=completionsOption" json:"completionsOption,omitempty"` // 对话配置
 	Model             string             `protobuf:"bytes,3,opt,name=model" json:"model,omitempty"`                         // 使用的模型
 	ConversationId    string             `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`       // 对话id
-	WithHistory       bool               `protobuf:"varint,5,opt,name=withHistory" json:"withHistory,omitempty"`            // 是否携带历史记录
+	ReplyId           *string            `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"`                     // 回复id
 }
 
 func (x *CompletionsReq) Reset() { *x = CompletionsReq{} }
@@ -395,11 +403,11 @@ func (x *CompletionsReq) GetConversationId() string {
 	return ""
 }
 
-func (x *CompletionsReq) GetWithHistory() bool {
-	if x != nil {
-		return x.WithHistory
+func (x *CompletionsReq) GetReplyId() string {
+	if x != nil && x.ReplyId != nil {
+		return *x.ReplyId
 	}
-	return false
+	return ""
 }
 
 // 获取历史记录请求
@@ -559,6 +567,7 @@ func (x *GetConversationResp) GetHasMore() bool {
 
 type GetConversationResp_Ext struct {
 	BotState string `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
+	Brief    string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
 }
 
 func (x *GetConversationResp_Ext) Reset() { *x = GetConversationResp_Ext{} }
@@ -576,12 +585,19 @@ func (x *GetConversationResp_Ext) GetBotState() string {
 	return ""
 }
 
+func (x *GetConversationResp_Ext) GetBrief() string {
+	if x != nil {
+		return x.Brief
+	}
+	return ""
+}
+
 type GetConversationResp_MessageList struct {
 	ConversationId string                   `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
 	SectionId      string                   `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
 	MessageId      string                   `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
 	Index          int32                    `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
-	ReplyId        string                   `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
+	ReplyId        *string                  `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
 	Status         int32                    `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
 	CreateTime     int64                    `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
 	MessageType    int32                    `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
@@ -629,8 +645,8 @@ func (x *GetConversationResp_MessageList) GetIndex() int32 {
 }
 
 func (x *GetConversationResp_MessageList) GetReplyId() string {
-	if x != nil {
-		return x.ReplyId
+	if x != nil && x.ReplyId != nil {
+		return *x.ReplyId
 	}
 	return ""
 }
