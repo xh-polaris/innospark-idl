@@ -14,6 +14,7 @@ type Message struct {
 	ContentType int32    `protobuf:"varint,2,opt,name=contentType" json:"contentType,omitempty"`
 	Attaches    []string `protobuf:"bytes,3,rep,name=attaches" json:"attaches,omitempty"`
 	References  []string `protobuf:"bytes,4,rep,name=references" json:"references,omitempty"`
+	Role        string   `protobuf:"bytes,5,opt,name=role" json:"role,omitempty"`
 }
 
 func (x *Message) Reset() { *x = Message{} }
@@ -48,6 +49,13 @@ func (x *Message) GetReferences() []string {
 		return x.References
 	}
 	return nil
+}
+
+func (x *Message) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
 }
 
 // 对话配置
@@ -194,8 +202,9 @@ func (x *EventMeta) GetConversationType() int32 {
 
 // 模型信息
 type EventModel struct {
-	BotId   string `protobuf:"bytes,1,opt,name=botId" json:"botId,omitempty"`     // 模型id
-	BotName string `protobuf:"bytes,2,opt,name=botName" json:"botName,omitempty"` // 模型名称
+	Model   string `protobuf:"bytes,1,opt,name=model" json:"model,omitempty"`     // 模型id
+	BotId   string `protobuf:"bytes,2,opt,name=botId" json:"botId,omitempty"`     // 智能体id
+	BotName string `protobuf:"bytes,3,opt,name=botName" json:"botName,omitempty"` // 模型名称
 }
 
 func (x *EventModel) Reset() { *x = EventModel{} }
@@ -203,6 +212,13 @@ func (x *EventModel) Reset() { *x = EventModel{} }
 func (x *EventModel) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
 func (x *EventModel) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *EventModel) GetModel() string {
+	if x != nil {
+		return x.Model
+	}
+	return ""
+}
 
 func (x *EventModel) GetBotId() string {
 	if x != nil {
@@ -348,7 +364,7 @@ func (x *EventEnd) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 type CompletionsReq struct {
 	Messages          []*Message         `protobuf:"bytes,1,rep,name=messages" json:"messages,omitempty"`                   // 用户输入消息, 长度应为1
 	CompletionsOption *CompletionsOption `protobuf:"bytes,2,opt,name=completionsOption" json:"completionsOption,omitempty"` // 对话配置
-	BotId             string             `protobuf:"bytes,3,opt,name=botId" json:"botId,omitempty"`                         // 使用的模型id
+	Model             string             `protobuf:"bytes,3,opt,name=model" json:"model,omitempty"`                         // 使用的模型
 	ConversationId    string             `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`       // 对话id
 	WithHistory       bool               `protobuf:"varint,5,opt,name=withHistory" json:"withHistory,omitempty"`            // 是否携带历史记录
 }
@@ -373,9 +389,9 @@ func (x *CompletionsReq) GetCompletionsOption() *CompletionsOption {
 	return nil
 }
 
-func (x *CompletionsReq) GetBotId() string {
+func (x *CompletionsReq) GetModel() string {
 	if x != nil {
-		return x.BotId
+		return x.Model
 	}
 	return ""
 }
