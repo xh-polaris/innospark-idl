@@ -367,6 +367,7 @@ type CompletionsReq struct {
 	Model             string             `protobuf:"bytes,3,opt,name=model" json:"model,omitempty"`                         // 使用的模型
 	ConversationId    string             `protobuf:"bytes,4,opt,name=conversationId" json:"conversationId,omitempty"`       // 对话id
 	ReplyId           *string            `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"`                     // 回复id
+	BotId             string             `protobuf:"bytes,6,opt,name=botId" json:"botId,omitempty"`                         // 智能体id
 }
 
 func (x *CompletionsReq) Reset() { *x = CompletionsReq{} }
@@ -406,6 +407,13 @@ func (x *CompletionsReq) GetConversationId() string {
 func (x *CompletionsReq) GetReplyId() string {
 	if x != nil && x.ReplyId != nil {
 		return *x.ReplyId
+	}
+	return ""
+}
+
+func (x *CompletionsReq) GetBotId() string {
+	if x != nil {
+		return x.BotId
 	}
 	return ""
 }
