@@ -88,6 +88,7 @@ message CompletionsReq {
   string model = 3; // 使用的模型
   string conversationId = 4; // 对话id
   optional string replyId = 5; // 回复id
+  string botId = 6; // 智能体id
 }
 
 // 获取历史记录请求
