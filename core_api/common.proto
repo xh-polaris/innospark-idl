@@ -29,6 +29,28 @@ message CompletionsOption {
   bool stream = 6; // 是否流式
 }
 
+message Ext {
+  string bot_state = 1; // json string, 对应EventModel
+  string brief = 2;
+  string think = 3;
+  string suggest = 4;
+}
+message FullMessage {
+  string conversationId = 1;
+  string sectionId = 2;
+  string messageId = 3;
+  int32 index = 4;
+  optional string replyId = 5; // 回复id
+  int32 status = 6; // 状态, 目前默认0
+  int64 createTime = 7;
+  int32 messageType = 8;
+  int32 contentType = 9;
+  string content = 10; // json string
+  Ext ext = 11;
+  int32 feedback = 12; // 反馈类型
+  int32 userType = 13; // 用户类型, 如system, assistant, user
+}
+
 // SSEEvent
 message SSEEvent {
   string eventData = 1; // 事件数据
@@ -75,7 +97,7 @@ message EventEnd {}
 
 /* 接口请求与响应定义 */
 /* 请求与响应必须相邻定义, 且符合如下规范: */
-/* 只有code和msg的响应, 使用re.Response, 无需重复定义 */
+/* 只有code和msg的响应, 使用re.Response, 命名为resp, 无需重复定义 */
 /* 请求以Req结尾, 响应以Resp结尾, 除此外同一接口请求与响应命名相同 */
 /* 根据含义确定前缀: 获取单个[Get], 分页获取[List], 更新[Update], 删除[Delete] */
 /* 形如GetInfo的接口, 存在重复命名的可能, 需要加上所属模块以区分, 如GetUserInfo|GetBotInfo */
@@ -111,7 +133,7 @@ message ListConversationResp {
     int64 createTime = 3;
     int64 updateTime = 4;
   }
-  basic.Response response = 1;
+  basic.Response resp = 1;
   repeated ConversationItem conversations = 2;
 }
 
@@ -121,35 +143,16 @@ message GetConversationReq {
   string conversationId = 2;
 }
 message GetConversationResp {
-  message Ext {
-    string bot_state = 1; // json string, 对应EventModel
-    string brief = 2;
-  }
-  message MessageList {
-    string conversationId = 1;
-    string sectionId = 2;
-    string messageId = 3;
-    int32 index = 4;
-    optional string replyId = 5; // 回复id
-    int32 status = 6; // 状态, 目前默认0
-    int64 createTime = 7;
-    int32 messageType = 8;
-    int32 contentType = 9;
-    string content = 10; // json string
-    Ext ext = 11;
-    int32 feedback = 12; // 反馈类型
-    int32 userType = 13; // 用户类型, 如system, assistant, user
-  }
   basic.Response resp = 1;
-  repeated MessageList messageList = 2;
-  repeated MessageList regenList = 3;
+  repeated FullMessage messageList = 2;
+  repeated FullMessage regenList = 3;
   bool hasMore = 4;
 }
 
 // 更新历史对话标题
 message RenameConversationReq {
   string conversationId = 1;
-  string newName = 2;
+  string brief = 2;
 }
 message RenameConversationResp{
   basic.Response resp = 1;
