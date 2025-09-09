@@ -24,6 +24,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingServer),
 	),
+	"CreateConversation": kitex.NewMethodInfo(
+		createConversationHandler,
+		newCreateConversationArgs,
+		newCreateConversationResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"ListConversation": kitex.NewMethodInfo(
 		listConversationHandler,
 		newListConversationArgs,
@@ -35,6 +42,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		getConversationHandler,
 		newGetConversationArgs,
 		newGetConversationResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"RenameConversation": kitex.NewMethodInfo(
+		renameConversationHandler,
+		newRenameConversationArgs,
+		newRenameConversationResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
@@ -239,6 +253,117 @@ func (p *CompletionsResult) IsSetSuccess() bool {
 }
 
 func (p *CompletionsResult) GetResult() interface{} {
+	return p.Success
+}
+
+func createConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.CreateConversationReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).CreateConversation(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CreateConversationArgs:
+		success, err := handler.(core_api.CoreApi).CreateConversation(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CreateConversationResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCreateConversationArgs() interface{} {
+	return &CreateConversationArgs{}
+}
+
+func newCreateConversationResult() interface{} {
+	return &CreateConversationResult{}
+}
+
+type CreateConversationArgs struct {
+	Req *core_api.CreateConversationReq
+}
+
+func (p *CreateConversationArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CreateConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.CreateConversationReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CreateConversationArgs_Req_DEFAULT *core_api.CreateConversationReq
+
+func (p *CreateConversationArgs) GetReq() *core_api.CreateConversationReq {
+	if !p.IsSetReq() {
+		return CreateConversationArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CreateConversationArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CreateConversationArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CreateConversationResult struct {
+	Success *core_api.CreateConversationResp
+}
+
+var CreateConversationResult_Success_DEFAULT *core_api.CreateConversationResp
+
+func (p *CreateConversationResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CreateConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.CreateConversationResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CreateConversationResult) GetSuccess() *core_api.CreateConversationResp {
+	if !p.IsSetSuccess() {
+		return CreateConversationResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CreateConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.CreateConversationResp)
+}
+
+func (p *CreateConversationResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CreateConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -461,6 +586,117 @@ func (p *GetConversationResult) IsSetSuccess() bool {
 }
 
 func (p *GetConversationResult) GetResult() interface{} {
+	return p.Success
+}
+
+func renameConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.RenameConversationReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).RenameConversation(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *RenameConversationArgs:
+		success, err := handler.(core_api.CoreApi).RenameConversation(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*RenameConversationResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newRenameConversationArgs() interface{} {
+	return &RenameConversationArgs{}
+}
+
+func newRenameConversationResult() interface{} {
+	return &RenameConversationResult{}
+}
+
+type RenameConversationArgs struct {
+	Req *core_api.RenameConversationReq
+}
+
+func (p *RenameConversationArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *RenameConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.RenameConversationReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var RenameConversationArgs_Req_DEFAULT *core_api.RenameConversationReq
+
+func (p *RenameConversationArgs) GetReq() *core_api.RenameConversationReq {
+	if !p.IsSetReq() {
+		return RenameConversationArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *RenameConversationArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *RenameConversationArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type RenameConversationResult struct {
+	Success *core_api.RenameConversationResp
+}
+
+var RenameConversationResult_Success_DEFAULT *core_api.RenameConversationResp
+
+func (p *RenameConversationResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *RenameConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.RenameConversationResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *RenameConversationResult) GetSuccess() *core_api.RenameConversationResp {
+	if !p.IsSetSuccess() {
+		return RenameConversationResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *RenameConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.RenameConversationResp)
+}
+
+func (p *RenameConversationResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *RenameConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -717,6 +953,16 @@ func (p *kClient) Completions(ctx context.Context, req *core_api.CompletionsReq)
 	return stream, nil
 }
 
+func (p *kClient) CreateConversation(ctx context.Context, Req *core_api.CreateConversationReq) (r *core_api.CreateConversationResp, err error) {
+	var _args CreateConversationArgs
+	_args.Req = Req
+	var _result CreateConversationResult
+	if err = p.c.Call(ctx, "CreateConversation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *kClient) ListConversation(ctx context.Context, Req *core_api.ListConversationReq) (r *core_api.ListConversationResp, err error) {
 	var _args ListConversationArgs
 	_args.Req = Req
@@ -732,6 +978,16 @@ func (p *kClient) GetConversation(ctx context.Context, Req *core_api.GetConversa
 	_args.Req = Req
 	var _result GetConversationResult
 	if err = p.c.Call(ctx, "GetConversation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) RenameConversation(ctx context.Context, Req *core_api.RenameConversationReq) (r *core_api.RenameConversationResp, err error) {
+	var _args RenameConversationArgs
+	_args.Req = Req
+	var _result RenameConversationResult
+	if err = p.c.Call(ctx, "RenameConversation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

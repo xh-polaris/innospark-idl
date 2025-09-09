@@ -17,8 +17,10 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	Completions(ctx context.Context, Req *core_api.CompletionsReq, callOptions ...callopt.Option) (stream CoreApi_CompletionsClient, err error)
+	CreateConversation(ctx context.Context, Req *core_api.CreateConversationReq, callOptions ...callopt.Option) (r *core_api.CreateConversationResp, err error)
 	ListConversation(ctx context.Context, Req *core_api.ListConversationReq, callOptions ...callopt.Option) (r *core_api.ListConversationResp, err error)
 	GetConversation(ctx context.Context, Req *core_api.GetConversationReq, callOptions ...callopt.Option) (r *core_api.GetConversationResp, err error)
+	RenameConversation(ctx context.Context, Req *core_api.RenameConversationReq, callOptions ...callopt.Option) (r *core_api.RenameConversationResp, err error)
 	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
 	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error)
 }
@@ -69,6 +71,11 @@ func (p *kCoreApiClient) Completions(ctx context.Context, Req *core_api.Completi
 	return p.kClient.Completions(ctx, Req)
 }
 
+func (p *kCoreApiClient) CreateConversation(ctx context.Context, Req *core_api.CreateConversationReq, callOptions ...callopt.Option) (r *core_api.CreateConversationResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CreateConversation(ctx, Req)
+}
+
 func (p *kCoreApiClient) ListConversation(ctx context.Context, Req *core_api.ListConversationReq, callOptions ...callopt.Option) (r *core_api.ListConversationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.ListConversation(ctx, Req)
@@ -77,6 +84,11 @@ func (p *kCoreApiClient) ListConversation(ctx context.Context, Req *core_api.Lis
 func (p *kCoreApiClient) GetConversation(ctx context.Context, Req *core_api.GetConversationReq, callOptions ...callopt.Option) (r *core_api.GetConversationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetConversation(ctx, Req)
+}
+
+func (p *kCoreApiClient) RenameConversation(ctx context.Context, Req *core_api.RenameConversationReq, callOptions ...callopt.Option) (r *core_api.RenameConversationResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.RenameConversation(ctx, Req)
 }
 
 func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error) {

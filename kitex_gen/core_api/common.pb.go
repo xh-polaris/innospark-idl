@@ -418,6 +418,37 @@ func (x *CompletionsReq) GetBotId() string {
 	return ""
 }
 
+// 创建对话
+type CreateConversationReq struct {
+}
+
+func (x *CreateConversationReq) Reset() { *x = CreateConversationReq{} }
+
+func (x *CreateConversationReq) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *CreateConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+type CreateConversationResp struct {
+	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+}
+
+func (x *CreateConversationResp) Reset() { *x = CreateConversationResp{} }
+
+func (x *CreateConversationResp) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *CreateConversationResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *CreateConversationResp) GetConversationId() string {
+	if x != nil {
+		return x.ConversationId
+	}
+	return ""
+}
+
 // 获取历史记录请求
 type ListConversationReq struct {
 	Page *basic.Page `protobuf:"bytes,1,opt,name=page" json:"page,omitempty"`
@@ -713,6 +744,53 @@ func (x *GetConversationResp_MessageList) GetUserType() int32 {
 		return x.UserType
 	}
 	return 0
+}
+
+// 更新历史对话标题
+type RenameConversationReq struct {
+	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	NewName        string `protobuf:"bytes,2,opt,name=newName" json:"newName,omitempty"`
+}
+
+func (x *RenameConversationReq) Reset() { *x = RenameConversationReq{} }
+
+func (x *RenameConversationReq) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *RenameConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *RenameConversationReq) GetConversationId() string {
+	if x != nil {
+		return x.ConversationId
+	}
+	return ""
+}
+
+func (x *RenameConversationReq) GetNewName() string {
+	if x != nil {
+		return x.NewName
+	}
+	return ""
+}
+
+type RenameConversationResp struct {
+	Resp *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+}
+
+func (x *RenameConversationResp) Reset() { *x = RenameConversationResp{} }
+
+func (x *RenameConversationResp) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *RenameConversationResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *RenameConversationResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
 }
 
 // 获取智能体列表

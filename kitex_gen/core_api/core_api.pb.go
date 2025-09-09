@@ -11,8 +11,10 @@ import (
 
 type CoreApi interface {
 	Completions(req *CompletionsReq, stream CoreApi_CompletionsServer) (err error)
+	CreateConversation(ctx context.Context, req *CreateConversationReq) (res *CreateConversationResp, err error)
 	ListConversation(ctx context.Context, req *ListConversationReq) (res *ListConversationResp, err error)
 	GetConversation(ctx context.Context, req *GetConversationReq) (res *GetConversationResp, err error)
+	RenameConversation(ctx context.Context, req *RenameConversationReq) (res *RenameConversationResp, err error)
 	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
 	Feedback(ctx context.Context, req *FeedbackReq) (res *basic.Response, err error)
 }
