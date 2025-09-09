@@ -431,7 +431,8 @@ func (x *CreateConversationReq) Marshal(in []byte) ([]byte, error) {
 func (x *CreateConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
 type CreateConversationResp struct {
-	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	ConversationId string          `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	Resp           *basic.Response `protobuf:"bytes,2,opt,name=resp" json:"resp,omitempty"`
 }
 
 func (x *CreateConversationResp) Reset() { *x = CreateConversationResp{} }
@@ -447,6 +448,13 @@ func (x *CreateConversationResp) GetConversationId() string {
 		return x.ConversationId
 	}
 	return ""
+}
+
+func (x *CreateConversationResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
 }
 
 // 获取历史记录请求
