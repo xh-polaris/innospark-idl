@@ -116,6 +116,160 @@ func (x *CompletionsOption) GetStream() bool {
 	return false
 }
 
+type Ext struct {
+	BotState string `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
+	Brief    string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
+	Think    string `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
+	Suggest  string `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
+}
+
+func (x *Ext) Reset() { *x = Ext{} }
+
+func (x *Ext) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *Ext) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Ext) GetBotState() string {
+	if x != nil {
+		return x.BotState
+	}
+	return ""
+}
+
+func (x *Ext) GetBrief() string {
+	if x != nil {
+		return x.Brief
+	}
+	return ""
+}
+
+func (x *Ext) GetThink() string {
+	if x != nil {
+		return x.Think
+	}
+	return ""
+}
+
+func (x *Ext) GetSuggest() string {
+	if x != nil {
+		return x.Suggest
+	}
+	return ""
+}
+
+type FullMessage struct {
+	ConversationId string  `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	SectionId      string  `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
+	MessageId      string  `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
+	Index          int32   `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
+	ReplyId        *string `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
+	Status         int32   `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
+	CreateTime     int64   `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
+	MessageType    int32   `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
+	ContentType    int32   `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
+	Content        string  `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
+	Ext            *Ext    `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
+	Feedback       int32   `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
+	UserType       int32   `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
+}
+
+func (x *FullMessage) Reset() { *x = FullMessage{} }
+
+func (x *FullMessage) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *FullMessage) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *FullMessage) GetConversationId() string {
+	if x != nil {
+		return x.ConversationId
+	}
+	return ""
+}
+
+func (x *FullMessage) GetSectionId() string {
+	if x != nil {
+		return x.SectionId
+	}
+	return ""
+}
+
+func (x *FullMessage) GetMessageId() string {
+	if x != nil {
+		return x.MessageId
+	}
+	return ""
+}
+
+func (x *FullMessage) GetIndex() int32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *FullMessage) GetReplyId() string {
+	if x != nil && x.ReplyId != nil {
+		return *x.ReplyId
+	}
+	return ""
+}
+
+func (x *FullMessage) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *FullMessage) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
+}
+
+func (x *FullMessage) GetMessageType() int32 {
+	if x != nil {
+		return x.MessageType
+	}
+	return 0
+}
+
+func (x *FullMessage) GetContentType() int32 {
+	if x != nil {
+		return x.ContentType
+	}
+	return 0
+}
+
+func (x *FullMessage) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *FullMessage) GetExt() *Ext {
+	if x != nil {
+		return x.Ext
+	}
+	return nil
+}
+
+func (x *FullMessage) GetFeedback() int32 {
+	if x != nil {
+		return x.Feedback
+	}
+	return 0
+}
+
+func (x *FullMessage) GetUserType() int32 {
+	if x != nil {
+		return x.UserType
+	}
+	return 0
+}
+
 // SSEEvent
 type SSEEvent struct {
 	EventData string `protobuf:"bytes,1,opt,name=eventData" json:"eventData,omitempty"`  // 事件数据
@@ -476,7 +630,7 @@ func (x *ListConversationReq) GetPage() *basic.Page {
 }
 
 type ListConversationResp struct {
-	Response      *basic.Response                          `protobuf:"bytes,1,opt,name=response" json:"response,omitempty"`
+	Resp          *basic.Response                          `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Conversations []*ListConversationResp_ConversationItem `protobuf:"bytes,2,rep,name=conversations" json:"conversations,omitempty"`
 }
 
@@ -486,9 +640,9 @@ func (x *ListConversationResp) Marshal(in []byte) ([]byte, error) { return pruta
 
 func (x *ListConversationResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *ListConversationResp) GetResponse() *basic.Response {
+func (x *ListConversationResp) GetResp() *basic.Response {
 	if x != nil {
-		return x.Response
+		return x.Resp
 	}
 	return nil
 }
@@ -572,10 +726,10 @@ func (x *GetConversationReq) GetConversationId() string {
 }
 
 type GetConversationResp struct {
-	Resp        *basic.Response                    `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	MessageList []*GetConversationResp_MessageList `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
-	RegenList   []*GetConversationResp_MessageList `protobuf:"bytes,3,rep,name=regenList" json:"regenList,omitempty"`
-	HasMore     bool                               `protobuf:"varint,4,opt,name=hasMore" json:"hasMore,omitempty"`
+	Resp        *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	MessageList []*FullMessage  `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
+	RegenList   []*FullMessage  `protobuf:"bytes,3,rep,name=regenList" json:"regenList,omitempty"`
+	HasMore     bool            `protobuf:"varint,4,opt,name=hasMore" json:"hasMore,omitempty"`
 }
 
 func (x *GetConversationResp) Reset() { *x = GetConversationResp{} }
@@ -591,14 +745,14 @@ func (x *GetConversationResp) GetResp() *basic.Response {
 	return nil
 }
 
-func (x *GetConversationResp) GetMessageList() []*GetConversationResp_MessageList {
+func (x *GetConversationResp) GetMessageList() []*FullMessage {
 	if x != nil {
 		return x.MessageList
 	}
 	return nil
 }
 
-func (x *GetConversationResp) GetRegenList() []*GetConversationResp_MessageList {
+func (x *GetConversationResp) GetRegenList() []*FullMessage {
 	if x != nil {
 		return x.RegenList
 	}
@@ -612,152 +766,10 @@ func (x *GetConversationResp) GetHasMore() bool {
 	return false
 }
 
-type GetConversationResp_Ext struct {
-	BotState string `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
-	Brief    string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
-}
-
-func (x *GetConversationResp_Ext) Reset() { *x = GetConversationResp_Ext{} }
-
-func (x *GetConversationResp_Ext) Marshal(in []byte) ([]byte, error) {
-	return prutal.MarshalAppend(in, x)
-}
-
-func (x *GetConversationResp_Ext) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
-
-func (x *GetConversationResp_Ext) GetBotState() string {
-	if x != nil {
-		return x.BotState
-	}
-	return ""
-}
-
-func (x *GetConversationResp_Ext) GetBrief() string {
-	if x != nil {
-		return x.Brief
-	}
-	return ""
-}
-
-type GetConversationResp_MessageList struct {
-	ConversationId string                   `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
-	SectionId      string                   `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
-	MessageId      string                   `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
-	Index          int32                    `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
-	ReplyId        *string                  `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
-	Status         int32                    `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
-	CreateTime     int64                    `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
-	MessageType    int32                    `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
-	ContentType    int32                    `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
-	Content        string                   `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
-	Ext            *GetConversationResp_Ext `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
-	Feedback       int32                    `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
-	UserType       int32                    `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
-}
-
-func (x *GetConversationResp_MessageList) Reset() { *x = GetConversationResp_MessageList{} }
-
-func (x *GetConversationResp_MessageList) Marshal(in []byte) ([]byte, error) {
-	return prutal.MarshalAppend(in, x)
-}
-
-func (x *GetConversationResp_MessageList) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
-
-func (x *GetConversationResp_MessageList) GetConversationId() string {
-	if x != nil {
-		return x.ConversationId
-	}
-	return ""
-}
-
-func (x *GetConversationResp_MessageList) GetSectionId() string {
-	if x != nil {
-		return x.SectionId
-	}
-	return ""
-}
-
-func (x *GetConversationResp_MessageList) GetMessageId() string {
-	if x != nil {
-		return x.MessageId
-	}
-	return ""
-}
-
-func (x *GetConversationResp_MessageList) GetIndex() int32 {
-	if x != nil {
-		return x.Index
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetReplyId() string {
-	if x != nil && x.ReplyId != nil {
-		return *x.ReplyId
-	}
-	return ""
-}
-
-func (x *GetConversationResp_MessageList) GetStatus() int32 {
-	if x != nil {
-		return x.Status
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetCreateTime() int64 {
-	if x != nil {
-		return x.CreateTime
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetMessageType() int32 {
-	if x != nil {
-		return x.MessageType
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetContentType() int32 {
-	if x != nil {
-		return x.ContentType
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetContent() string {
-	if x != nil {
-		return x.Content
-	}
-	return ""
-}
-
-func (x *GetConversationResp_MessageList) GetExt() *GetConversationResp_Ext {
-	if x != nil {
-		return x.Ext
-	}
-	return nil
-}
-
-func (x *GetConversationResp_MessageList) GetFeedback() int32 {
-	if x != nil {
-		return x.Feedback
-	}
-	return 0
-}
-
-func (x *GetConversationResp_MessageList) GetUserType() int32 {
-	if x != nil {
-		return x.UserType
-	}
-	return 0
-}
-
 // 更新历史对话标题
 type RenameConversationReq struct {
 	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
-	NewName        string `protobuf:"bytes,2,opt,name=newName" json:"newName,omitempty"`
+	Brief          string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
 }
 
 func (x *RenameConversationReq) Reset() { *x = RenameConversationReq{} }
@@ -775,9 +787,9 @@ func (x *RenameConversationReq) GetConversationId() string {
 	return ""
 }
 
-func (x *RenameConversationReq) GetNewName() string {
+func (x *RenameConversationReq) GetBrief() string {
 	if x != nil {
-		return x.NewName
+		return x.Brief
 	}
 	return ""
 }
