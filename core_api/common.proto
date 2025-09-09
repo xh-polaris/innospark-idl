@@ -1,0 +1,167 @@
+syntax = "proto3";
+
+package core_api;
+
+option go_package = "core_api";
+
+import "basic/page.proto";
+import "basic/re.proto";
+import "google/protobuf/struct.proto";
+
+/* 通用Message类定义 */
+
+// 单条消息
+message Message {
+  string content = 1; // 消息内容, json字符串, 存放在text中
+  int32 contentType = 2;
+  repeated string attaches = 3;
+  repeated string references = 4;
+  string role = 5;
+}
+
+// 对话配置
+message CompletionsOption {
+  bool isRegen = 1; // 是否重新生成
+  optional string selectedRegenId = 2;
+  bool withSuggest = 3; // 是否生成建议
+  bool isReplace = 4; // 是否替换
+  bool useDeepThink = 5; // 是否深度思考
+  bool stream = 6; // 是否流式
+}
+
+// SSEEvent
+message SSEEvent {
+  string eventData = 1; // 事件数据
+  int32 eventId = 2; // 事件id
+  int32 eventType = 3; // 事件类型
+}
+
+// 消息元数据
+message EventMeta {
+  string messageId = 1; // 消息id
+  string conversationId = 2; // 对话id
+  string sectionId = 3; // 段id
+  int32 messageIndex = 4; // 消息索引
+  int32 conversationType = 5; // 对话类型
+}
+
+// 模型信息
+message EventModel {
+  string model = 1; // 模型id
+  string botId = 2; // 智能体id
+  string botName = 3; // 模型名称
+}
+
+// 模型内容
+message EventChat {
+  message Message {// 模型增量返回的简要消息
+    string content = 1;
+    int32 contentType = 2;
+  }
+  Message message = 1; // 消息内容
+  string messageId = 2; // 消息id
+  string conversationId = 3; // 对话id
+  string sectionId = 4; // 段id
+  string replyId = 5; // 回复id
+  bool isDelta = 6; // 是否增量
+  int32 status = 7; // 状态
+  int32 inputContentType = 8; // 输入内容类型
+  int32 messageIndex = 9; // 消息索引
+  string botId = 10; // 模型id
+}
+
+// 结束
+message EventEnd {}
+
+/* 接口请求与响应定义 */
+/* 请求与响应必须相邻定义, 且符合如下规范: */
+/* 只有code和msg的响应, 使用re.Response, 无需重复定义 */
+/* 请求以Req结尾, 响应以Resp结尾, 除此外同一接口请求与响应命名相同 */
+/* 根据含义确定前缀: 获取单个[Get], 分页获取[List], 更新[Update], 删除[Delete] */
+/* 形如GetInfo的接口, 存在重复命名的可能, 需要加上所属模块以区分, 如GetUserInfo|GetBotInfo */
+/* 字段较复杂且可能出现多处重用的, 即使有字段冗余也可以使用通用Message类作为字段 */
+
+// 模型对话请求
+message CompletionsReq {
+  repeated Message messages = 1; // 用户输入消息, 长度应为1
+  CompletionsOption completionsOption = 2; // 对话配置
+  string model = 3; // 使用的模型
+  string conversationId = 4; // 对话id
+  optional string replyId = 5; // 回复id
+  string botId = 6; // 智能体id
+}
+
+// 获取历史记录请求
+message ListConversationReq {
+  basic.Page page = 1;
+}
+message ListConversationResp {
+  message ConversationItem {
+    string conversationId = 1;
+    string brief = 2;
+    int64 createTime = 3;
+    int64 updateTime = 4;
+  }
+  basic.Response response = 1;
+  repeated ConversationItem conversations = 2;
+}
+
+// 获取历史记录
+message GetConversationReq {
+  basic.Page page = 1;
+  string conversationId = 2;
+}
+message GetConversationResp {
+  message Ext {
+    string bot_state = 1; // json string, 对应EventModel
+    string brief = 2;
+  }
+  message MessageList {
+    string conversationId = 1;
+    string sectionId = 2;
+    string messageId = 3;
+    int32 index = 4;
+    optional string replyId = 5; // 回复id
+    int32 status = 6; // 状态, 目前默认0
+    int64 createTime = 7;
+    int32 messageType = 8;
+    int32 contentType = 9;
+    string content = 10; // json string
+    Ext ext = 11;
+    int32 feedback = 12; // 反馈类型
+    int32 userType = 13; // 用户类型, 如system, assistant, user
+  }
+  basic.Response resp = 1;
+  repeated MessageList messageList = 2;
+  repeated MessageList regenList = 3;
+  bool hasMore = 4;
+}
+
+// 获取智能体列表
+message ListAgentsReq {
+  basic.Page page = 1;
+}
+message ListAgentsResp {
+  message Agent {
+    string botId = 1;
+    string botIcon = 2;
+    string botName = 3;
+    string botDescription = 4;
+  }
+  basic.Response resp = 1;
+  repeated Agent agents = 2;
+}
+
+// 反馈, 包括点赞, 点踩, 删除等
+message FeedbackReq {
+  message Feedback {
+    int32 type = 1;
+    string content = 2;
+  }
+  string action = 1;
+  string messageId = 2;
+  Feedback feedback = 3;
+}
+message FeedbackResp {
+  basic.Response resp = 1;
+}

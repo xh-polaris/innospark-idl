@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package core_api;
+
+option go_package = "core_api";
+
+import "core_api/common.proto";
+import "basic/http.proto";
+import "basic/re.proto";
+
+service CoreApi {
+  rpc Completions(CompletionsReq) returns (stream SSEEvent){
+    option(http.post) = "/v1/completions";
+  }
+  rpc ListConversation(ListConversationReq) returns (ListConversationResp) {
+    option(http.post) = "/conversation/list";
+  }
+  rpc GetConversation(GetConversationReq) returns (GetConversationResp) {
+    option(http.post) = "/conversation/get";
+  }
+  rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
+    option(http.post) = "/agents/list";
+  }
+  rpc Feedback(FeedbackReq) returns (basic.Response) {
+    option(http.post) = "/feedback";
+  }
+}
