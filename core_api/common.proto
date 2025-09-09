@@ -97,6 +97,7 @@ message CreateConversationReq {
 }
 message CreateConversationResp {
   string conversationId = 1;
+  basic.Response resp = 2;
 }
 
 // 获取历史记录请求
