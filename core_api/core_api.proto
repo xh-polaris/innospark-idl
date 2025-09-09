@@ -12,11 +12,17 @@ service CoreApi {
   rpc Completions(CompletionsReq) returns (stream SSEEvent){
     option(http.post) = "/v1/completions";
   }
+  rpc CreateConversation(CreateConversationReq) returns (CreateConversationResp) {
+    option(http.post) = "/conversation/create";
+  }
   rpc ListConversation(ListConversationReq) returns (ListConversationResp) {
     option(http.post) = "/conversation/list";
   }
   rpc GetConversation(GetConversationReq) returns (GetConversationResp) {
     option(http.post) = "/conversation/get";
+  }
+  rpc RenameConversation(RenameConversationReq) returns (RenameConversationResp) {
+    option(http.post) = "/conversation/rename";
   }
   rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
     option(http.post) = "/agents/list";

@@ -91,6 +91,14 @@ message CompletionsReq {
   string botId = 6; // 智能体id
 }
 
+// 创建对话
+message CreateConversationReq {
+
+}
+message CreateConversationResp {
+  string conversationId = 1;
+}
+
 // 获取历史记录请求
 message ListConversationReq {
   basic.Page page = 1;
@@ -135,6 +143,15 @@ message GetConversationResp {
   repeated MessageList messageList = 2;
   repeated MessageList regenList = 3;
   bool hasMore = 4;
+}
+
+// 更新历史对话标题
+message RenameConversationReq {
+  string conversationId = 1;
+  string newName = 2;
+}
+message RenameConversationResp{
+  basic.Response resp = 1;
 }
 
 // 获取智能体列表
