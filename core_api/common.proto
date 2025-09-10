@@ -95,9 +95,17 @@ message EventChat {
 // 结束
 message EventEnd {}
 
+// 对话
+message Conversation {
+  string conversationId = 1;
+  string brief = 2;
+  int64 createTime = 3;
+  int64 updateTime = 4;
+}
+
 /* 接口请求与响应定义 */
 /* 请求与响应必须相邻定义, 且符合如下规范: */
-/* 只有code和msg的响应, 使用re.Response, 命名为resp, 无需重复定义 */
+/* 只有code和msg的响应, 也需要定义一个只有的re.Response的message */
 /* 请求以Req结尾, 响应以Resp结尾, 除此外同一接口请求与响应命名相同 */
 /* 根据含义确定前缀: 获取单个[Get], 分页获取[List], 更新[Update], 删除[Delete] */
 /* 形如GetInfo的接口, 存在重复命名的可能, 需要加上所属模块以区分, 如GetUserInfo|GetBotInfo */
@@ -127,14 +135,9 @@ message ListConversationReq {
   basic.Page page = 1;
 }
 message ListConversationResp {
-  message ConversationItem {
-    string conversationId = 1;
-    string brief = 2;
-    int64 createTime = 3;
-    int64 updateTime = 4;
-  }
   basic.Response resp = 1;
-  repeated ConversationItem conversations = 2;
+  repeated Conversation conversations = 2;
+  bool hasMore = 3;
 }
 
 // 获取历史记录
@@ -156,6 +159,24 @@ message RenameConversationReq {
 }
 message RenameConversationResp{
   basic.Response resp = 1;
+}
+
+// 删除历史记录
+message DeleteConversationReq {
+  string conversationId = 1;
+}
+message DeleteConversationResp{
+  basic.Response resp = 1;
+}
+
+// 查找历史记录
+message SearchConversationReq {
+  string key = 1;
+}
+message SearchConversationResp {
+  basic.Response resp = 1;
+  repeated Conversation conversations = 2;
+  bool hasMore = 3;
 }
 
 // 获取智能体列表
@@ -181,7 +202,8 @@ message FeedbackReq {
   }
   string action = 1;
   string messageId = 2;
-  Feedback feedback = 3;
+  int32 messageIndex = 3;
+  Feedback feedback = 4;
 }
 message FeedbackResp {
   basic.Response resp = 1;
