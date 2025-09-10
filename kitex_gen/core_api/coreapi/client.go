@@ -21,6 +21,7 @@ type Client interface {
 	ListConversation(ctx context.Context, Req *core_api.ListConversationReq, callOptions ...callopt.Option) (r *core_api.ListConversationResp, err error)
 	GetConversation(ctx context.Context, Req *core_api.GetConversationReq, callOptions ...callopt.Option) (r *core_api.GetConversationResp, err error)
 	RenameConversation(ctx context.Context, Req *core_api.RenameConversationReq, callOptions ...callopt.Option) (r *core_api.RenameConversationResp, err error)
+	DeleteConversation(ctx context.Context, Req *core_api.DeleteConversationReq, callOptions ...callopt.Option) (r *core_api.DeleteConversationResp, err error)
 	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
 	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error)
 }
@@ -89,6 +90,11 @@ func (p *kCoreApiClient) GetConversation(ctx context.Context, Req *core_api.GetC
 func (p *kCoreApiClient) RenameConversation(ctx context.Context, Req *core_api.RenameConversationReq, callOptions ...callopt.Option) (r *core_api.RenameConversationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.RenameConversation(ctx, Req)
+}
+
+func (p *kCoreApiClient) DeleteConversation(ctx context.Context, Req *core_api.DeleteConversationReq, callOptions ...callopt.Option) (r *core_api.DeleteConversationResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.DeleteConversation(ctx, Req)
 }
 
 func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error) {

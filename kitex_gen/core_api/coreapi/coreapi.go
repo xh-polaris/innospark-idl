@@ -52,6 +52,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"DeleteConversation": kitex.NewMethodInfo(
+		deleteConversationHandler,
+		newDeleteConversationArgs,
+		newDeleteConversationResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"ListAgents": kitex.NewMethodInfo(
 		listAgentsHandler,
 		newListAgentsArgs,
@@ -700,6 +707,117 @@ func (p *RenameConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
+func deleteConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.DeleteConversationReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).DeleteConversation(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *DeleteConversationArgs:
+		success, err := handler.(core_api.CoreApi).DeleteConversation(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*DeleteConversationResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newDeleteConversationArgs() interface{} {
+	return &DeleteConversationArgs{}
+}
+
+func newDeleteConversationResult() interface{} {
+	return &DeleteConversationResult{}
+}
+
+type DeleteConversationArgs struct {
+	Req *core_api.DeleteConversationReq
+}
+
+func (p *DeleteConversationArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *DeleteConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.DeleteConversationReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var DeleteConversationArgs_Req_DEFAULT *core_api.DeleteConversationReq
+
+func (p *DeleteConversationArgs) GetReq() *core_api.DeleteConversationReq {
+	if !p.IsSetReq() {
+		return DeleteConversationArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *DeleteConversationArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *DeleteConversationArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type DeleteConversationResult struct {
+	Success *core_api.DeleteConversationResp
+}
+
+var DeleteConversationResult_Success_DEFAULT *core_api.DeleteConversationResp
+
+func (p *DeleteConversationResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *DeleteConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.DeleteConversationResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *DeleteConversationResult) GetSuccess() *core_api.DeleteConversationResp {
+	if !p.IsSetSuccess() {
+		return DeleteConversationResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *DeleteConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.DeleteConversationResp)
+}
+
+func (p *DeleteConversationResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *DeleteConversationResult) GetResult() interface{} {
+	return p.Success
+}
+
 func listAgentsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -988,6 +1106,16 @@ func (p *kClient) RenameConversation(ctx context.Context, Req *core_api.RenameCo
 	_args.Req = Req
 	var _result RenameConversationResult
 	if err = p.c.Call(ctx, "RenameConversation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DeleteConversation(ctx context.Context, Req *core_api.DeleteConversationReq) (r *core_api.DeleteConversationResp, err error) {
+	var _args DeleteConversationArgs
+	_args.Req = Req
+	var _result DeleteConversationResult
+	if err = p.c.Call(ctx, "DeleteConversation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
