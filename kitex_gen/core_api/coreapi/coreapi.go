@@ -10,7 +10,6 @@ import (
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
 	proto "github.com/cloudwego/prutal"
-	basic "github.com/xh-polaris/innospark-idl/kitex_gen/basic"
 	core_api "github.com/xh-polaris/innospark-idl/kitex_gen/core_api"
 )
 
@@ -1118,10 +1117,10 @@ func (p *FeedbackArgs) GetFirstArgument() interface{} {
 }
 
 type FeedbackResult struct {
-	Success *basic.Response
+	Success *core_api.FeedbackResp
 }
 
-var FeedbackResult_Success_DEFAULT *basic.Response
+var FeedbackResult_Success_DEFAULT *core_api.FeedbackResp
 
 func (p *FeedbackResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -1131,7 +1130,7 @@ func (p *FeedbackResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *FeedbackResult) Unmarshal(in []byte) error {
-	msg := new(basic.Response)
+	msg := new(core_api.FeedbackResp)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -1139,7 +1138,7 @@ func (p *FeedbackResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *FeedbackResult) GetSuccess() *basic.Response {
+func (p *FeedbackResult) GetSuccess() *core_api.FeedbackResp {
 	if !p.IsSetSuccess() {
 		return FeedbackResult_Success_DEFAULT
 	}
@@ -1147,7 +1146,7 @@ func (p *FeedbackResult) GetSuccess() *basic.Response {
 }
 
 func (p *FeedbackResult) SetSuccess(x interface{}) {
-	p.Success = x.(*basic.Response)
+	p.Success = x.(*core_api.FeedbackResp)
 }
 
 func (p *FeedbackResult) IsSetSuccess() bool {
@@ -1259,7 +1258,7 @@ func (p *kClient) ListAgents(ctx context.Context, Req *core_api.ListAgentsReq) (
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq) (r *basic.Response, err error) {
+func (p *kClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq) (r *core_api.FeedbackResp, err error) {
 	var _args FeedbackArgs
 	_args.Req = Req
 	var _result FeedbackResult

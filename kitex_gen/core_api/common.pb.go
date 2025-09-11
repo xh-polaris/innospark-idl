@@ -675,6 +675,7 @@ type ListConversationResp struct {
 	Resp          *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Conversations []*Conversation `protobuf:"bytes,2,rep,name=conversations" json:"conversations,omitempty"`
 	HasMore       bool            `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
+	Cursor        int64           `protobuf:"varint,4,opt,name=cursor" json:"cursor,omitempty"`
 }
 
 func (x *ListConversationResp) Reset() { *x = ListConversationResp{} }
@@ -702,6 +703,13 @@ func (x *ListConversationResp) GetHasMore() bool {
 		return x.HasMore
 	}
 	return false
+}
+
+func (x *ListConversationResp) GetCursor() int64 {
+	if x != nil {
+		return x.Cursor
+	}
+	return 0
 }
 
 // 获取历史记录
@@ -735,6 +743,7 @@ type GetConversationResp struct {
 	MessageList []*FullMessage  `protobuf:"bytes,2,rep,name=messageList" json:"messageList,omitempty"`
 	RegenList   []*FullMessage  `protobuf:"bytes,3,rep,name=regenList" json:"regenList,omitempty"`
 	HasMore     bool            `protobuf:"varint,4,opt,name=hasMore" json:"hasMore,omitempty"`
+	Cursor      int64           `protobuf:"varint,5,opt,name=cursor" json:"cursor,omitempty"`
 }
 
 func (x *GetConversationResp) Reset() { *x = GetConversationResp{} }
@@ -769,6 +778,13 @@ func (x *GetConversationResp) GetHasMore() bool {
 		return x.HasMore
 	}
 	return false
+}
+
+func (x *GetConversationResp) GetCursor() int64 {
+	if x != nil {
+		return x.Cursor
+	}
+	return 0
 }
 
 // 更新历史对话标题
@@ -889,6 +905,7 @@ type SearchConversationResp struct {
 	Resp          *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Conversations []*Conversation `protobuf:"bytes,2,rep,name=conversations" json:"conversations,omitempty"`
 	HasMore       bool            `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
+	Cursor        int64           `protobuf:"varint,4,opt,name=cursor" json:"cursor,omitempty"`
 }
 
 func (x *SearchConversationResp) Reset() { *x = SearchConversationResp{} }
@@ -918,6 +935,13 @@ func (x *SearchConversationResp) GetHasMore() bool {
 		return x.HasMore
 	}
 	return false
+}
+
+func (x *SearchConversationResp) GetCursor() int64 {
+	if x != nil {
+		return x.Cursor
+	}
+	return 0
 }
 
 // 获取智能体列表

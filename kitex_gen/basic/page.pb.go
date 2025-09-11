@@ -5,11 +5,9 @@ package basic
 import "github.com/cloudwego/prutal"
 
 type Page struct {
-	Page      *int64  `protobuf:"varint,1,opt,name=page" json:"page,omitempty"`
-	Size      *int64  `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`
-	LastToken *string `protobuf:"bytes,3,opt,name=lastToken" json:"lastToken,omitempty"`
-	Backward  *bool   `protobuf:"varint,4,opt,name=backward" json:"backward,omitempty"`
-	Offset    *int64  `protobuf:"varint,5,opt,name=offset" json:"offset,omitempty"`
+	Page   *int64 `protobuf:"varint,1,opt,name=page" json:"page,omitempty"`     // 页面数
+	Size   *int64 `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`     // 页面大小
+	Cursor *int64 `protobuf:"varint,3,opt,name=cursor" json:"cursor,omitempty"` // 最后一个游标
 }
 
 func (x *Page) Reset() { *x = Page{} }
@@ -32,23 +30,9 @@ func (x *Page) GetSize() int64 {
 	return 0
 }
 
-func (x *Page) GetLastToken() string {
-	if x != nil && x.LastToken != nil {
-		return *x.LastToken
-	}
-	return ""
-}
-
-func (x *Page) GetBackward() bool {
-	if x != nil && x.Backward != nil {
-		return *x.Backward
-	}
-	return false
-}
-
-func (x *Page) GetOffset() int64 {
-	if x != nil && x.Offset != nil {
-		return *x.Offset
+func (x *Page) GetCursor() int64 {
+	if x != nil && x.Cursor != nil {
+		return *x.Cursor
 	}
 	return 0
 }

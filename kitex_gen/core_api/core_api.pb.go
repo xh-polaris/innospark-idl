@@ -4,7 +4,6 @@ package core_api
 
 import (
 	"context"
-	"github.com/xh-polaris/innospark-idl/kitex_gen/basic"
 
 	"github.com/cloudwego/kitex/pkg/streaming"
 )
@@ -18,7 +17,7 @@ type CoreApi interface {
 	DeleteConversation(ctx context.Context, req *DeleteConversationReq) (res *DeleteConversationResp, err error)
 	SearchConversation(ctx context.Context, req *SearchConversationReq) (res *SearchConversationResp, err error)
 	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
-	Feedback(ctx context.Context, req *FeedbackReq) (res *basic.Response, err error)
+	Feedback(ctx context.Context, req *FeedbackReq) (res *FeedbackResp, err error)
 }
 
 type CoreApi_CompletionsServer interface {

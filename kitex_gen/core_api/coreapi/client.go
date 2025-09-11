@@ -10,7 +10,6 @@ import (
 	streamclient "github.com/cloudwego/kitex/client/streamclient"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
 	transport "github.com/cloudwego/kitex/transport"
-	basic "github.com/xh-polaris/innospark-idl/kitex_gen/basic"
 	core_api "github.com/xh-polaris/innospark-idl/kitex_gen/core_api"
 )
 
@@ -24,7 +23,7 @@ type Client interface {
 	DeleteConversation(ctx context.Context, Req *core_api.DeleteConversationReq, callOptions ...callopt.Option) (r *core_api.DeleteConversationResp, err error)
 	SearchConversation(ctx context.Context, Req *core_api.SearchConversationReq, callOptions ...callopt.Option) (r *core_api.SearchConversationResp, err error)
 	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
-	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error)
+	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error)
 }
 
 // StreamClient is designed to provide Interface for Streaming APIs.
@@ -108,7 +107,7 @@ func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgent
 	return p.kClient.ListAgents(ctx, Req)
 }
 
-func (p *kCoreApiClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *basic.Response, err error) {
+func (p *kCoreApiClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Feedback(ctx, Req)
 }
