@@ -59,6 +59,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"SearchConversation": kitex.NewMethodInfo(
+		searchConversationHandler,
+		newSearchConversationArgs,
+		newSearchConversationResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"ListAgents": kitex.NewMethodInfo(
 		listAgentsHandler,
 		newListAgentsArgs,
@@ -818,6 +825,117 @@ func (p *DeleteConversationResult) GetResult() interface{} {
 	return p.Success
 }
 
+func searchConversationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.SearchConversationReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).SearchConversation(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *SearchConversationArgs:
+		success, err := handler.(core_api.CoreApi).SearchConversation(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*SearchConversationResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newSearchConversationArgs() interface{} {
+	return &SearchConversationArgs{}
+}
+
+func newSearchConversationResult() interface{} {
+	return &SearchConversationResult{}
+}
+
+type SearchConversationArgs struct {
+	Req *core_api.SearchConversationReq
+}
+
+func (p *SearchConversationArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *SearchConversationArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.SearchConversationReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var SearchConversationArgs_Req_DEFAULT *core_api.SearchConversationReq
+
+func (p *SearchConversationArgs) GetReq() *core_api.SearchConversationReq {
+	if !p.IsSetReq() {
+		return SearchConversationArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *SearchConversationArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *SearchConversationArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type SearchConversationResult struct {
+	Success *core_api.SearchConversationResp
+}
+
+var SearchConversationResult_Success_DEFAULT *core_api.SearchConversationResp
+
+func (p *SearchConversationResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *SearchConversationResult) Unmarshal(in []byte) error {
+	msg := new(core_api.SearchConversationResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *SearchConversationResult) GetSuccess() *core_api.SearchConversationResp {
+	if !p.IsSetSuccess() {
+		return SearchConversationResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *SearchConversationResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.SearchConversationResp)
+}
+
+func (p *SearchConversationResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *SearchConversationResult) GetResult() interface{} {
+	return p.Success
+}
+
 func listAgentsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -1116,6 +1234,16 @@ func (p *kClient) DeleteConversation(ctx context.Context, Req *core_api.DeleteCo
 	_args.Req = Req
 	var _result DeleteConversationResult
 	if err = p.c.Call(ctx, "DeleteConversation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) SearchConversation(ctx context.Context, Req *core_api.SearchConversationReq) (r *core_api.SearchConversationResp, err error) {
+	var _args SearchConversationArgs
+	_args.Req = Req
+	var _result SearchConversationResult
+	if err = p.c.Call(ctx, "SearchConversation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

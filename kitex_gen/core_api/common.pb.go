@@ -859,7 +859,8 @@ func (x *DeleteConversationResp) GetResp() *basic.Response {
 
 // 查找历史记录
 type SearchConversationReq struct {
-	Key string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
+	Key  string      `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
+	Page *basic.Page `protobuf:"bytes,2,opt,name=page" json:"page,omitempty"`
 }
 
 func (x *SearchConversationReq) Reset() { *x = SearchConversationReq{} }
@@ -875,6 +876,13 @@ func (x *SearchConversationReq) GetKey() string {
 		return x.Key
 	}
 	return ""
+}
+
+func (x *SearchConversationReq) GetPage() *basic.Page {
+	if x != nil {
+		return x.Page
+	}
+	return nil
 }
 
 type SearchConversationResp struct {
@@ -998,10 +1006,9 @@ func (x *ListAgentsResp_Agent) GetBotDescription() string {
 
 // 反馈, 包括点赞, 点踩, 删除等
 type FeedbackReq struct {
-	Action       string                `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
-	MessageId    string                `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`
-	MessageIndex int32                 `protobuf:"varint,3,opt,name=messageIndex" json:"messageIndex,omitempty"`
-	Feedback     *FeedbackReq_Feedback `protobuf:"bytes,4,opt,name=feedback" json:"feedback,omitempty"`
+	Action    int32                 `protobuf:"varint,1,opt,name=action" json:"action,omitempty"`
+	MessageId string                `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`
+	Feedback  *FeedbackReq_Feedback `protobuf:"bytes,3,opt,name=feedback" json:"feedback,omitempty"`
 }
 
 func (x *FeedbackReq) Reset() { *x = FeedbackReq{} }
@@ -1010,11 +1017,11 @@ func (x *FeedbackReq) Marshal(in []byte) ([]byte, error) { return prutal.Marshal
 
 func (x *FeedbackReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *FeedbackReq) GetAction() string {
+func (x *FeedbackReq) GetAction() int32 {
 	if x != nil {
 		return x.Action
 	}
-	return ""
+	return 0
 }
 
 func (x *FeedbackReq) GetMessageId() string {
@@ -1022,13 +1029,6 @@ func (x *FeedbackReq) GetMessageId() string {
 		return x.MessageId
 	}
 	return ""
-}
-
-func (x *FeedbackReq) GetMessageIndex() int32 {
-	if x != nil {
-		return x.MessageIndex
-	}
-	return 0
 }
 
 func (x *FeedbackReq) GetFeedback() *FeedbackReq_Feedback {

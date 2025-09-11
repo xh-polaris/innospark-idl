@@ -16,6 +16,7 @@ type CoreApi interface {
 	GetConversation(ctx context.Context, req *GetConversationReq) (res *GetConversationResp, err error)
 	RenameConversation(ctx context.Context, req *RenameConversationReq) (res *RenameConversationResp, err error)
 	DeleteConversation(ctx context.Context, req *DeleteConversationReq) (res *DeleteConversationResp, err error)
+	SearchConversation(ctx context.Context, req *SearchConversationReq) (res *SearchConversationResp, err error)
 	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
 	Feedback(ctx context.Context, req *FeedbackReq) (res *basic.Response, err error)
 }
