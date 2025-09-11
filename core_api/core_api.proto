@@ -33,7 +33,7 @@ service CoreApi {
   rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
     option(http.post) = "/agents/list";
   }
-  rpc Feedback(FeedbackReq) returns (basic.Response) {
+  rpc Feedback(FeedbackReq) returns (FeedbackResp) {
     option(http.post) = "/feedback";
   }
 }
