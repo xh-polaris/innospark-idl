@@ -27,6 +27,9 @@ service CoreApi {
   rpc DeleteConversation(DeleteConversationReq) returns (DeleteConversationResp) {
     option(http.post) = "/conversation/delete";
   }
+  rpc SearchConversation(SearchConversationReq) returns (SearchConversationResp) {
+    option(http.post) = "/conversation/search";
+  }
   rpc ListAgents(ListAgentsReq) returns (ListAgentsResp) {
     option(http.post) = "/agents/list";
   }

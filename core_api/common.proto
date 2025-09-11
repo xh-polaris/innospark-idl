@@ -172,6 +172,7 @@ message DeleteConversationResp{
 // 查找历史记录
 message SearchConversationReq {
   string key = 1;
+  basic.Page page = 2;
 }
 message SearchConversationResp {
   basic.Response resp = 1;
@@ -200,10 +201,9 @@ message FeedbackReq {
     int32 type = 1;
     string content = 2;
   }
-  string action = 1;
+  int32 action = 1;
   string messageId = 2;
-  int32 messageIndex = 3;
-  Feedback feedback = 4;
+  optional Feedback feedback = 3;
 }
 message FeedbackResp {
   basic.Response resp = 1;
