@@ -7,5 +7,5 @@ option go_package = "basic";
 message Page {
   optional int64 page = 1; // 页面数
   optional int64 size = 2; // 页面大小
-  optional int64 cursor = 3; // 最后一个游标
+  optional string cursor = 3; // 最后一个游标
 }

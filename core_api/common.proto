@@ -138,7 +138,7 @@ message ListConversationResp {
   basic.Response resp = 1;
   repeated Conversation conversations = 2;
   bool hasMore = 3;
-  int64 cursor = 4;
+  string cursor = 4;
 }
 
 // 获取历史记录
@@ -151,7 +151,7 @@ message GetConversationResp {
   repeated FullMessage messageList = 2;
   repeated FullMessage regenList = 3;
   bool hasMore = 4;
-  int64 cursor = 5;
+  string cursor = 5;
 }
 
 // 更新历史对话标题
@@ -180,7 +180,7 @@ message SearchConversationResp {
   basic.Response resp = 1;
   repeated Conversation conversations = 2;
   bool hasMore = 3;
-  int64 cursor = 4;
+  string cursor = 4;
 }
 
 // 获取智能体列表
