@@ -5,9 +5,9 @@ package basic
 import "github.com/cloudwego/prutal"
 
 type Page struct {
-	Page   *int64 `protobuf:"varint,1,opt,name=page" json:"page,omitempty"`     // 页面数
-	Size   *int64 `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`     // 页面大小
-	Cursor *int64 `protobuf:"varint,3,opt,name=cursor" json:"cursor,omitempty"` // 最后一个游标
+	Page   *int64  `protobuf:"varint,1,opt,name=page" json:"page,omitempty"`    // 页面数
+	Size   *int64  `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`    // 页面大小
+	Cursor *string `protobuf:"bytes,3,opt,name=cursor" json:"cursor,omitempty"` // 最后一个游标
 }
 
 func (x *Page) Reset() { *x = Page{} }
@@ -30,9 +30,9 @@ func (x *Page) GetSize() int64 {
 	return 0
 }
 
-func (x *Page) GetCursor() int64 {
+func (x *Page) GetCursor() string {
 	if x != nil && x.Cursor != nil {
 		return *x.Cursor
 	}
-	return 0
+	return ""
 }
