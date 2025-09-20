@@ -60,12 +60,13 @@ func (x *Message) GetRole() string {
 
 // 对话配置
 type CompletionsOption struct {
-	IsRegen         bool    `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"` // 是否重新生成
-	SelectedRegenId *string `protobuf:"bytes,2,opt,name=selectedRegenId" json:"selectedRegenId,omitempty"`
-	WithSuggest     bool    `protobuf:"varint,3,opt,name=withSuggest" json:"withSuggest,omitempty"`   // 是否生成建议
-	IsReplace       bool    `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`       // 是否替换
-	UseDeepThink    bool    `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"` // 是否深度思考
-	Stream          bool    `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`             // 是否流式
+	IsRegen         bool    `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`                // 是否重新生成
+	SelectedRegenId *string `protobuf:"bytes,2,opt,name=selectedRegenId" json:"selectedRegenId,omitempty"` // 选择生成的id
+	WithSuggest     bool    `protobuf:"varint,3,opt,name=withSuggest" json:"withSuggest,omitempty"`        // 是否生成建议
+	IsReplace       bool    `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`            // 是否替换
+	UseDeepThink    bool    `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"`      // 是否深度思考
+	Stream          bool    `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`                  // 是否流式
+	WebSearch       *bool   `protobuf:"varint,7,opt,name=webSearch" json:"webSearch,omitempty"`            // 是否联网搜索
 }
 
 func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
@@ -112,6 +113,13 @@ func (x *CompletionsOption) GetUseDeepThink() bool {
 func (x *CompletionsOption) GetStream() bool {
 	if x != nil {
 		return x.Stream
+	}
+	return false
+}
+
+func (x *CompletionsOption) GetWebSearch() bool {
+	if x != nil && x.WebSearch != nil {
+		return *x.WebSearch
 	}
 	return false
 }
