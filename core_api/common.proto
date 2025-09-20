@@ -22,11 +22,12 @@ message Message {
 // 对话配置
 message CompletionsOption {
   bool isRegen = 1; // 是否重新生成
-  optional string selectedRegenId = 2;
+  optional string selectedRegenId = 2; // 选择生成的id
   bool withSuggest = 3; // 是否生成建议
   bool isReplace = 4; // 是否替换
   bool useDeepThink = 5; // 是否深度思考
   bool stream = 6; // 是否流式
+  optional bool webSearch = 7; // 是否联网搜索
 }
 
 message Ext {
