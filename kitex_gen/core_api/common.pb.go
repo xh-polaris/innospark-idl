@@ -125,10 +125,11 @@ func (x *CompletionsOption) GetWebSearch() bool {
 }
 
 type Ext struct {
-	BotState string `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
-	Brief    string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
-	Think    string `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
-	Suggest  string `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
+	BotState string  `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
+	Brief    string  `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
+	Think    string  `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
+	Suggest  string  `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
+	Cite     []*Cite `protobuf:"bytes,5,rep,name=cite" json:"cite,omitempty"`
 }
 
 func (x *Ext) Reset() { *x = Ext{} }
@@ -161,6 +162,78 @@ func (x *Ext) GetThink() string {
 func (x *Ext) GetSuggest() string {
 	if x != nil {
 		return x.Suggest
+	}
+	return ""
+}
+
+func (x *Ext) GetCite() []*Cite {
+	if x != nil {
+		return x.Cite
+	}
+	return nil
+}
+
+type Cite struct {
+	Index         int32  `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
+	Name          string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Url           string `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
+	Snippet       string `protobuf:"bytes,4,opt,name=snippet" json:"snippet,omitempty"`
+	SiteName      string `protobuf:"bytes,5,opt,name=siteName" json:"siteName,omitempty"`
+	SiteIcon      string `protobuf:"bytes,6,opt,name=siteIcon" json:"siteIcon,omitempty"`
+	DatePublished string `protobuf:"bytes,7,opt,name=datePublished" json:"datePublished,omitempty"`
+}
+
+func (x *Cite) Reset() { *x = Cite{} }
+
+func (x *Cite) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *Cite) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Cite) GetIndex() int32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *Cite) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Cite) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *Cite) GetSnippet() string {
+	if x != nil {
+		return x.Snippet
+	}
+	return ""
+}
+
+func (x *Cite) GetSiteName() string {
+	if x != nil {
+		return x.SiteName
+	}
+	return ""
+}
+
+func (x *Cite) GetSiteIcon() string {
+	if x != nil {
+		return x.SiteIcon
+	}
+	return ""
+}
+
+func (x *Cite) GetDatePublished() string {
+	if x != nil {
+		return x.DatePublished
 	}
 	return ""
 }
