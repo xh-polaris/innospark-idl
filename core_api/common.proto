@@ -35,7 +35,18 @@ message Ext {
   string brief = 2;
   string think = 3;
   string suggest = 4;
+  repeated Cite cite = 5;
 }
+message Cite {
+  int32 index = 1;
+  string name = 2;
+  string url = 3;
+  string snippet = 4;
+  string siteName = 5;
+  string siteIcon = 6;
+  string datePublished = 7;
+}
+
 message FullMessage {
   string conversationId = 1;
   string sectionId = 2;
