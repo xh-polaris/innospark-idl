@@ -130,6 +130,7 @@ type Ext struct {
 	Think    string  `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
 	Suggest  string  `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
 	Cite     []*Cite `protobuf:"bytes,5,rep,name=cite" json:"cite,omitempty"`
+	Code     []*Code `protobuf:"bytes,6,rep,name=code" json:"code,omitempty"`
 }
 
 func (x *Ext) Reset() { *x = Ext{} }
@@ -169,6 +170,13 @@ func (x *Ext) GetSuggest() string {
 func (x *Ext) GetCite() []*Cite {
 	if x != nil {
 		return x.Cite
+	}
+	return nil
+}
+
+func (x *Ext) GetCode() []*Code {
+	if x != nil {
+		return x.Code
 	}
 	return nil
 }
@@ -234,6 +242,39 @@ func (x *Cite) GetSiteIcon() string {
 func (x *Cite) GetDatePublished() string {
 	if x != nil {
 		return x.DatePublished
+	}
+	return ""
+}
+
+type Code struct {
+	Index    int32  `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
+	CodeType string `protobuf:"bytes,2,opt,name=codeType" json:"codeType,omitempty"`
+	Code     string `protobuf:"bytes,3,opt,name=code" json:"code,omitempty"`
+}
+
+func (x *Code) Reset() { *x = Code{} }
+
+func (x *Code) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *Code) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Code) GetIndex() int32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *Code) GetCodeType() string {
+	if x != nil {
+		return x.CodeType
+	}
+	return ""
+}
+
+func (x *Code) GetCode() string {
+	if x != nil {
+		return x.Code
 	}
 	return ""
 }
