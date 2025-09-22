@@ -36,6 +36,7 @@ message Ext {
   string think = 3;
   string suggest = 4;
   repeated Cite cite = 5;
+  repeated Code code = 6;
 }
 message Cite {
   int32 index = 1;
@@ -45,6 +46,11 @@ message Cite {
   string siteName = 5;
   string siteIcon = 6;
   string datePublished = 7;
+}
+message Code {
+  int32 index =1;
+  string codeType = 2;
+  string code = 3;
 }
 
 message FullMessage {
