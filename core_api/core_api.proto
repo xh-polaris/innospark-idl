@@ -20,6 +20,9 @@ service CoreApi {
   rpc GetConversation(GetConversationReq) returns (GetConversationResp) {
     option(http.post) = "/conversation/get";
   }
+  rpc Generate(GenerateBriefReq) returns (GenerateBriefResp) {
+    option(http.post) = "/conversation/brief";
+  }
   rpc RenameConversation(RenameConversationReq) returns (RenameConversationResp) {
     option(http.post) = "/conversation/rename";
   }

@@ -48,7 +48,7 @@ message Cite {
   string datePublished = 7;
 }
 message Code {
-  int32 index =1;
+  int32 index = 1;
   string codeType = 2;
   string code = 3;
 }
@@ -171,6 +171,17 @@ message GetConversationResp {
   bool hasMore = 4;
   string cursor = 5;
 }
+
+// 生成对话标题
+message GenerateBriefReq{
+  repeated Message messages = 1; // 用户输入消息, 长度应为1
+  string conversationId = 2;
+}
+message GenerateBriefResp {
+  basic.Response resp = 1;
+  string brief = 2;
+}
+
 
 // 更新历史对话标题
 message RenameConversationReq {
