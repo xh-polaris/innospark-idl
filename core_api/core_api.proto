@@ -47,4 +47,7 @@ service CoreApi {
   rpc BasicUserLogin (BasicUserLoginReq) returns (BasicUserLoginResp) {
     option(http.post) = "/basic_user/login";
   }
+  rpc BasicUserResetPassword (BasicUserResetPasswordReq) returns (BasicUserRegisterResp) {
+    option(http.post) = "/basic_user/reset_password";
+  }
 }

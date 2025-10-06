@@ -271,4 +271,13 @@ message BasicUserLoginReq {
 message BasicUserLoginResp {
   basic.Response resp = 1;
   string token = 2;
+  bool new = 3;
+}
+
+// 设置密码
+message BasicUserResetPasswordReq {
+  string newPassword = 1;
+}
+message BasicUserResetPasswordResp {
+  basic.Response resp = 1;
 }
