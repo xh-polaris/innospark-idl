@@ -1426,6 +1426,7 @@ func (x *BasicUserLoginReq) GetVerify() string {
 type BasicUserLoginResp struct {
 	Resp  *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Token string          `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	New   bool            `protobuf:"varint,3,opt,name=new" json:"new,omitempty"`
 }
 
 func (x *BasicUserLoginResp) Reset() { *x = BasicUserLoginResp{} }
@@ -1446,4 +1447,50 @@ func (x *BasicUserLoginResp) GetToken() string {
 		return x.Token
 	}
 	return ""
+}
+
+func (x *BasicUserLoginResp) GetNew() bool {
+	if x != nil {
+		return x.New
+	}
+	return false
+}
+
+// 设置密码
+type BasicUserResetPasswordReq struct {
+	NewPassword string `protobuf:"bytes,1,opt,name=newPassword" json:"newPassword,omitempty"`
+}
+
+func (x *BasicUserResetPasswordReq) Reset() { *x = BasicUserResetPasswordReq{} }
+
+func (x *BasicUserResetPasswordReq) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserResetPasswordReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *BasicUserResetPasswordReq) GetNewPassword() string {
+	if x != nil {
+		return x.NewPassword
+	}
+	return ""
+}
+
+type BasicUserResetPasswordResp struct {
+	Resp *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+}
+
+func (x *BasicUserResetPasswordResp) Reset() { *x = BasicUserResetPasswordResp{} }
+
+func (x *BasicUserResetPasswordResp) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserResetPasswordResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *BasicUserResetPasswordResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
 }

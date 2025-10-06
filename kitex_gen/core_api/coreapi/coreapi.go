@@ -107,6 +107,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"BasicUserResetPassword": kitex.NewMethodInfo(
+		basicUserResetPasswordHandler,
+		newBasicUserResetPasswordArgs,
+		newBasicUserResetPasswordResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -1629,6 +1636,117 @@ func (p *BasicUserLoginResult) GetResult() interface{} {
 	return p.Success
 }
 
+func basicUserResetPasswordHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.BasicUserResetPasswordReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).BasicUserResetPassword(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *BasicUserResetPasswordArgs:
+		success, err := handler.(core_api.CoreApi).BasicUserResetPassword(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*BasicUserResetPasswordResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newBasicUserResetPasswordArgs() interface{} {
+	return &BasicUserResetPasswordArgs{}
+}
+
+func newBasicUserResetPasswordResult() interface{} {
+	return &BasicUserResetPasswordResult{}
+}
+
+type BasicUserResetPasswordArgs struct {
+	Req *core_api.BasicUserResetPasswordReq
+}
+
+func (p *BasicUserResetPasswordArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *BasicUserResetPasswordArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserResetPasswordReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var BasicUserResetPasswordArgs_Req_DEFAULT *core_api.BasicUserResetPasswordReq
+
+func (p *BasicUserResetPasswordArgs) GetReq() *core_api.BasicUserResetPasswordReq {
+	if !p.IsSetReq() {
+		return BasicUserResetPasswordArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *BasicUserResetPasswordArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *BasicUserResetPasswordArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type BasicUserResetPasswordResult struct {
+	Success *core_api.BasicUserRegisterResp
+}
+
+var BasicUserResetPasswordResult_Success_DEFAULT *core_api.BasicUserRegisterResp
+
+func (p *BasicUserResetPasswordResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *BasicUserResetPasswordResult) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserRegisterResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *BasicUserResetPasswordResult) GetSuccess() *core_api.BasicUserRegisterResp {
+	if !p.IsSetSuccess() {
+		return BasicUserResetPasswordResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *BasicUserResetPasswordResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.BasicUserRegisterResp)
+}
+
+func (p *BasicUserResetPasswordResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *BasicUserResetPasswordResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -1775,6 +1893,16 @@ func (p *kClient) BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLog
 	_args.Req = Req
 	var _result BasicUserLoginResult
 	if err = p.c.Call(ctx, "BasicUserLogin", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) BasicUserResetPassword(ctx context.Context, Req *core_api.BasicUserResetPasswordReq) (r *core_api.BasicUserRegisterResp, err error) {
+	var _args BasicUserResetPasswordArgs
+	_args.Req = Req
+	var _result BasicUserResetPasswordResult
+	if err = p.c.Call(ctx, "BasicUserResetPassword", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

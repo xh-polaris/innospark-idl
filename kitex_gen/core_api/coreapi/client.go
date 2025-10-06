@@ -28,6 +28,7 @@ type Client interface {
 	SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.SendVerifyCodeResp, err error)
 	BasicUserRegister(ctx context.Context, Req *core_api.BasicUserRegisterReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
 	BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLoginReq, callOptions ...callopt.Option) (r *core_api.BasicUserLoginResp, err error)
+	BasicUserResetPassword(ctx context.Context, Req *core_api.BasicUserResetPasswordReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
 }
 
 // StreamClient is designed to provide Interface for Streaming APIs.
@@ -134,6 +135,11 @@ func (p *kCoreApiClient) BasicUserRegister(ctx context.Context, Req *core_api.Ba
 func (p *kCoreApiClient) BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLoginReq, callOptions ...callopt.Option) (r *core_api.BasicUserLoginResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.BasicUserLogin(ctx, Req)
+}
+
+func (p *kCoreApiClient) BasicUserResetPassword(ctx context.Context, Req *core_api.BasicUserResetPasswordReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.BasicUserResetPassword(ctx, Req)
 }
 
 // NewStreamClient creates a stream client for the service's streaming APIs defined in IDL.
