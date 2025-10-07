@@ -29,3 +29,8 @@ type CoreApi_CompletionsServer interface {
 	streaming.Stream
 	Send(*SSEEvent) error
 }
+
+type IntelligenceApi interface {
+	ListIntelligence(ctx context.Context, req *ListIntelligenceReq) (res *ListIntelligenceResp, err error)
+	GetIntelligence(ctx context.Context, req *GetIntelligenceReq) (res *GetIntelligenceResp, err error)
+}
