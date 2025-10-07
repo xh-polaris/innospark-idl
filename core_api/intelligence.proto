@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package core_api;
+
+option go_package = "core_api";
+
+import "basic/page.proto";
+import "basic/re.proto";
+
+message Intelligence {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string description = 4;
+  string iconUrl = 5;
+  string createTime = 6;
+  string updateTime = 7;
+  string publishTime = 8;
+}
+
+message IntelligenceInfo {
+  string botId = 1;
+  string name = 2;
+  string description = 3;
+  string iconUrl = 4;
+  int64 createTime = 5;
+  int64 updateTime = 6;
+  string version = 7;
+  PromptInfo promptInfo = 8;
+  OnboardingInfo onboardingInfo = 9;
+  int32 botMode = 10;
+  ModelInfo modelInfo = 11;
+  repeated PluginInfo pluginInfoList = 12;
+  repeated WorkflowInfo workflowInfoList = 13;
+  string shortcutCommands = 14;
+  string defaultUserInputType = 15;
+  string suggestReplyInfo = 16;
+  string backgroundImageInfo = 17;
+  string variables = 18;
+  string type = 19;
+}
+
+message PromptInfo {
+  string prompt = 1;
+}
+
+message OnboardingInfo {
+  string prologue = 1;
+  int32 suggestedQuestionsShowMode = 2;
+}
+
+message ModelInfo {
+  string modelId = 1;
+  float temperature = 2;
+  int32 maxTokens = 3;
+  float topP = 4;
+  ShortMemoryPolicy shortMemoryPolicy = 5;
+  int32 modelStyle = 6;
+}
+
+message ShortMemoryPolicy {
+  int32 historyRound = 1;
+}
+
+message PluginInfo {
+  // 根据实际插件信息结构定义
+}
+
+message WorkflowInfo {
+  // 根据实际工作流信息结构定义
+}
+
+message ListIntelligenceReq {
+  basic.Page page = 1;
+}
+message ListIntelligenceResp {
+  basic.Response resp = 1;
+  repeated Intelligence intelligences = 2;
+  bool hasMore = 3;
+}
+
+message GetIntelligenceReq {
+  string id = 1;
+}
+message GetIntelligenceResp {
+  basic.Response resp = 1;
+  IntelligenceInfo info = 2;
+}

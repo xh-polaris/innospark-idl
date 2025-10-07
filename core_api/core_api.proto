@@ -5,6 +5,7 @@ package core_api;
 option go_package = "core_api";
 
 import "core_api/common.proto";
+import "core_api/intelligence.proto";
 import "basic/http.proto";
 
 service CoreApi {
@@ -49,5 +50,14 @@ service CoreApi {
   }
   rpc BasicUserResetPassword (BasicUserResetPasswordReq) returns (BasicUserRegisterResp) {
     option(http.post) = "/basic_user/reset_password";
+  }
+}
+
+service IntelligenceApi {
+  rpc ListIntelligence(ListIntelligenceReq) returns(ListIntelligenceResp) {
+    option(http.post) = "/intelligence/list";
+  }
+  rpc GetIntelligence(GetIntelligenceReq) returns (GetIntelligenceResp) {
+    option(http.post) = "/intelligence/get";
   }
 }
