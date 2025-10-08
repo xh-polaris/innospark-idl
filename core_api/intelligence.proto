@@ -47,6 +47,7 @@ message PromptInfo {
 message OnboardingInfo {
   string prologue = 1;
   int32 suggestedQuestionsShowMode = 2;
+  repeated string suggestedQuestions = 3;
 }
 
 message ModelInfo {
