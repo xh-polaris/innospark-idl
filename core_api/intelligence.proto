@@ -78,6 +78,7 @@ message ListIntelligenceResp {
   basic.Response resp = 1;
   repeated Intelligence intelligences = 2;
   bool hasMore = 3;
+  string nextCursor = 4;
 }
 
 message GetIntelligenceReq {
