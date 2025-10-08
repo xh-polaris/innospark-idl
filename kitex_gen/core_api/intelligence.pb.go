@@ -260,8 +260,9 @@ func (x *PromptInfo) GetPrompt() string {
 }
 
 type OnboardingInfo struct {
-	Prologue                   string `protobuf:"bytes,1,opt,name=prologue" json:"prologue,omitempty"`
-	SuggestedQuestionsShowMode int32  `protobuf:"varint,2,opt,name=suggestedQuestionsShowMode" json:"suggestedQuestionsShowMode,omitempty"`
+	Prologue                   string   `protobuf:"bytes,1,opt,name=prologue" json:"prologue,omitempty"`
+	SuggestedQuestionsShowMode int32    `protobuf:"varint,2,opt,name=suggestedQuestionsShowMode" json:"suggestedQuestionsShowMode,omitempty"`
+	SuggestedQuestions         []string `protobuf:"bytes,3,rep,name=suggestedQuestions" json:"suggestedQuestions,omitempty"`
 }
 
 func (x *OnboardingInfo) Reset() { *x = OnboardingInfo{} }
@@ -282,6 +283,13 @@ func (x *OnboardingInfo) GetSuggestedQuestionsShowMode() int32 {
 		return x.SuggestedQuestionsShowMode
 	}
 	return 0
+}
+
+func (x *OnboardingInfo) GetSuggestedQuestions() []string {
+	if x != nil {
+		return x.SuggestedQuestions
+	}
+	return nil
 }
 
 type ModelInfo struct {
@@ -397,6 +405,7 @@ type ListIntelligenceResp struct {
 	Resp          *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Intelligences []*Intelligence `protobuf:"bytes,2,rep,name=intelligences" json:"intelligences,omitempty"`
 	HasMore       bool            `protobuf:"varint,3,opt,name=hasMore" json:"hasMore,omitempty"`
+	NextCursor    string          `protobuf:"bytes,4,opt,name=nextCursor" json:"nextCursor,omitempty"`
 }
 
 func (x *ListIntelligenceResp) Reset() { *x = ListIntelligenceResp{} }
@@ -424,6 +433,13 @@ func (x *ListIntelligenceResp) GetHasMore() bool {
 		return x.HasMore
 	}
 	return false
+}
+
+func (x *ListIntelligenceResp) GetNextCursor() string {
+	if x != nil {
+		return x.NextCursor
+	}
+	return ""
 }
 
 type GetIntelligenceReq struct {
