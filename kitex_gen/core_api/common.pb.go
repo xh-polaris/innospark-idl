@@ -640,8 +640,9 @@ func (x *EventEnd) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 type Conversation struct {
 	ConversationId string `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
 	Brief          string `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
-	CreateTime     int64  `protobuf:"varint,3,opt,name=createTime" json:"createTime,omitempty"`
-	UpdateTime     int64  `protobuf:"varint,4,opt,name=updateTime" json:"updateTime,omitempty"`
+	BotId          string `protobuf:"bytes,3,opt,name=botId" json:"botId,omitempty"`
+	CreateTime     int64  `protobuf:"varint,4,opt,name=createTime" json:"createTime,omitempty"`
+	UpdateTime     int64  `protobuf:"varint,5,opt,name=updateTime" json:"updateTime,omitempty"`
 }
 
 func (x *Conversation) Reset() { *x = Conversation{} }
@@ -660,6 +661,13 @@ func (x *Conversation) GetConversationId() string {
 func (x *Conversation) GetBrief() string {
 	if x != nil {
 		return x.Brief
+	}
+	return ""
+}
+
+func (x *Conversation) GetBotId() string {
+	if x != nil {
+		return x.BotId
 	}
 	return ""
 }
@@ -738,6 +746,7 @@ func (x *CompletionsReq) GetBotId() string {
 
 // 创建对话
 type CreateConversationReq struct {
+	BotId string `protobuf:"bytes,1,opt,name=botId" json:"botId,omitempty"`
 }
 
 func (x *CreateConversationReq) Reset() { *x = CreateConversationReq{} }
@@ -747,6 +756,13 @@ func (x *CreateConversationReq) Marshal(in []byte) ([]byte, error) {
 }
 
 func (x *CreateConversationReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *CreateConversationReq) GetBotId() string {
+	if x != nil {
+		return x.BotId
+	}
+	return ""
+}
 
 type CreateConversationResp struct {
 	ConversationId string          `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
