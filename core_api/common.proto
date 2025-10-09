@@ -117,8 +117,9 @@ message EventEnd {}
 message Conversation {
   string conversationId = 1;
   string brief = 2;
-  int64 createTime = 3;
-  int64 updateTime = 4;
+  string botId = 3;
+  int64 createTime = 4;
+  int64 updateTime = 5;
 }
 
 /* 接口请求与响应定义 */
@@ -141,7 +142,7 @@ message CompletionsReq {
 
 // 创建对话
 message CreateConversationReq {
-
+  string botId = 1;
 }
 message CreateConversationResp {
   string conversationId = 1;
