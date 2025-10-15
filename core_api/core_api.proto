@@ -51,6 +51,9 @@ service CoreApi {
   rpc BasicUserResetPassword (BasicUserResetPasswordReq) returns (BasicUserRegisterResp) {
     option(http.post) = "/basic_user/reset_password";
   }
+  rpc ThirdPartyLogin (ThirdPartyLoginReq) returns (ThirdPartyLoginResp) {
+    option(http.post) = "/thirdparty/login";
+  }
 }
 
 service IntelligenceApi {

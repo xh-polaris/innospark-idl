@@ -282,3 +282,13 @@ message BasicUserResetPasswordReq {
 message BasicUserResetPasswordResp {
   basic.Response resp = 1;
 }
+
+message ThirdPartyLoginReq {
+  string thirdparty = 1;
+  string ticket = 2;
+}
+message ThirdPartyLoginResp {
+  basic.Response resp = 1;
+  string token = 2;
+  bool new = 3;
+}
