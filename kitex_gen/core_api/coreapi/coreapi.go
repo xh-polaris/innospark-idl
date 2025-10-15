@@ -114,6 +114,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"ThirdPartyLogin": kitex.NewMethodInfo(
+		thirdPartyLoginHandler,
+		newThirdPartyLoginArgs,
+		newThirdPartyLoginResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -1747,6 +1754,117 @@ func (p *BasicUserResetPasswordResult) GetResult() interface{} {
 	return p.Success
 }
 
+func thirdPartyLoginHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.ThirdPartyLoginReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).ThirdPartyLogin(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *ThirdPartyLoginArgs:
+		success, err := handler.(core_api.CoreApi).ThirdPartyLogin(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*ThirdPartyLoginResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newThirdPartyLoginArgs() interface{} {
+	return &ThirdPartyLoginArgs{}
+}
+
+func newThirdPartyLoginResult() interface{} {
+	return &ThirdPartyLoginResult{}
+}
+
+type ThirdPartyLoginArgs struct {
+	Req *core_api.ThirdPartyLoginReq
+}
+
+func (p *ThirdPartyLoginArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *ThirdPartyLoginArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.ThirdPartyLoginReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var ThirdPartyLoginArgs_Req_DEFAULT *core_api.ThirdPartyLoginReq
+
+func (p *ThirdPartyLoginArgs) GetReq() *core_api.ThirdPartyLoginReq {
+	if !p.IsSetReq() {
+		return ThirdPartyLoginArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *ThirdPartyLoginArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ThirdPartyLoginArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type ThirdPartyLoginResult struct {
+	Success *core_api.ThirdPartyLoginResp
+}
+
+var ThirdPartyLoginResult_Success_DEFAULT *core_api.ThirdPartyLoginResp
+
+func (p *ThirdPartyLoginResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *ThirdPartyLoginResult) Unmarshal(in []byte) error {
+	msg := new(core_api.ThirdPartyLoginResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *ThirdPartyLoginResult) GetSuccess() *core_api.ThirdPartyLoginResp {
+	if !p.IsSetSuccess() {
+		return ThirdPartyLoginResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *ThirdPartyLoginResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.ThirdPartyLoginResp)
+}
+
+func (p *ThirdPartyLoginResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ThirdPartyLoginResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -1903,6 +2021,16 @@ func (p *kClient) BasicUserResetPassword(ctx context.Context, Req *core_api.Basi
 	_args.Req = Req
 	var _result BasicUserResetPasswordResult
 	if err = p.c.Call(ctx, "BasicUserResetPassword", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) ThirdPartyLogin(ctx context.Context, Req *core_api.ThirdPartyLoginReq) (r *core_api.ThirdPartyLoginResp, err error) {
+	var _args ThirdPartyLoginArgs
+	_args.Req = Req
+	var _result ThirdPartyLoginResult
+	if err = p.c.Call(ctx, "ThirdPartyLogin", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

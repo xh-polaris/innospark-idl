@@ -1510,3 +1510,61 @@ func (x *BasicUserResetPasswordResp) GetResp() *basic.Response {
 	}
 	return nil
 }
+
+type ThirdPartyLoginReq struct {
+	Thirdparty string `protobuf:"bytes,1,opt,name=thirdparty" json:"thirdparty,omitempty"`
+	Ticket     string `protobuf:"bytes,2,opt,name=ticket" json:"ticket,omitempty"`
+}
+
+func (x *ThirdPartyLoginReq) Reset() { *x = ThirdPartyLoginReq{} }
+
+func (x *ThirdPartyLoginReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *ThirdPartyLoginReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ThirdPartyLoginReq) GetThirdparty() string {
+	if x != nil {
+		return x.Thirdparty
+	}
+	return ""
+}
+
+func (x *ThirdPartyLoginReq) GetTicket() string {
+	if x != nil {
+		return x.Ticket
+	}
+	return ""
+}
+
+type ThirdPartyLoginResp struct {
+	Resp  *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Token string          `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	New   bool            `protobuf:"varint,3,opt,name=new" json:"new,omitempty"`
+}
+
+func (x *ThirdPartyLoginResp) Reset() { *x = ThirdPartyLoginResp{} }
+
+func (x *ThirdPartyLoginResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *ThirdPartyLoginResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ThirdPartyLoginResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *ThirdPartyLoginResp) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *ThirdPartyLoginResp) GetNew() bool {
+	if x != nil {
+		return x.New
+	}
+	return false
+}
