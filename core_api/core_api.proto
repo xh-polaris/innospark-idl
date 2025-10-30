@@ -7,6 +7,7 @@ option go_package = "core_api";
 import "core_api/common.proto";
 import "core_api/intelligence.proto";
 import "basic/http.proto";
+import "core_api/manage.proto";
 
 service CoreApi {
   rpc Completions(CompletionsReq) returns (stream SSEEvent){
@@ -62,5 +63,17 @@ service IntelligenceApi {
   }
   rpc GetIntelligence(GetIntelligenceReq) returns (GetIntelligenceResp) {
     option(http.post) = "/intelligence/get";
+  }
+}
+
+service ManageApi {
+  rpc AdminLogin(manage.AdminLoginReq) returns (manage.AdminLoginResp) {
+    option (http.post) = "/admin/login";
+  }
+  rpc ListUser(manage.ListUserReq) returns (manage.ListUserResp) {
+    option (http.post) = "/admin/list_user";
+  }
+  rpc Forbidden(manage.ForbiddenUserReq) returns (manage.ForbiddenUserResp) {
+    option (http.post) = "/admin/forbidden";
   }
 }
