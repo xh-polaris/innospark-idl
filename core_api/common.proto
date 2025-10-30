@@ -292,3 +292,12 @@ message ThirdPartyLoginResp {
   string token = 2;
   bool new = 3;
 }
+
+// 修改用户信息（头像和用户名）
+message BasicUserUpdateProfileReq {
+  optional string username = 1;
+  optional string avatar = 2;
+}
+message BasicUserUpdateProfileResp {
+  basic.Response resp = 1;
+}
