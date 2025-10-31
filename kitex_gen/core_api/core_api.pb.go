@@ -25,6 +25,7 @@ type CoreApi interface {
 	BasicUserRegister(ctx context.Context, req *BasicUserRegisterReq) (res *BasicUserRegisterResp, err error)
 	BasicUserLogin(ctx context.Context, req *BasicUserLoginReq) (res *BasicUserLoginResp, err error)
 	BasicUserResetPassword(ctx context.Context, req *BasicUserResetPasswordReq) (res *BasicUserRegisterResp, err error)
+	BasicUserUpdateProfile(ctx context.Context, req *BasicUserUpdateProfileReq) (res *BasicUserUpdateProfileResp, err error)
 	ThirdPartyLogin(ctx context.Context, req *ThirdPartyLoginReq) (res *ThirdPartyLoginResp, err error)
 }
 

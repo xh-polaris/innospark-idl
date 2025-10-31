@@ -1568,3 +1568,50 @@ func (x *ThirdPartyLoginResp) GetNew() bool {
 	}
 	return false
 }
+
+// 修改用户信息（头像和用户名）
+type BasicUserUpdateProfileReq struct {
+	Username *string `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
+	Avatar   *string `protobuf:"bytes,2,opt,name=avatar" json:"avatar,omitempty"`
+}
+
+func (x *BasicUserUpdateProfileReq) Reset() { *x = BasicUserUpdateProfileReq{} }
+
+func (x *BasicUserUpdateProfileReq) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserUpdateProfileReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *BasicUserUpdateProfileReq) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *BasicUserUpdateProfileReq) GetAvatar() string {
+	if x != nil && x.Avatar != nil {
+		return *x.Avatar
+	}
+	return ""
+}
+
+type BasicUserUpdateProfileResp struct {
+	Resp *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+}
+
+func (x *BasicUserUpdateProfileResp) Reset() { *x = BasicUserUpdateProfileResp{} }
+
+func (x *BasicUserUpdateProfileResp) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserUpdateProfileResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *BasicUserUpdateProfileResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}

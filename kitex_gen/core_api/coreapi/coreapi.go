@@ -121,6 +121,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"BasicUserUpdateProfile": kitex.NewMethodInfo(
+		basicUserUpdateProfileHandler,
+		newBasicUserUpdateProfileArgs,
+		newBasicUserUpdateProfileResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"ThirdPartyLogin": kitex.NewMethodInfo(
 		thirdPartyLoginHandler,
 		newThirdPartyLoginArgs,
@@ -1872,6 +1879,117 @@ func (p *BasicUserResetPasswordResult) GetResult() interface{} {
 	return p.Success
 }
 
+func basicUserUpdateProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.BasicUserUpdateProfileReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).BasicUserUpdateProfile(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *BasicUserUpdateProfileArgs:
+		success, err := handler.(core_api.CoreApi).BasicUserUpdateProfile(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*BasicUserUpdateProfileResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newBasicUserUpdateProfileArgs() interface{} {
+	return &BasicUserUpdateProfileArgs{}
+}
+
+func newBasicUserUpdateProfileResult() interface{} {
+	return &BasicUserUpdateProfileResult{}
+}
+
+type BasicUserUpdateProfileArgs struct {
+	Req *core_api.BasicUserUpdateProfileReq
+}
+
+func (p *BasicUserUpdateProfileArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *BasicUserUpdateProfileArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserUpdateProfileReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var BasicUserUpdateProfileArgs_Req_DEFAULT *core_api.BasicUserUpdateProfileReq
+
+func (p *BasicUserUpdateProfileArgs) GetReq() *core_api.BasicUserUpdateProfileReq {
+	if !p.IsSetReq() {
+		return BasicUserUpdateProfileArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *BasicUserUpdateProfileArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *BasicUserUpdateProfileArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type BasicUserUpdateProfileResult struct {
+	Success *core_api.BasicUserUpdateProfileResp
+}
+
+var BasicUserUpdateProfileResult_Success_DEFAULT *core_api.BasicUserUpdateProfileResp
+
+func (p *BasicUserUpdateProfileResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *BasicUserUpdateProfileResult) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserUpdateProfileResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *BasicUserUpdateProfileResult) GetSuccess() *core_api.BasicUserUpdateProfileResp {
+	if !p.IsSetSuccess() {
+		return BasicUserUpdateProfileResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *BasicUserUpdateProfileResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.BasicUserUpdateProfileResp)
+}
+
+func (p *BasicUserUpdateProfileResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *BasicUserUpdateProfileResult) GetResult() interface{} {
+	return p.Success
+}
+
 func thirdPartyLoginHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -2149,6 +2267,16 @@ func (p *kClient) BasicUserResetPassword(ctx context.Context, Req *core_api.Basi
 	_args.Req = Req
 	var _result BasicUserResetPasswordResult
 	if err = p.c.Call(ctx, "BasicUserResetPassword", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) BasicUserUpdateProfile(ctx context.Context, Req *core_api.BasicUserUpdateProfileReq) (r *core_api.BasicUserUpdateProfileResp, err error) {
+	var _args BasicUserUpdateProfileArgs
+	_args.Req = Req
+	var _result BasicUserUpdateProfileResult
+	if err = p.c.Call(ctx, "BasicUserUpdateProfile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
