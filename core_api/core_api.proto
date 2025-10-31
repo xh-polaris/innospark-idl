@@ -40,6 +40,9 @@ service CoreApi {
   rpc Feedback(FeedbackReq) returns (FeedbackResp) {
     option(http.post) = "/feedback";
   }
+  rpc FeedbackContent(FeedbackReq) returns (FeedbackResp) {
+    option(http.post) = "/feedback/content";
+  }
   rpc SendVerifyCode(SendVerifyCodeReq) returns (SendVerifyCodeResp) {
     option(http.post) = "/system/send_verify_code";
   }
