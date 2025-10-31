@@ -86,6 +86,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"FeedbackContent": kitex.NewMethodInfo(
+		feedbackContentHandler,
+		newFeedbackContentArgs,
+		newFeedbackContentResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"SendVerifyCode": kitex.NewMethodInfo(
 		sendVerifyCodeHandler,
 		newSendVerifyCodeArgs,
@@ -1310,6 +1317,117 @@ func (p *FeedbackResult) GetResult() interface{} {
 	return p.Success
 }
 
+func feedbackContentHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.FeedbackReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).FeedbackContent(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *FeedbackContentArgs:
+		success, err := handler.(core_api.CoreApi).FeedbackContent(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*FeedbackContentResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newFeedbackContentArgs() interface{} {
+	return &FeedbackContentArgs{}
+}
+
+func newFeedbackContentResult() interface{} {
+	return &FeedbackContentResult{}
+}
+
+type FeedbackContentArgs struct {
+	Req *core_api.FeedbackReq
+}
+
+func (p *FeedbackContentArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *FeedbackContentArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.FeedbackReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var FeedbackContentArgs_Req_DEFAULT *core_api.FeedbackReq
+
+func (p *FeedbackContentArgs) GetReq() *core_api.FeedbackReq {
+	if !p.IsSetReq() {
+		return FeedbackContentArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *FeedbackContentArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *FeedbackContentArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type FeedbackContentResult struct {
+	Success *core_api.FeedbackResp
+}
+
+var FeedbackContentResult_Success_DEFAULT *core_api.FeedbackResp
+
+func (p *FeedbackContentResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *FeedbackContentResult) Unmarshal(in []byte) error {
+	msg := new(core_api.FeedbackResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *FeedbackContentResult) GetSuccess() *core_api.FeedbackResp {
+	if !p.IsSetSuccess() {
+		return FeedbackContentResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *FeedbackContentResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.FeedbackResp)
+}
+
+func (p *FeedbackContentResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *FeedbackContentResult) GetResult() interface{} {
+	return p.Success
+}
+
 func sendVerifyCodeHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -1981,6 +2099,16 @@ func (p *kClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq) (r *c
 	_args.Req = Req
 	var _result FeedbackResult
 	if err = p.c.Call(ctx, "Feedback", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) FeedbackContent(ctx context.Context, Req *core_api.FeedbackReq) (r *core_api.FeedbackResp, err error) {
+	var _args FeedbackContentArgs
+	_args.Req = Req
+	var _result FeedbackContentResult
+	if err = p.c.Call(ctx, "FeedbackContent", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

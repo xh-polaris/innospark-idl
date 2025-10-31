@@ -25,6 +25,7 @@ type Client interface {
 	SearchConversation(ctx context.Context, Req *core_api.SearchConversationReq, callOptions ...callopt.Option) (r *core_api.SearchConversationResp, err error)
 	ListAgents(ctx context.Context, Req *core_api.ListAgentsReq, callOptions ...callopt.Option) (r *core_api.ListAgentsResp, err error)
 	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error)
+	FeedbackContent(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error)
 	SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.SendVerifyCodeResp, err error)
 	BasicUserRegister(ctx context.Context, Req *core_api.BasicUserRegisterReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
 	BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLoginReq, callOptions ...callopt.Option) (r *core_api.BasicUserLoginResp, err error)
@@ -121,6 +122,11 @@ func (p *kCoreApiClient) ListAgents(ctx context.Context, Req *core_api.ListAgent
 func (p *kCoreApiClient) Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Feedback(ctx, Req)
+}
+
+func (p *kCoreApiClient) FeedbackContent(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.FeedbackContent(ctx, Req)
 }
 
 func (p *kCoreApiClient) SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.SendVerifyCodeResp, err error) {

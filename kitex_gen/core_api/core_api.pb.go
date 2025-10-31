@@ -20,6 +20,7 @@ type CoreApi interface {
 	SearchConversation(ctx context.Context, req *SearchConversationReq) (res *SearchConversationResp, err error)
 	ListAgents(ctx context.Context, req *ListAgentsReq) (res *ListAgentsResp, err error)
 	Feedback(ctx context.Context, req *FeedbackReq) (res *FeedbackResp, err error)
+	FeedbackContent(ctx context.Context, req *FeedbackReq) (res *FeedbackResp, err error)
 	SendVerifyCode(ctx context.Context, req *SendVerifyCodeReq) (res *SendVerifyCodeResp, err error)
 	BasicUserRegister(ctx context.Context, req *BasicUserRegisterReq) (res *BasicUserRegisterResp, err error)
 	BasicUserLogin(ctx context.Context, req *BasicUserLoginReq) (res *BasicUserLoginResp, err error)
