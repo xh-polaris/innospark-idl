@@ -77,3 +77,9 @@ service ManageApi {
     option (http.post) = "/admin/forbidden";
   }
 }
+
+service SystemApi {
+  rpc GenSignedURL(GenSignedURLReq) returns (core_api.GenSignedURLResp) {
+    option (http.post)  = "/system/get_signed_url";
+  }
+}
