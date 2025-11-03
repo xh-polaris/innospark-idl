@@ -270,3 +270,136 @@ func (x *ForbiddenUserResp) GetResp() *basic.Response {
 	}
 	return nil
 }
+
+type ListFeedBackReq struct {
+	Page      *basic.Page `protobuf:"bytes,1,opt,name=page" json:"page,omitempty"`
+	MessageId *string     `protobuf:"bytes,2,opt,name=messageId" json:"messageId,omitempty"`
+	UserId    *string     `protobuf:"bytes,3,opt,name=userId" json:"userId,omitempty"`
+	Action    *int32      `protobuf:"varint,4,opt,name=action" json:"action,omitempty"`
+	Type      *int32      `protobuf:"varint,5,opt,name=type" json:"type,omitempty"`
+}
+
+func (x *ListFeedBackReq) Reset() { *x = ListFeedBackReq{} }
+
+func (x *ListFeedBackReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *ListFeedBackReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ListFeedBackReq) GetPage() *basic.Page {
+	if x != nil {
+		return x.Page
+	}
+	return nil
+}
+
+func (x *ListFeedBackReq) GetMessageId() string {
+	if x != nil && x.MessageId != nil {
+		return *x.MessageId
+	}
+	return ""
+}
+
+func (x *ListFeedBackReq) GetUserId() string {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
+	}
+	return ""
+}
+
+func (x *ListFeedBackReq) GetAction() int32 {
+	if x != nil && x.Action != nil {
+		return *x.Action
+	}
+	return 0
+}
+
+func (x *ListFeedBackReq) GetType() int32 {
+	if x != nil && x.Type != nil {
+		return *x.Type
+	}
+	return 0
+}
+
+type ListFeedBackResp struct {
+	Resp      *basic.Response              `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Feedbacks []*ListFeedBackResp_FeedBack `protobuf:"bytes,2,rep,name=feedbacks" json:"feedbacks,omitempty"`
+}
+
+func (x *ListFeedBackResp) Reset() { *x = ListFeedBackResp{} }
+
+func (x *ListFeedBackResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *ListFeedBackResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ListFeedBackResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *ListFeedBackResp) GetFeedbacks() []*ListFeedBackResp_FeedBack {
+	if x != nil {
+		return x.Feedbacks
+	}
+	return nil
+}
+
+type ListFeedBackResp_FeedBack struct {
+	MessageId  string `protobuf:"bytes,1,opt,name=messageId" json:"messageId,omitempty"`
+	UserId     string `protobuf:"bytes,2,opt,name=userId" json:"userId,omitempty"`
+	Action     int32  `protobuf:"varint,3,opt,name=action" json:"action,omitempty"`
+	Type       int32  `protobuf:"varint,4,opt,name=type" json:"type,omitempty"`
+	Content    string `protobuf:"bytes,5,opt,name=content" json:"content,omitempty"`
+	CreateTime int64  `protobuf:"varint,6,opt,name=createTime" json:"createTime,omitempty"`
+}
+
+func (x *ListFeedBackResp_FeedBack) Reset() { *x = ListFeedBackResp_FeedBack{} }
+
+func (x *ListFeedBackResp_FeedBack) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *ListFeedBackResp_FeedBack) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *ListFeedBackResp_FeedBack) GetMessageId() string {
+	if x != nil {
+		return x.MessageId
+	}
+	return ""
+}
+
+func (x *ListFeedBackResp_FeedBack) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ListFeedBackResp_FeedBack) GetAction() int32 {
+	if x != nil {
+		return x.Action
+	}
+	return 0
+}
+
+func (x *ListFeedBackResp_FeedBack) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *ListFeedBackResp_FeedBack) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *ListFeedBackResp_FeedBack) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
+}

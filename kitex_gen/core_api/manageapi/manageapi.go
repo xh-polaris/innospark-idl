@@ -37,6 +37,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"ListFeedback": kitex.NewMethodInfo(
+		listFeedbackHandler,
+		newListFeedbackArgs,
+		newListFeedbackResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -436,6 +443,117 @@ func (p *ForbiddenResult) GetResult() interface{} {
 	return p.Success
 }
 
+func listFeedbackHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(manage.ListFeedBackReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.ManageApi).ListFeedback(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *ListFeedbackArgs:
+		success, err := handler.(core_api.ManageApi).ListFeedback(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*ListFeedbackResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newListFeedbackArgs() interface{} {
+	return &ListFeedbackArgs{}
+}
+
+func newListFeedbackResult() interface{} {
+	return &ListFeedbackResult{}
+}
+
+type ListFeedbackArgs struct {
+	Req *manage.ListFeedBackReq
+}
+
+func (p *ListFeedbackArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *ListFeedbackArgs) Unmarshal(in []byte) error {
+	msg := new(manage.ListFeedBackReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var ListFeedbackArgs_Req_DEFAULT *manage.ListFeedBackReq
+
+func (p *ListFeedbackArgs) GetReq() *manage.ListFeedBackReq {
+	if !p.IsSetReq() {
+		return ListFeedbackArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *ListFeedbackArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ListFeedbackArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type ListFeedbackResult struct {
+	Success *manage.ListFeedBackResp
+}
+
+var ListFeedbackResult_Success_DEFAULT *manage.ListFeedBackResp
+
+func (p *ListFeedbackResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *ListFeedbackResult) Unmarshal(in []byte) error {
+	msg := new(manage.ListFeedBackResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *ListFeedbackResult) GetSuccess() *manage.ListFeedBackResp {
+	if !p.IsSetSuccess() {
+		return ListFeedbackResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *ListFeedbackResult) SetSuccess(x interface{}) {
+	p.Success = x.(*manage.ListFeedBackResp)
+}
+
+func (p *ListFeedbackResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ListFeedbackResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -471,6 +589,16 @@ func (p *kClient) Forbidden(ctx context.Context, Req *manage.ForbiddenUserReq) (
 	_args.Req = Req
 	var _result ForbiddenResult
 	if err = p.c.Call(ctx, "Forbidden", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) ListFeedback(ctx context.Context, Req *manage.ListFeedBackReq) (r *manage.ListFeedBackResp, err error) {
+	var _args ListFeedbackArgs
+	_args.Req = Req
+	var _result ListFeedbackResult
+	if err = p.c.Call(ctx, "ListFeedback", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
