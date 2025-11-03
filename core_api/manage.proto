@@ -69,4 +69,5 @@ message ListFeedBackResp {
   }
   basic.Response resp = 1;
   repeated FeedBack feedbacks = 2;
+  int64 total = 3;
 }
