@@ -125,12 +125,13 @@ func (x *CompletionsOption) GetWebSearch() bool {
 }
 
 type Ext struct {
-	BotState string  `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
-	Brief    string  `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
-	Think    string  `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
-	Suggest  string  `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
-	Cite     []*Cite `protobuf:"bytes,5,rep,name=cite" json:"cite,omitempty"`
-	Code     []*Code `protobuf:"bytes,6,rep,name=code" json:"code,omitempty"`
+	BotState  string  `protobuf:"bytes,1,opt,name=bot_state" json:"bot_state,omitempty"` // json string, 对应EventModel
+	Brief     string  `protobuf:"bytes,2,opt,name=brief" json:"brief,omitempty"`
+	Think     string  `protobuf:"bytes,3,opt,name=think" json:"think,omitempty"`
+	Suggest   string  `protobuf:"bytes,4,opt,name=suggest" json:"suggest,omitempty"`
+	Cite      []*Cite `protobuf:"bytes,5,rep,name=cite" json:"cite,omitempty"`
+	Code      []*Code `protobuf:"bytes,6,rep,name=code" json:"code,omitempty"`
+	Sensitive bool    `protobuf:"varint,7,opt,name=sensitive" json:"sensitive,omitempty"`
 }
 
 func (x *Ext) Reset() { *x = Ext{} }
@@ -179,6 +180,13 @@ func (x *Ext) GetCode() []*Code {
 		return x.Code
 	}
 	return nil
+}
+
+func (x *Ext) GetSensitive() bool {
+	if x != nil {
+		return x.Sensitive
+	}
+	return false
 }
 
 type Cite struct {
