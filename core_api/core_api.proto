@@ -82,4 +82,7 @@ service ManageApi {
   rpc Forbidden(manage.ForbiddenUserReq) returns (manage.ForbiddenUserResp) {
     option (http.post) = "/admin/forbidden";
   }
+  rpc ListFeedback (manage.ListFeedBackReq) returns (manage.ListFeedBackResp) {
+    option (http.post) = "/admin/feedback/list";
+  }
 }
