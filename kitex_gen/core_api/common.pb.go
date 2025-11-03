@@ -1303,8 +1303,9 @@ func (x *FeedbackResp) GetResp() *basic.Response {
 
 // 发送验证码
 type SendVerifyCodeReq struct {
-	AuthType string `protobuf:"bytes,1,opt,name=authType" json:"authType,omitempty"`
-	AuthId   string `protobuf:"bytes,2,opt,name=authId" json:"authId,omitempty"`
+	AuthType string  `protobuf:"bytes,1,opt,name=authType" json:"authType,omitempty"`
+	AuthId   string  `protobuf:"bytes,2,opt,name=authId" json:"authId,omitempty"`
+	Cause    *string `protobuf:"bytes,3,opt,name=cause" json:"cause,omitempty"` // 发验证码的目的
 }
 
 func (x *SendVerifyCodeReq) Reset() { *x = SendVerifyCodeReq{} }
@@ -1323,6 +1324,13 @@ func (x *SendVerifyCodeReq) GetAuthType() string {
 func (x *SendVerifyCodeReq) GetAuthId() string {
 	if x != nil {
 		return x.AuthId
+	}
+	return ""
+}
+
+func (x *SendVerifyCodeReq) GetCause() string {
+	if x != nil && x.Cause != nil {
+		return *x.Cause
 	}
 	return ""
 }

@@ -323,6 +323,7 @@ func (x *ListFeedBackReq) GetType() int32 {
 type ListFeedBackResp struct {
 	Resp      *basic.Response              `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
 	Feedbacks []*ListFeedBackResp_FeedBack `protobuf:"bytes,2,rep,name=feedbacks" json:"feedbacks,omitempty"`
+	Total     int64                        `protobuf:"varint,3,opt,name=total" json:"total,omitempty"`
 }
 
 func (x *ListFeedBackResp) Reset() { *x = ListFeedBackResp{} }
@@ -343,6 +344,13 @@ func (x *ListFeedBackResp) GetFeedbacks() []*ListFeedBackResp_FeedBack {
 		return x.Feedbacks
 	}
 	return nil
+}
+
+func (x *ListFeedBackResp) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
 }
 
 type ListFeedBackResp_FeedBack struct {
