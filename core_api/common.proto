@@ -253,6 +253,18 @@ message SendVerifyCodeResp {
   basic.Response resp = 1;
 }
 
+// 校验验证码
+message CheckVerifyCodeReq {
+  string authType = 1;
+  string authId = 2;
+  string cause = 3; // 发验证码的目的
+  string verify = 4;
+}
+message CheckVerifyCodeResp {
+  basic.Response resp = 1;
+  bool verify = 2;
+}
+
 // 注册基础用户
 message BasicUserRegisterReq {
   string authType = 1;

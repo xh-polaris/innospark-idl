@@ -46,6 +46,9 @@ service CoreApi {
   rpc SendVerifyCode(SendVerifyCodeReq) returns (SendVerifyCodeResp) {
     option(http.post) = "/system/send_verify_code";
   }
+  rpc CheckVerifyCode(CheckVerifyCodeReq) returns (CheckVerifyCodeResp) {
+    option(http.post) = "/system/check_verify_code";
+  }
   rpc BasicUserRegister (BasicUserRegisterReq) returns (BasicUserRegisterResp) {
     option(http.post) = "/basic_user/register";
   }
