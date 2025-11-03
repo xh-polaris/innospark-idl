@@ -247,6 +247,7 @@ message FeedbackResp {
 message SendVerifyCodeReq {
   string authType = 1;
   string authId = 2;
+  optional string cause = 3; // 发验证码的目的
 }
 message SendVerifyCodeResp {
   basic.Response resp = 1;
