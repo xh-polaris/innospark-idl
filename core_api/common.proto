@@ -37,6 +37,7 @@ message Ext {
   string suggest = 4;
   repeated Cite cite = 5;
   repeated Code code = 6;
+  bool sensitive = 7;
 }
 message Cite {
   int32 index = 1;
