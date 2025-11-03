@@ -27,6 +27,7 @@ type Client interface {
 	Feedback(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error)
 	FeedbackContent(ctx context.Context, Req *core_api.FeedbackReq, callOptions ...callopt.Option) (r *core_api.FeedbackResp, err error)
 	SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.SendVerifyCodeResp, err error)
+	CheckVerifyCode(ctx context.Context, Req *core_api.CheckVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.CheckVerifyCodeResp, err error)
 	BasicUserRegister(ctx context.Context, Req *core_api.BasicUserRegisterReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
 	BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLoginReq, callOptions ...callopt.Option) (r *core_api.BasicUserLoginResp, err error)
 	BasicUserResetPassword(ctx context.Context, Req *core_api.BasicUserResetPasswordReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
@@ -133,6 +134,11 @@ func (p *kCoreApiClient) FeedbackContent(ctx context.Context, Req *core_api.Feed
 func (p *kCoreApiClient) SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.SendVerifyCodeResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.SendVerifyCode(ctx, Req)
+}
+
+func (p *kCoreApiClient) CheckVerifyCode(ctx context.Context, Req *core_api.CheckVerifyCodeReq, callOptions ...callopt.Option) (r *core_api.CheckVerifyCodeResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CheckVerifyCode(ctx, Req)
 }
 
 func (p *kCoreApiClient) BasicUserRegister(ctx context.Context, Req *core_api.BasicUserRegisterReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error) {

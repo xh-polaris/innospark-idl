@@ -1352,6 +1352,73 @@ func (x *SendVerifyCodeResp) GetResp() *basic.Response {
 	return nil
 }
 
+// 校验验证码
+type CheckVerifyCodeReq struct {
+	AuthType string `protobuf:"bytes,1,opt,name=authType" json:"authType,omitempty"`
+	AuthId   string `protobuf:"bytes,2,opt,name=authId" json:"authId,omitempty"`
+	Cause    string `protobuf:"bytes,3,opt,name=cause" json:"cause,omitempty"` // 发验证码的目的
+	Verify   string `protobuf:"bytes,4,opt,name=verify" json:"verify,omitempty"`
+}
+
+func (x *CheckVerifyCodeReq) Reset() { *x = CheckVerifyCodeReq{} }
+
+func (x *CheckVerifyCodeReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *CheckVerifyCodeReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *CheckVerifyCodeReq) GetAuthType() string {
+	if x != nil {
+		return x.AuthType
+	}
+	return ""
+}
+
+func (x *CheckVerifyCodeReq) GetAuthId() string {
+	if x != nil {
+		return x.AuthId
+	}
+	return ""
+}
+
+func (x *CheckVerifyCodeReq) GetCause() string {
+	if x != nil {
+		return x.Cause
+	}
+	return ""
+}
+
+func (x *CheckVerifyCodeReq) GetVerify() string {
+	if x != nil {
+		return x.Verify
+	}
+	return ""
+}
+
+type CheckVerifyCodeResp struct {
+	Resp   *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Verify bool            `protobuf:"varint,2,opt,name=verify" json:"verify,omitempty"`
+}
+
+func (x *CheckVerifyCodeResp) Reset() { *x = CheckVerifyCodeResp{} }
+
+func (x *CheckVerifyCodeResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *CheckVerifyCodeResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *CheckVerifyCodeResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *CheckVerifyCodeResp) GetVerify() bool {
+	if x != nil {
+		return x.Verify
+	}
+	return false
+}
+
 // 注册基础用户
 type BasicUserRegisterReq struct {
 	AuthType string `protobuf:"bytes,1,opt,name=authType" json:"authType,omitempty"`

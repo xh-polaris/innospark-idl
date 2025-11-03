@@ -100,6 +100,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"CheckVerifyCode": kitex.NewMethodInfo(
+		checkVerifyCodeHandler,
+		newCheckVerifyCodeArgs,
+		newCheckVerifyCodeResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"BasicUserRegister": kitex.NewMethodInfo(
 		basicUserRegisterHandler,
 		newBasicUserRegisterArgs,
@@ -1546,6 +1553,117 @@ func (p *SendVerifyCodeResult) GetResult() interface{} {
 	return p.Success
 }
 
+func checkVerifyCodeHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.CheckVerifyCodeReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).CheckVerifyCode(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CheckVerifyCodeArgs:
+		success, err := handler.(core_api.CoreApi).CheckVerifyCode(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CheckVerifyCodeResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCheckVerifyCodeArgs() interface{} {
+	return &CheckVerifyCodeArgs{}
+}
+
+func newCheckVerifyCodeResult() interface{} {
+	return &CheckVerifyCodeResult{}
+}
+
+type CheckVerifyCodeArgs struct {
+	Req *core_api.CheckVerifyCodeReq
+}
+
+func (p *CheckVerifyCodeArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CheckVerifyCodeArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.CheckVerifyCodeReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CheckVerifyCodeArgs_Req_DEFAULT *core_api.CheckVerifyCodeReq
+
+func (p *CheckVerifyCodeArgs) GetReq() *core_api.CheckVerifyCodeReq {
+	if !p.IsSetReq() {
+		return CheckVerifyCodeArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CheckVerifyCodeArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CheckVerifyCodeArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CheckVerifyCodeResult struct {
+	Success *core_api.CheckVerifyCodeResp
+}
+
+var CheckVerifyCodeResult_Success_DEFAULT *core_api.CheckVerifyCodeResp
+
+func (p *CheckVerifyCodeResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CheckVerifyCodeResult) Unmarshal(in []byte) error {
+	msg := new(core_api.CheckVerifyCodeResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CheckVerifyCodeResult) GetSuccess() *core_api.CheckVerifyCodeResp {
+	if !p.IsSetSuccess() {
+		return CheckVerifyCodeResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CheckVerifyCodeResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.CheckVerifyCodeResp)
+}
+
+func (p *CheckVerifyCodeResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CheckVerifyCodeResult) GetResult() interface{} {
+	return p.Success
+}
+
 func basicUserRegisterHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -2237,6 +2355,16 @@ func (p *kClient) SendVerifyCode(ctx context.Context, Req *core_api.SendVerifyCo
 	_args.Req = Req
 	var _result SendVerifyCodeResult
 	if err = p.c.Call(ctx, "SendVerifyCode", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CheckVerifyCode(ctx context.Context, Req *core_api.CheckVerifyCodeReq) (r *core_api.CheckVerifyCodeResp, err error) {
+	var _args CheckVerifyCodeArgs
+	_args.Req = Req
+	var _result CheckVerifyCodeResult
+	if err = p.c.Call(ctx, "CheckVerifyCode", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
