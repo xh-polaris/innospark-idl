@@ -37,6 +37,7 @@ message Ext {
   string suggest = 4;
   repeated Cite cite = 5;
   repeated Code code = 6;
+  bool sensitive = 7;
 }
 message Cite {
   int32 index = 1;
@@ -246,9 +247,22 @@ message FeedbackResp {
 message SendVerifyCodeReq {
   string authType = 1;
   string authId = 2;
+  optional string cause = 3; // 发验证码的目的
 }
 message SendVerifyCodeResp {
   basic.Response resp = 1;
+}
+
+// 校验验证码
+message CheckVerifyCodeReq {
+  string authType = 1;
+  string authId = 2;
+  string cause = 3; // 发验证码的目的
+  string verify = 4;
+}
+message CheckVerifyCodeResp {
+  basic.Response resp = 1;
+  bool verify = 2;
 }
 
 // 注册基础用户

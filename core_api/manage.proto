@@ -50,3 +50,24 @@ message ForbiddenUserReq {
 message ForbiddenUserResp {
   basic.Response resp = 1;
 }
+
+message ListFeedBackReq {
+  basic.Page page = 1;
+  optional string messageId = 2;
+  optional string userId = 3;
+  optional int32 action = 4;
+  optional int32 type = 5;
+}
+message ListFeedBackResp {
+  message FeedBack {
+    string messageId = 1;
+    string userId = 2;
+    int32 action = 3;
+    int32 type = 4;
+    string content = 5;
+    int64 createTime = 6;
+  }
+  basic.Response resp = 1;
+  repeated FeedBack feedbacks = 2;
+  int64 total = 3;
+}
