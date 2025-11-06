@@ -1698,3 +1698,61 @@ func (x *BasicUserUpdateProfileResp) GetResp() *basic.Response {
 	}
 	return nil
 }
+
+type GenSignedURLReq struct {
+	ConversationID string `protobuf:"bytes,1,opt,name=conversationID" json:"conversationID,omitempty"`
+	Filename       string `protobuf:"bytes,2,opt,name=filename" json:"filename,omitempty"`
+}
+
+func (x *GenSignedURLReq) Reset() { *x = GenSignedURLReq{} }
+
+func (x *GenSignedURLReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *GenSignedURLReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *GenSignedURLReq) GetConversationID() string {
+	if x != nil {
+		return x.ConversationID
+	}
+	return ""
+}
+
+func (x *GenSignedURLReq) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+type GenSignedURLResp struct {
+	Resp         *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	PresignedURL string          `protobuf:"bytes,2,opt,name=PresignedURL" json:"PresignedURL,omitempty"`
+	AccessURL    string          `protobuf:"bytes,3,opt,name=AccessURL" json:"AccessURL,omitempty"`
+}
+
+func (x *GenSignedURLResp) Reset() { *x = GenSignedURLResp{} }
+
+func (x *GenSignedURLResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *GenSignedURLResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *GenSignedURLResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *GenSignedURLResp) GetPresignedURL() string {
+	if x != nil {
+		return x.PresignedURL
+	}
+	return ""
+}
+
+func (x *GenSignedURLResp) GetAccessURL() string {
+	if x != nil {
+		return x.AccessURL
+	}
+	return ""
+}

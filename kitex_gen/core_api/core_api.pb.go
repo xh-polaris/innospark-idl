@@ -46,3 +46,7 @@ type ManageApi interface {
 	Forbidden(ctx context.Context, req *manage.ForbiddenUserReq) (res *manage.ForbiddenUserResp, err error)
 	ListFeedback(ctx context.Context, req *manage.ListFeedBackReq) (res *manage.ListFeedBackResp, err error)
 }
+
+type SystemApi interface {
+	GenSignedURL(ctx context.Context, req *GenSignedURLReq) (res *GenSignedURLResp, err error)
+}
