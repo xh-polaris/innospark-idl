@@ -1716,8 +1716,8 @@ func (x *BasicUserUpdateProfileResp) GetResp() *basic.Response {
 }
 
 type GenSignedURLReq struct {
-	ConversationID string `protobuf:"bytes,1,opt,name=conversationID" json:"conversationID,omitempty"`
-	Filename       string `protobuf:"bytes,2,opt,name=filename" json:"filename,omitempty"`
+	Prefix string `protobuf:"bytes,1,opt,name=prefix" json:"prefix,omitempty"`
+	Suffix string `protobuf:"bytes,2,opt,name=suffix" json:"suffix,omitempty"`
 }
 
 func (x *GenSignedURLReq) Reset() { *x = GenSignedURLReq{} }
@@ -1726,24 +1726,24 @@ func (x *GenSignedURLReq) Marshal(in []byte) ([]byte, error) { return prutal.Mar
 
 func (x *GenSignedURLReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *GenSignedURLReq) GetConversationID() string {
+func (x *GenSignedURLReq) GetPrefix() string {
 	if x != nil {
-		return x.ConversationID
+		return x.Prefix
 	}
 	return ""
 }
 
-func (x *GenSignedURLReq) GetFilename() string {
+func (x *GenSignedURLReq) GetSuffix() string {
 	if x != nil {
-		return x.Filename
+		return x.Suffix
 	}
 	return ""
 }
 
 type GenSignedURLResp struct {
 	Resp         *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	PresignedURL string          `protobuf:"bytes,2,opt,name=PresignedURL" json:"PresignedURL,omitempty"`
-	AccessURL    string          `protobuf:"bytes,3,opt,name=AccessURL" json:"AccessURL,omitempty"`
+	PresignedURL string          `protobuf:"bytes,2,opt,name=presignedURL" json:"presignedURL,omitempty"`
+	AccessURL    string          `protobuf:"bytes,3,opt,name=accessURL" json:"accessURL,omitempty"`
 }
 
 func (x *GenSignedURLResp) Reset() { *x = GenSignedURLResp{} }
