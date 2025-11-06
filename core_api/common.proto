@@ -319,11 +319,11 @@ message BasicUserUpdateProfileResp {
 }
 
 message GenSignedURLReq {
-  string conversationID = 1;
-  string filename = 2;
+  string prefix = 1;
+  string suffix = 2;
 }
 message GenSignedURLResp {
   basic.Response resp = 1;
-  string PresignedURL = 2;
-  string AccessURL = 3;
+  string presignedURL = 2;
+  string accessURL = 3;
 }
