@@ -287,6 +287,8 @@ message BasicUserLoginResp {
   basic.Response resp = 1;
   string token = 2;
   bool new = 3;
+  string name = 4;
+  string avatar = 5;
 }
 
 // 设置密码
