@@ -92,6 +92,6 @@ service ManageApi {
 
 service SystemApi {
   rpc GenSignedURL(GenSignedURLReq) returns (core_api.GenSignedURLResp) {
-    option (http.post)  = "/system/get_signed_url";
+    option (http.post)  = "/system/gen_signed_url";
   }
 }
