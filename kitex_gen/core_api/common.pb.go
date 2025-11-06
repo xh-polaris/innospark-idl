@@ -1523,9 +1523,11 @@ func (x *BasicUserLoginReq) GetVerify() string {
 }
 
 type BasicUserLoginResp struct {
-	Resp  *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	Token string          `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
-	New   bool            `protobuf:"varint,3,opt,name=new" json:"new,omitempty"`
+	Resp   *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Token  string          `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	New    bool            `protobuf:"varint,3,opt,name=new" json:"new,omitempty"`
+	Name   string          `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
+	Avatar string          `protobuf:"bytes,5,opt,name=avatar" json:"avatar,omitempty"`
 }
 
 func (x *BasicUserLoginResp) Reset() { *x = BasicUserLoginResp{} }
@@ -1553,6 +1555,20 @@ func (x *BasicUserLoginResp) GetNew() bool {
 		return x.New
 	}
 	return false
+}
+
+func (x *BasicUserLoginResp) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *BasicUserLoginResp) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
 }
 
 // 设置密码
