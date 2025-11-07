@@ -1715,6 +1715,53 @@ func (x *BasicUserUpdateProfileResp) GetResp() *basic.Response {
 	return nil
 }
 
+// 获取用户信息
+type BasicUserGetProfileReq struct {
+}
+
+func (x *BasicUserGetProfileReq) Reset() { *x = BasicUserGetProfileReq{} }
+
+func (x *BasicUserGetProfileReq) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserGetProfileReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+type BasicUserGetProfileResp struct {
+	Resp   *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Name   string          `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Avatar string          `protobuf:"bytes,3,opt,name=avatar" json:"avatar,omitempty"`
+}
+
+func (x *BasicUserGetProfileResp) Reset() { *x = BasicUserGetProfileResp{} }
+
+func (x *BasicUserGetProfileResp) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *BasicUserGetProfileResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *BasicUserGetProfileResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *BasicUserGetProfileResp) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *BasicUserGetProfileResp) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
 type GenSignedURLReq struct {
 	Prefix string `protobuf:"bytes,1,opt,name=prefix" json:"prefix,omitempty"`
 	Suffix string `protobuf:"bytes,2,opt,name=suffix" json:"suffix,omitempty"`

@@ -32,6 +32,7 @@ type Client interface {
 	BasicUserLogin(ctx context.Context, Req *core_api.BasicUserLoginReq, callOptions ...callopt.Option) (r *core_api.BasicUserLoginResp, err error)
 	BasicUserResetPassword(ctx context.Context, Req *core_api.BasicUserResetPasswordReq, callOptions ...callopt.Option) (r *core_api.BasicUserRegisterResp, err error)
 	BasicUserUpdateProfile(ctx context.Context, Req *core_api.BasicUserUpdateProfileReq, callOptions ...callopt.Option) (r *core_api.BasicUserUpdateProfileResp, err error)
+	BasicUserGetProfile(ctx context.Context, Req *core_api.BasicUserGetProfileReq, callOptions ...callopt.Option) (r *core_api.BasicUserGetProfileResp, err error)
 	ThirdPartyLogin(ctx context.Context, Req *core_api.ThirdPartyLoginReq, callOptions ...callopt.Option) (r *core_api.ThirdPartyLoginResp, err error)
 }
 
@@ -159,6 +160,11 @@ func (p *kCoreApiClient) BasicUserResetPassword(ctx context.Context, Req *core_a
 func (p *kCoreApiClient) BasicUserUpdateProfile(ctx context.Context, Req *core_api.BasicUserUpdateProfileReq, callOptions ...callopt.Option) (r *core_api.BasicUserUpdateProfileResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.BasicUserUpdateProfile(ctx, Req)
+}
+
+func (p *kCoreApiClient) BasicUserGetProfile(ctx context.Context, Req *core_api.BasicUserGetProfileReq, callOptions ...callopt.Option) (r *core_api.BasicUserGetProfileResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.BasicUserGetProfile(ctx, Req)
 }
 
 func (p *kCoreApiClient) ThirdPartyLogin(ctx context.Context, Req *core_api.ThirdPartyLoginReq, callOptions ...callopt.Option) (r *core_api.ThirdPartyLoginResp, err error) {

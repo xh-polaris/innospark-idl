@@ -135,6 +135,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"BasicUserGetProfile": kitex.NewMethodInfo(
+		basicUserGetProfileHandler,
+		newBasicUserGetProfileArgs,
+		newBasicUserGetProfileResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 	"ThirdPartyLogin": kitex.NewMethodInfo(
 		thirdPartyLoginHandler,
 		newThirdPartyLoginArgs,
@@ -2108,6 +2115,117 @@ func (p *BasicUserUpdateProfileResult) GetResult() interface{} {
 	return p.Success
 }
 
+func basicUserGetProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(core_api.BasicUserGetProfileReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.CoreApi).BasicUserGetProfile(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *BasicUserGetProfileArgs:
+		success, err := handler.(core_api.CoreApi).BasicUserGetProfile(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*BasicUserGetProfileResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newBasicUserGetProfileArgs() interface{} {
+	return &BasicUserGetProfileArgs{}
+}
+
+func newBasicUserGetProfileResult() interface{} {
+	return &BasicUserGetProfileResult{}
+}
+
+type BasicUserGetProfileArgs struct {
+	Req *core_api.BasicUserGetProfileReq
+}
+
+func (p *BasicUserGetProfileArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *BasicUserGetProfileArgs) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserGetProfileReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var BasicUserGetProfileArgs_Req_DEFAULT *core_api.BasicUserGetProfileReq
+
+func (p *BasicUserGetProfileArgs) GetReq() *core_api.BasicUserGetProfileReq {
+	if !p.IsSetReq() {
+		return BasicUserGetProfileArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *BasicUserGetProfileArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *BasicUserGetProfileArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type BasicUserGetProfileResult struct {
+	Success *core_api.BasicUserGetProfileResp
+}
+
+var BasicUserGetProfileResult_Success_DEFAULT *core_api.BasicUserGetProfileResp
+
+func (p *BasicUserGetProfileResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *BasicUserGetProfileResult) Unmarshal(in []byte) error {
+	msg := new(core_api.BasicUserGetProfileResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *BasicUserGetProfileResult) GetSuccess() *core_api.BasicUserGetProfileResp {
+	if !p.IsSetSuccess() {
+		return BasicUserGetProfileResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *BasicUserGetProfileResult) SetSuccess(x interface{}) {
+	p.Success = x.(*core_api.BasicUserGetProfileResp)
+}
+
+func (p *BasicUserGetProfileResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *BasicUserGetProfileResult) GetResult() interface{} {
+	return p.Success
+}
+
 func thirdPartyLoginHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
@@ -2405,6 +2523,16 @@ func (p *kClient) BasicUserUpdateProfile(ctx context.Context, Req *core_api.Basi
 	_args.Req = Req
 	var _result BasicUserUpdateProfileResult
 	if err = p.c.Call(ctx, "BasicUserUpdateProfile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) BasicUserGetProfile(ctx context.Context, Req *core_api.BasicUserGetProfileReq) (r *core_api.BasicUserGetProfileResp, err error) {
+	var _args BasicUserGetProfileArgs
+	_args.Req = Req
+	var _result BasicUserGetProfileResult
+	if err = p.c.Call(ctx, "BasicUserGetProfile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
