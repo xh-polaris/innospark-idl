@@ -61,6 +61,9 @@ service CoreApi {
   rpc BasicUserUpdateProfile (BasicUserUpdateProfileReq) returns (BasicUserUpdateProfileResp) {
     option(http.post) = "/basic_user/update_profile";
   }
+  rpc BasicUserGetProfile (BasicUserGetProfileReq) returns (BasicUserGetProfileResp) {
+    option(http.get) = "/basic_user/profile";
+  }
   rpc ThirdPartyLogin (ThirdPartyLoginReq) returns (ThirdPartyLoginResp) {
     option(http.post) = "/thirdparty/login";
   }
