@@ -54,6 +54,67 @@ message Code {
   string code = 3;
 }
 
+message MessageInputPart {
+  string type = 1;
+  optional string text = 2;
+  optional MessageInputImage image = 3;
+  optional MessageInputAudio audio = 4;
+  optional MessageInputVideo video = 5;
+  optional MessageInputFile file = 6;
+}
+
+message MessageInputImage {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+  string detail = 4;
+}
+
+message MessageInputAudio {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+}
+
+message MessageInputVideo {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+}
+
+message MessageInputFile {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+}
+
+message MessageOutputPart {
+  string type = 1;
+  optional string text = 2;
+  optional MessageOutputImage image = 3;
+  optional MessageOutputAudio audio = 4;
+  optional MessageOutputVideo video = 5;
+}
+
+message MessageOutputImage {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+  string detail = 4;
+}
+
+message MessageOutputAudio {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+}
+
+message MessageOutputVideo {
+  optional string url = 1;
+  optional string base64Data = 2;
+  optional string mimeType = 3;
+}
+
 message FullMessage {
   string conversationId = 1;
   string sectionId = 2;
@@ -65,9 +126,11 @@ message FullMessage {
   int32 messageType = 8;
   int32 contentType = 9;
   string content = 10; // json string
-  Ext ext = 11;
-  int32 feedback = 12; // 反馈类型
-  int32 userType = 13; // 用户类型, 如system, assistant, user
+  repeated MessageInputPart userInputMultiContent = 11;
+  repeated MessageOutputPart assistantGenMultiContent = 12;
+  Ext ext = 13;
+  int32 feedback = 14; // 反馈类型
+  int32 userType = 15; // 用户类型, 如system, assistant, user
 }
 
 // SSEEvent
