@@ -287,20 +287,375 @@ func (x *Code) GetCode() string {
 	return ""
 }
 
+type MessageInputPart struct {
+	Type  string             `protobuf:"bytes,1,opt,name=type" json:"type,omitempty"`
+	Text  *string            `protobuf:"bytes,2,opt,name=text" json:"text,omitempty"`
+	Image *MessageInputImage `protobuf:"bytes,3,opt,name=image" json:"image,omitempty"`
+	Audio *MessageInputAudio `protobuf:"bytes,4,opt,name=audio" json:"audio,omitempty"`
+	Video *MessageInputVideo `protobuf:"bytes,5,opt,name=video" json:"video,omitempty"`
+	File  *MessageInputFile  `protobuf:"bytes,6,opt,name=file" json:"file,omitempty"`
+}
+
+func (x *MessageInputPart) Reset() { *x = MessageInputPart{} }
+
+func (x *MessageInputPart) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageInputPart) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageInputPart) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *MessageInputPart) GetText() string {
+	if x != nil && x.Text != nil {
+		return *x.Text
+	}
+	return ""
+}
+
+func (x *MessageInputPart) GetImage() *MessageInputImage {
+	if x != nil {
+		return x.Image
+	}
+	return nil
+}
+
+func (x *MessageInputPart) GetAudio() *MessageInputAudio {
+	if x != nil {
+		return x.Audio
+	}
+	return nil
+}
+
+func (x *MessageInputPart) GetVideo() *MessageInputVideo {
+	if x != nil {
+		return x.Video
+	}
+	return nil
+}
+
+func (x *MessageInputPart) GetFile() *MessageInputFile {
+	if x != nil {
+		return x.File
+	}
+	return nil
+}
+
+type MessageInputImage struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+	Detail     string  `protobuf:"bytes,4,opt,name=detail" json:"detail,omitempty"`
+}
+
+func (x *MessageInputImage) Reset() { *x = MessageInputImage{} }
+
+func (x *MessageInputImage) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageInputImage) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageInputImage) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageInputImage) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageInputImage) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+func (x *MessageInputImage) GetDetail() string {
+	if x != nil {
+		return x.Detail
+	}
+	return ""
+}
+
+type MessageInputAudio struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+}
+
+func (x *MessageInputAudio) Reset() { *x = MessageInputAudio{} }
+
+func (x *MessageInputAudio) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageInputAudio) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageInputAudio) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageInputAudio) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageInputAudio) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+type MessageInputVideo struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+}
+
+func (x *MessageInputVideo) Reset() { *x = MessageInputVideo{} }
+
+func (x *MessageInputVideo) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageInputVideo) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageInputVideo) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageInputVideo) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageInputVideo) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+type MessageInputFile struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+}
+
+func (x *MessageInputFile) Reset() { *x = MessageInputFile{} }
+
+func (x *MessageInputFile) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageInputFile) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageInputFile) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageInputFile) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageInputFile) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+type MessageOutputPart struct {
+	Type  string              `protobuf:"bytes,1,opt,name=type" json:"type,omitempty"`
+	Text  *string             `protobuf:"bytes,2,opt,name=text" json:"text,omitempty"`
+	Image *MessageOutputImage `protobuf:"bytes,3,opt,name=image" json:"image,omitempty"`
+	Audio *MessageOutputAudio `protobuf:"bytes,4,opt,name=audio" json:"audio,omitempty"`
+	Video *MessageOutputVideo `protobuf:"bytes,5,opt,name=video" json:"video,omitempty"`
+}
+
+func (x *MessageOutputPart) Reset() { *x = MessageOutputPart{} }
+
+func (x *MessageOutputPart) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageOutputPart) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageOutputPart) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *MessageOutputPart) GetText() string {
+	if x != nil && x.Text != nil {
+		return *x.Text
+	}
+	return ""
+}
+
+func (x *MessageOutputPart) GetImage() *MessageOutputImage {
+	if x != nil {
+		return x.Image
+	}
+	return nil
+}
+
+func (x *MessageOutputPart) GetAudio() *MessageOutputAudio {
+	if x != nil {
+		return x.Audio
+	}
+	return nil
+}
+
+func (x *MessageOutputPart) GetVideo() *MessageOutputVideo {
+	if x != nil {
+		return x.Video
+	}
+	return nil
+}
+
+type MessageOutputImage struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+	Detail     string  `protobuf:"bytes,4,opt,name=detail" json:"detail,omitempty"`
+}
+
+func (x *MessageOutputImage) Reset() { *x = MessageOutputImage{} }
+
+func (x *MessageOutputImage) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageOutputImage) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageOutputImage) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageOutputImage) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageOutputImage) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+func (x *MessageOutputImage) GetDetail() string {
+	if x != nil {
+		return x.Detail
+	}
+	return ""
+}
+
+type MessageOutputAudio struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+}
+
+func (x *MessageOutputAudio) Reset() { *x = MessageOutputAudio{} }
+
+func (x *MessageOutputAudio) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageOutputAudio) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageOutputAudio) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageOutputAudio) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageOutputAudio) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
+type MessageOutputVideo struct {
+	Url        *string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Base64Data *string `protobuf:"bytes,2,opt,name=base64Data" json:"base64Data,omitempty"`
+	MimeType   *string `protobuf:"bytes,3,opt,name=mimeType" json:"mimeType,omitempty"`
+}
+
+func (x *MessageOutputVideo) Reset() { *x = MessageOutputVideo{} }
+
+func (x *MessageOutputVideo) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *MessageOutputVideo) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *MessageOutputVideo) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *MessageOutputVideo) GetBase64Data() string {
+	if x != nil && x.Base64Data != nil {
+		return *x.Base64Data
+	}
+	return ""
+}
+
+func (x *MessageOutputVideo) GetMimeType() string {
+	if x != nil && x.MimeType != nil {
+		return *x.MimeType
+	}
+	return ""
+}
+
 type FullMessage struct {
-	ConversationId string  `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
-	SectionId      string  `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
-	MessageId      string  `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
-	Index          int32   `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
-	ReplyId        *string `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
-	Status         int32   `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
-	CreateTime     int64   `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
-	MessageType    int32   `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
-	ContentType    int32   `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
-	Content        string  `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
-	Ext            *Ext    `protobuf:"bytes,11,opt,name=ext" json:"ext,omitempty"`
-	Feedback       int32   `protobuf:"varint,12,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
-	UserType       int32   `protobuf:"varint,13,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
+	ConversationId           string               `protobuf:"bytes,1,opt,name=conversationId" json:"conversationId,omitempty"`
+	SectionId                string               `protobuf:"bytes,2,opt,name=sectionId" json:"sectionId,omitempty"`
+	MessageId                string               `protobuf:"bytes,3,opt,name=messageId" json:"messageId,omitempty"`
+	Index                    int32                `protobuf:"varint,4,opt,name=index" json:"index,omitempty"`
+	ReplyId                  *string              `protobuf:"bytes,5,opt,name=replyId" json:"replyId,omitempty"` // 回复id
+	Status                   int32                `protobuf:"varint,6,opt,name=status" json:"status,omitempty"`  // 状态, 目前默认0
+	CreateTime               int64                `protobuf:"varint,7,opt,name=createTime" json:"createTime,omitempty"`
+	MessageType              int32                `protobuf:"varint,8,opt,name=messageType" json:"messageType,omitempty"`
+	ContentType              int32                `protobuf:"varint,9,opt,name=contentType" json:"contentType,omitempty"`
+	Content                  string               `protobuf:"bytes,10,opt,name=content" json:"content,omitempty"` // json string
+	UserInputMultiContent    []*MessageInputPart  `protobuf:"bytes,11,rep,name=userInputMultiContent" json:"userInputMultiContent,omitempty"`
+	AssistantGenMultiContent []*MessageOutputPart `protobuf:"bytes,12,rep,name=assistantGenMultiContent" json:"assistantGenMultiContent,omitempty"`
+	Ext                      *Ext                 `protobuf:"bytes,13,opt,name=ext" json:"ext,omitempty"`
+	Feedback                 int32                `protobuf:"varint,14,opt,name=feedback" json:"feedback,omitempty"` // 反馈类型
+	UserType                 int32                `protobuf:"varint,15,opt,name=userType" json:"userType,omitempty"` // 用户类型, 如system, assistant, user
 }
 
 func (x *FullMessage) Reset() { *x = FullMessage{} }
@@ -377,6 +732,20 @@ func (x *FullMessage) GetContent() string {
 		return x.Content
 	}
 	return ""
+}
+
+func (x *FullMessage) GetUserInputMultiContent() []*MessageInputPart {
+	if x != nil {
+		return x.UserInputMultiContent
+	}
+	return nil
+}
+
+func (x *FullMessage) GetAssistantGenMultiContent() []*MessageOutputPart {
+	if x != nil {
+		return x.AssistantGenMultiContent
+	}
+	return nil
 }
 
 func (x *FullMessage) GetExt() *Ext {
