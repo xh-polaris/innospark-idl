@@ -38,7 +38,19 @@ message Ext {
   repeated Cite cite = 5;
   repeated Code code = 6;
   bool sensitive = 7;
+  Usage usage = 8;
 }
+
+message Usage {
+  message PromptTokenDetails {
+    int64 cachedTokens = 1;
+  }
+  int64 promptTokens = 1;
+  PromptTokenDetails promptTokenDetails = 2;
+  int64 CompletionTokens = 3;
+  int64 TotalTokens = 4;
+}
+
 message Cite {
   int32 index = 1;
   string name = 2;
@@ -48,6 +60,7 @@ message Cite {
   string siteIcon = 6;
   string datePublished = 7;
 }
+
 message Code {
   int32 index = 1;
   string codeType = 2;
