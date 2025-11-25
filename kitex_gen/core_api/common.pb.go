@@ -132,6 +132,7 @@ type Ext struct {
 	Cite      []*Cite `protobuf:"bytes,5,rep,name=cite" json:"cite,omitempty"`
 	Code      []*Code `protobuf:"bytes,6,rep,name=code" json:"code,omitempty"`
 	Sensitive bool    `protobuf:"varint,7,opt,name=sensitive" json:"sensitive,omitempty"`
+	Usage     *Usage  `protobuf:"bytes,8,opt,name=usage" json:"usage,omitempty"`
 }
 
 func (x *Ext) Reset() { *x = Ext{} }
@@ -187,6 +188,73 @@ func (x *Ext) GetSensitive() bool {
 		return x.Sensitive
 	}
 	return false
+}
+
+func (x *Ext) GetUsage() *Usage {
+	if x != nil {
+		return x.Usage
+	}
+	return nil
+}
+
+type Usage struct {
+	PromptTokens       int64                     `protobuf:"varint,1,opt,name=promptTokens" json:"promptTokens,omitempty"`
+	PromptTokenDetails *Usage_PromptTokenDetails `protobuf:"bytes,2,opt,name=promptTokenDetails" json:"promptTokenDetails,omitempty"`
+	CompletionTokens   int64                     `protobuf:"varint,3,opt,name=CompletionTokens" json:"CompletionTokens,omitempty"`
+	TotalTokens        int64                     `protobuf:"varint,4,opt,name=TotalTokens" json:"TotalTokens,omitempty"`
+}
+
+func (x *Usage) Reset() { *x = Usage{} }
+
+func (x *Usage) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *Usage) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Usage) GetPromptTokens() int64 {
+	if x != nil {
+		return x.PromptTokens
+	}
+	return 0
+}
+
+func (x *Usage) GetPromptTokenDetails() *Usage_PromptTokenDetails {
+	if x != nil {
+		return x.PromptTokenDetails
+	}
+	return nil
+}
+
+func (x *Usage) GetCompletionTokens() int64 {
+	if x != nil {
+		return x.CompletionTokens
+	}
+	return 0
+}
+
+func (x *Usage) GetTotalTokens() int64 {
+	if x != nil {
+		return x.TotalTokens
+	}
+	return 0
+}
+
+type Usage_PromptTokenDetails struct {
+	CachedTokens int64 `protobuf:"varint,1,opt,name=cachedTokens" json:"cachedTokens,omitempty"`
+}
+
+func (x *Usage_PromptTokenDetails) Reset() { *x = Usage_PromptTokenDetails{} }
+
+func (x *Usage_PromptTokenDetails) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *Usage_PromptTokenDetails) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Usage_PromptTokenDetails) GetCachedTokens() int64 {
+	if x != nil {
+		return x.CachedTokens
+	}
+	return 0
 }
 
 type Cite struct {
