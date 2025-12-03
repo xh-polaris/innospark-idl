@@ -60,13 +60,14 @@ func (x *Message) GetRole() string {
 
 // 对话配置
 type CompletionsOption struct {
-	IsRegen         bool    `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`                // 是否重新生成
-	SelectedRegenId *string `protobuf:"bytes,2,opt,name=selectedRegenId" json:"selectedRegenId,omitempty"` // 选择生成的id
-	WithSuggest     bool    `protobuf:"varint,3,opt,name=withSuggest" json:"withSuggest,omitempty"`        // 是否生成建议
-	IsReplace       bool    `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`            // 是否替换
-	UseDeepThink    bool    `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"`      // 是否深度思考
-	Stream          bool    `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`                  // 是否流式
-	WebSearch       *bool   `protobuf:"varint,7,opt,name=webSearch" json:"webSearch,omitempty"`            // 是否联网搜索
+	IsRegen         bool              `protobuf:"varint,1,opt,name=isRegen" json:"isRegen,omitempty"`                                                                  // 是否重新生成
+	SelectedRegenId *string           `protobuf:"bytes,2,opt,name=selectedRegenId" json:"selectedRegenId,omitempty"`                                                   // 选择生成的id
+	WithSuggest     bool              `protobuf:"varint,3,opt,name=withSuggest" json:"withSuggest,omitempty"`                                                          // 是否生成建议
+	IsReplace       bool              `protobuf:"varint,4,opt,name=isReplace" json:"isReplace,omitempty"`                                                              // 是否替换
+	UseDeepThink    bool              `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"`                                                        // 是否深度思考
+	Stream          bool              `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`                                                                    // 是否流式
+	WebSearch       *bool             `protobuf:"varint,7,opt,name=webSearch" json:"webSearch,omitempty"`                                                              // 是否联网搜索
+	Ext             map[string]string `protobuf:"bytes,8,rep,name=ext" json:"ext,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // 额外信息
 }
 
 func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
@@ -122,6 +123,13 @@ func (x *CompletionsOption) GetWebSearch() bool {
 		return *x.WebSearch
 	}
 	return false
+}
+
+func (x *CompletionsOption) GetExt() map[string]string {
+	if x != nil {
+		return x.Ext
+	}
+	return nil
 }
 
 type Ext struct {
@@ -1131,6 +1139,23 @@ func (x *Conversation) GetUpdateTime() int64 {
 	return 0
 }
 
+type Profile struct {
+	Role *string `protobuf:"bytes,1,opt,name=role" json:"role,omitempty"`
+}
+
+func (x *Profile) Reset() { *x = Profile{} }
+
+func (x *Profile) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *Profile) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *Profile) GetRole() string {
+	if x != nil && x.Role != nil {
+		return *x.Role
+	}
+	return ""
+}
+
 // 模型对话请求
 type CompletionsReq struct {
 	Messages          []*Message         `protobuf:"bytes,1,rep,name=messages" json:"messages,omitempty"`                   // 用户输入消息, 长度应为1
@@ -2107,8 +2132,9 @@ func (x *ThirdPartyLoginResp) GetNew() bool {
 
 // 修改用户信息（头像和用户名）
 type BasicUserUpdateProfileReq struct {
-	Username *string `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
-	Avatar   *string `protobuf:"bytes,2,opt,name=avatar" json:"avatar,omitempty"`
+	Username *string  `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
+	Avatar   *string  `protobuf:"bytes,2,opt,name=avatar" json:"avatar,omitempty"`
+	Profile  *Profile `protobuf:"bytes,3,opt,name=profile" json:"profile,omitempty"`
 }
 
 func (x *BasicUserUpdateProfileReq) Reset() { *x = BasicUserUpdateProfileReq{} }
@@ -2131,6 +2157,13 @@ func (x *BasicUserUpdateProfileReq) GetAvatar() string {
 		return *x.Avatar
 	}
 	return ""
+}
+
+func (x *BasicUserUpdateProfileReq) GetProfile() *Profile {
+	if x != nil {
+		return x.Profile
+	}
+	return nil
 }
 
 type BasicUserUpdateProfileResp struct {
@@ -2165,9 +2198,10 @@ func (x *BasicUserGetProfileReq) Marshal(in []byte) ([]byte, error) {
 func (x *BasicUserGetProfileReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
 type BasicUserGetProfileResp struct {
-	Resp   *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	Name   string          `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	Avatar string          `protobuf:"bytes,3,opt,name=avatar" json:"avatar,omitempty"`
+	Resp    *basic.Response `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Name    string          `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Avatar  string          `protobuf:"bytes,3,opt,name=avatar" json:"avatar,omitempty"`
+	Profile *Profile        `protobuf:"bytes,4,opt,name=profile" json:"profile,omitempty"`
 }
 
 func (x *BasicUserGetProfileResp) Reset() { *x = BasicUserGetProfileResp{} }
@@ -2197,6 +2231,13 @@ func (x *BasicUserGetProfileResp) GetAvatar() string {
 		return x.Avatar
 	}
 	return ""
+}
+
+func (x *BasicUserGetProfileResp) GetProfile() *Profile {
+	if x != nil {
+		return x.Profile
+	}
+	return nil
 }
 
 type GenSignedURLReq struct {

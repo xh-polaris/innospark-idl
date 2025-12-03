@@ -46,6 +46,7 @@ type ManageApi interface {
 	ListUser(ctx context.Context, req *manage.ListUserReq) (res *manage.ListUserResp, err error)
 	Forbidden(ctx context.Context, req *manage.ForbiddenUserReq) (res *manage.ForbiddenUserResp, err error)
 	ListFeedback(ctx context.Context, req *manage.ListFeedBackReq) (res *manage.ListFeedBackResp, err error)
+	UserStatistic(ctx context.Context, req *manage.UserStatisticsReq) (res *manage.UserStatisticsResp, err error)
 }
 
 type SystemApi interface {

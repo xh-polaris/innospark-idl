@@ -411,3 +411,139 @@ func (x *ListFeedBackResp_FeedBack) GetCreateTime() int64 {
 	}
 	return 0
 }
+
+type UserStatisticsReq struct {
+	Start int64 `protobuf:"varint,1,opt,name=start" json:"start,omitempty"`
+	End   int64 `protobuf:"varint,2,opt,name=end" json:"end,omitempty"`
+}
+
+func (x *UserStatisticsReq) Reset() { *x = UserStatisticsReq{} }
+
+func (x *UserStatisticsReq) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *UserStatisticsReq) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *UserStatisticsReq) GetStart() int64 {
+	if x != nil {
+		return x.Start
+	}
+	return 0
+}
+
+func (x *UserStatisticsReq) GetEnd() int64 {
+	if x != nil {
+		return x.End
+	}
+	return 0
+}
+
+type UserStatisticsResp struct {
+	Resp               *basic.Response            `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Growth             []*UserStatisticsResp_Item `protobuf:"bytes,2,rep,name=growth" json:"growth,omitempty"`                           // 柱状图：每日新增用户数据
+	Accumulate         []*UserStatisticsResp_Item `protobuf:"bytes,3,rep,name=accumulate" json:"accumulate,omitempty"`                   // 折线图：每日累计用户数据
+	Trend              *UserStatisticsResp_Trend  `protobuf:"bytes,4,opt,name=trend" json:"trend,omitempty"`                             // 直线, 趋势
+	TotalNewUsers      int64                      `protobuf:"varint,5,opt,name=totalNewUsers" json:"totalNewUsers,omitempty"`            // 统计周期内总新增用户数
+	AverageDailyGrowth float64                    `protobuf:"fixed64,6,opt,name=averageDailyGrowth" json:"averageDailyGrowth,omitempty"` // 统计周期内的日均新增用户数
+}
+
+func (x *UserStatisticsResp) Reset() { *x = UserStatisticsResp{} }
+
+func (x *UserStatisticsResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+
+func (x *UserStatisticsResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *UserStatisticsResp) GetResp() *basic.Response {
+	if x != nil {
+		return x.Resp
+	}
+	return nil
+}
+
+func (x *UserStatisticsResp) GetGrowth() []*UserStatisticsResp_Item {
+	if x != nil {
+		return x.Growth
+	}
+	return nil
+}
+
+func (x *UserStatisticsResp) GetAccumulate() []*UserStatisticsResp_Item {
+	if x != nil {
+		return x.Accumulate
+	}
+	return nil
+}
+
+func (x *UserStatisticsResp) GetTrend() *UserStatisticsResp_Trend {
+	if x != nil {
+		return x.Trend
+	}
+	return nil
+}
+
+func (x *UserStatisticsResp) GetTotalNewUsers() int64 {
+	if x != nil {
+		return x.TotalNewUsers
+	}
+	return 0
+}
+
+func (x *UserStatisticsResp) GetAverageDailyGrowth() float64 {
+	if x != nil {
+		return x.AverageDailyGrowth
+	}
+	return 0
+}
+
+type UserStatisticsResp_Item struct {
+	Date  int64 `protobuf:"varint,1,opt,name=date" json:"date,omitempty"`
+	Count int64 `protobuf:"varint,2,opt,name=count" json:"count,omitempty"`
+}
+
+func (x *UserStatisticsResp_Item) Reset() { *x = UserStatisticsResp_Item{} }
+
+func (x *UserStatisticsResp_Item) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *UserStatisticsResp_Item) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *UserStatisticsResp_Item) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
+func (x *UserStatisticsResp_Item) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type UserStatisticsResp_Trend struct {
+	W float64 `protobuf:"fixed64,1,opt,name=w" json:"w,omitempty"` // 斜率 w，用于表示用户累计趋势的增长速度
+	B float64 `protobuf:"fixed64,2,opt,name=b" json:"b,omitempty"` // 截距 b，用于表示趋势线在 x=0 时的理论值
+}
+
+func (x *UserStatisticsResp_Trend) Reset() { *x = UserStatisticsResp_Trend{} }
+
+func (x *UserStatisticsResp_Trend) Marshal(in []byte) ([]byte, error) {
+	return prutal.MarshalAppend(in, x)
+}
+
+func (x *UserStatisticsResp_Trend) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+
+func (x *UserStatisticsResp_Trend) GetW() float64 {
+	if x != nil {
+		return x.W
+	}
+	return 0
+}
+
+func (x *UserStatisticsResp_Trend) GetB() float64 {
+	if x != nil {
+		return x.B
+	}
+	return 0
+}

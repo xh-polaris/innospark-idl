@@ -44,6 +44,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"UserStatistic": kitex.NewMethodInfo(
+		userStatisticHandler,
+		newUserStatisticArgs,
+		newUserStatisticResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -554,6 +561,117 @@ func (p *ListFeedbackResult) GetResult() interface{} {
 	return p.Success
 }
 
+func userStatisticHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(manage.UserStatisticsReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.ManageApi).UserStatistic(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *UserStatisticArgs:
+		success, err := handler.(core_api.ManageApi).UserStatistic(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*UserStatisticResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newUserStatisticArgs() interface{} {
+	return &UserStatisticArgs{}
+}
+
+func newUserStatisticResult() interface{} {
+	return &UserStatisticResult{}
+}
+
+type UserStatisticArgs struct {
+	Req *manage.UserStatisticsReq
+}
+
+func (p *UserStatisticArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *UserStatisticArgs) Unmarshal(in []byte) error {
+	msg := new(manage.UserStatisticsReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var UserStatisticArgs_Req_DEFAULT *manage.UserStatisticsReq
+
+func (p *UserStatisticArgs) GetReq() *manage.UserStatisticsReq {
+	if !p.IsSetReq() {
+		return UserStatisticArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *UserStatisticArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserStatisticArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type UserStatisticResult struct {
+	Success *manage.UserStatisticsResp
+}
+
+var UserStatisticResult_Success_DEFAULT *manage.UserStatisticsResp
+
+func (p *UserStatisticResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *UserStatisticResult) Unmarshal(in []byte) error {
+	msg := new(manage.UserStatisticsResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *UserStatisticResult) GetSuccess() *manage.UserStatisticsResp {
+	if !p.IsSetSuccess() {
+		return UserStatisticResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *UserStatisticResult) SetSuccess(x interface{}) {
+	p.Success = x.(*manage.UserStatisticsResp)
+}
+
+func (p *UserStatisticResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserStatisticResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -599,6 +717,16 @@ func (p *kClient) ListFeedback(ctx context.Context, Req *manage.ListFeedBackReq)
 	_args.Req = Req
 	var _result ListFeedbackResult
 	if err = p.c.Call(ctx, "ListFeedback", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UserStatistic(ctx context.Context, Req *manage.UserStatisticsReq) (r *manage.UserStatisticsResp, err error) {
+	var _args UserStatisticArgs
+	_args.Req = Req
+	var _result UserStatisticResult
+	if err = p.c.Call(ctx, "UserStatistic", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
