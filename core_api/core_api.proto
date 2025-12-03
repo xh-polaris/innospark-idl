@@ -91,10 +91,13 @@ service ManageApi {
   rpc ListFeedback (manage.ListFeedBackReq) returns (manage.ListFeedBackResp) {
     option (http.post) = "/admin/feedback/list";
   }
+  rpc UserStatistic(manage.UserStatisticsReq) returns (manage.UserStatisticsResp) {
+    option (http.post) = "/admin/statistic/user";
+  }
 }
 
 service SystemApi {
   rpc GenSignedURL(GenSignedURLReq) returns (core_api.GenSignedURLResp) {
-    option (http.post)  = "/system/gen_signed_url";
+    option (http.post) = "/system/gen_signed_url";
   }
 }

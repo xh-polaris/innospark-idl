@@ -71,3 +71,24 @@ message ListFeedBackResp {
   repeated FeedBack feedbacks = 2;
   int64 total = 3;
 }
+
+message UserStatisticsReq  {
+  int64 start = 1;
+  int64 end = 2;
+}
+message UserStatisticsResp {
+  message Item {
+    int64 date = 1;
+    int64 count = 2;
+  }
+  message Trend {
+    double w = 1; // 斜率 w，用于表示用户累计趋势的增长速度
+    double b = 2; // 截距 b，用于表示趋势线在 x=0 时的理论值
+  }
+  basic.Response resp = 1;
+  repeated Item growth = 2; // 柱状图：每日新增用户数据
+  repeated Item accumulate = 3; // 折线图：每日累计用户数据
+  Trend trend = 4; // 直线, 趋势
+  int64 totalNewUsers = 5; // 统计周期内总新增用户数
+  double averageDailyGrowth = 6; // 统计周期内的日均新增用户数
+}
