@@ -28,6 +28,7 @@ message CompletionsOption {
   bool useDeepThink = 5; // 是否深度思考
   bool stream = 6; // 是否流式
   optional bool webSearch = 7; // 是否联网搜索
+  map<string,string> ext = 8; // 额外信息
 }
 
 message Ext {
