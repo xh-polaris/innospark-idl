@@ -199,6 +199,10 @@ message Conversation {
   int64 updateTime = 5;
 }
 
+message Profile {
+  optional string role = 1;
+}
+
 /* 接口请求与响应定义 */
 /* 请求与响应必须相邻定义, 且符合如下规范: */
 /* 只有code和msg的响应, 也需要定义一个只有的re.Response的message */
@@ -389,6 +393,7 @@ message ThirdPartyLoginResp {
 message BasicUserUpdateProfileReq {
   optional string username = 1;
   optional string avatar = 2;
+  optional Profile profile = 3;
 }
 message BasicUserUpdateProfileResp {
   basic.Response resp = 1;
@@ -402,6 +407,7 @@ message BasicUserGetProfileResp {
   basic.Response resp = 1;
   string name = 2;
   string avatar = 3;
+  Profile profile = 4;
 }
 
 message GenSignedURLReq {
