@@ -67,7 +67,8 @@ type CompletionsOption struct {
 	UseDeepThink    bool              `protobuf:"varint,5,opt,name=useDeepThink" json:"useDeepThink,omitempty"`                                                        // 是否深度思考
 	Stream          bool              `protobuf:"varint,6,opt,name=stream" json:"stream,omitempty"`                                                                    // 是否流式
 	WebSearch       *bool             `protobuf:"varint,7,opt,name=webSearch" json:"webSearch,omitempty"`                                                              // 是否联网搜索
-	Ext             map[string]string `protobuf:"bytes,8,rep,name=ext" json:"ext,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // 额外信息
+	Suggest         *bool             `protobuf:"varint,8,opt,name=suggest" json:"suggest,omitempty"`                                                                  // 是否建议
+	Ext             map[string]string `protobuf:"bytes,9,rep,name=ext" json:"ext,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // 额外信息
 }
 
 func (x *CompletionsOption) Reset() { *x = CompletionsOption{} }
@@ -121,6 +122,13 @@ func (x *CompletionsOption) GetStream() bool {
 func (x *CompletionsOption) GetWebSearch() bool {
 	if x != nil && x.WebSearch != nil {
 		return *x.WebSearch
+	}
+	return false
+}
+
+func (x *CompletionsOption) GetSuggest() bool {
+	if x != nil && x.Suggest != nil {
+		return *x.Suggest
 	}
 	return false
 }
