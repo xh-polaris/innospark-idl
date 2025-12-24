@@ -203,6 +203,8 @@ message Conversation {
 
 message Profile {
   optional string role = 1;
+  optional string grade = 2;
+  optional string subject = 3;
 }
 
 /* 接口请求与响应定义 */
