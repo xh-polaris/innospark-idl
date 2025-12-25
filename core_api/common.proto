@@ -405,7 +405,6 @@ message BasicUserUpdateProfileResp {
 
 // 获取用户信息
 message BasicUserGetProfileReq {
-
 }
 message BasicUserGetProfileResp {
   basic.Response resp = 1;
