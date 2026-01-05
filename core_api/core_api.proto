@@ -22,6 +22,12 @@ service CoreApi {
   rpc GetConversation(GetConversationReq) returns (GetConversationResp) {
     option(http.post) = "/conversation/get";
   }
+  rpc GetConversationExt(GetConversationExtReq) returns (GetConversationExtResp) {
+    option(http.post) = "/conversation/get_ext";
+  }
+  rpc UpdateConversationExt(UpdateConversationExtReq) returns (UpdateConversationExtResp) {
+    option(http.post) = "/conversation/update_ext";
+  }
   rpc Generate(GenerateBriefReq) returns (GenerateBriefResp) {
     option(http.post) = "/conversation/brief";
   }

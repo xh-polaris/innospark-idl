@@ -258,7 +258,20 @@ message GetConversationResp {
   bool hasMore = 4;
   string cursor = 5;
 }
-
+message GetConversationExtReq {
+  string conversationId = 1;
+}
+message GetConversationExtResp {
+  basic.Response resp = 1;
+  map<string, string> ext = 2;
+}
+message UpdateConversationExtReq {
+  string conversationId = 1;
+  map<string, string> ext = 2;
+}
+message UpdateConversationExtResp {
+  basic.Response resp = 1;
+}
 // 生成对话标题
 message GenerateBriefReq{
   repeated Message messages = 1; // 用户输入消息, 长度应为1
