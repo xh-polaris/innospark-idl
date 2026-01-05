@@ -199,6 +199,7 @@ message Conversation {
   string botId = 3;
   int64 createTime = 4;
   int64 updateTime = 5;
+  map<string, string> ext = 6; // 额外信息
 }
 
 message Profile {
