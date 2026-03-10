@@ -92,3 +92,15 @@ message UserStatisticsResp {
   int64 totalNewUsers = 5; // 统计周期内总新增用户数
   double averageDailyGrowth = 6; // 统计周期内的日均新增用户数
 }
+
+message GetWeeklyStatsReq {}
+message GetWeeklyStatsResp {
+  basic.Response resp = 1;
+  int64 totalUsers = 2;
+  int64 newUsersThisWeek = 3;
+  int64 newUsersLastWeek = 4;
+  int64 weeklyAvgDAU = 5;
+  int64 monthlyAvgDAU = 6;
+  string weekStart = 7;
+  string weekEnd = 8;
+}
