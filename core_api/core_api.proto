@@ -100,6 +100,9 @@ service ManageApi {
   rpc UserStatistic(manage.UserStatisticsReq) returns (manage.UserStatisticsResp) {
     option (http.post) = "/admin/statistic/user";
   }
+  rpc GetWeeklyStats(manage.GetWeeklyStatsReq) returns (manage.GetWeeklyStatsResp) {
+    option (http.post) = "/admin/statistic/weekly";
+  }
 }
 
 service SystemApi {
