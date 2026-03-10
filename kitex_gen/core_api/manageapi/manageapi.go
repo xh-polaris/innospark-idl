@@ -51,6 +51,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"GetWeeklyStats": kitex.NewMethodInfo(
+		getWeeklyStatsHandler,
+		newGetWeeklyStatsArgs,
+		newGetWeeklyStatsResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -672,6 +679,117 @@ func (p *UserStatisticResult) GetResult() interface{} {
 	return p.Success
 }
 
+func getWeeklyStatsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(manage.GetWeeklyStatsReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(core_api.ManageApi).GetWeeklyStats(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *GetWeeklyStatsArgs:
+		success, err := handler.(core_api.ManageApi).GetWeeklyStats(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*GetWeeklyStatsResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newGetWeeklyStatsArgs() interface{} {
+	return &GetWeeklyStatsArgs{}
+}
+
+func newGetWeeklyStatsResult() interface{} {
+	return &GetWeeklyStatsResult{}
+}
+
+type GetWeeklyStatsArgs struct {
+	Req *manage.GetWeeklyStatsReq
+}
+
+func (p *GetWeeklyStatsArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *GetWeeklyStatsArgs) Unmarshal(in []byte) error {
+	msg := new(manage.GetWeeklyStatsReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var GetWeeklyStatsArgs_Req_DEFAULT *manage.GetWeeklyStatsReq
+
+func (p *GetWeeklyStatsArgs) GetReq() *manage.GetWeeklyStatsReq {
+	if !p.IsSetReq() {
+		return GetWeeklyStatsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *GetWeeklyStatsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *GetWeeklyStatsArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type GetWeeklyStatsResult struct {
+	Success *manage.GetWeeklyStatsResp
+}
+
+var GetWeeklyStatsResult_Success_DEFAULT *manage.GetWeeklyStatsResp
+
+func (p *GetWeeklyStatsResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *GetWeeklyStatsResult) Unmarshal(in []byte) error {
+	msg := new(manage.GetWeeklyStatsResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *GetWeeklyStatsResult) GetSuccess() *manage.GetWeeklyStatsResp {
+	if !p.IsSetSuccess() {
+		return GetWeeklyStatsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *GetWeeklyStatsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*manage.GetWeeklyStatsResp)
+}
+
+func (p *GetWeeklyStatsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *GetWeeklyStatsResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -727,6 +845,16 @@ func (p *kClient) UserStatistic(ctx context.Context, Req *manage.UserStatisticsR
 	_args.Req = Req
 	var _result UserStatisticResult
 	if err = p.c.Call(ctx, "UserStatistic", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetWeeklyStats(ctx context.Context, Req *manage.GetWeeklyStatsReq) (r *manage.GetWeeklyStatsResp, err error) {
+	var _args GetWeeklyStatsArgs
+	_args.Req = Req
+	var _result GetWeeklyStatsResult
+	if err = p.c.Call(ctx, "GetWeeklyStats", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

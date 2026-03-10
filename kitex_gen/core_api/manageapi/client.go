@@ -16,6 +16,7 @@ type Client interface {
 	Forbidden(ctx context.Context, Req *manage.ForbiddenUserReq, callOptions ...callopt.Option) (r *manage.ForbiddenUserResp, err error)
 	ListFeedback(ctx context.Context, Req *manage.ListFeedBackReq, callOptions ...callopt.Option) (r *manage.ListFeedBackResp, err error)
 	UserStatistic(ctx context.Context, Req *manage.UserStatisticsReq, callOptions ...callopt.Option) (r *manage.UserStatisticsResp, err error)
+	GetWeeklyStats(ctx context.Context, Req *manage.GetWeeklyStatsReq, callOptions ...callopt.Option) (r *manage.GetWeeklyStatsResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -70,4 +71,9 @@ func (p *kManageApiClient) ListFeedback(ctx context.Context, Req *manage.ListFee
 func (p *kManageApiClient) UserStatistic(ctx context.Context, Req *manage.UserStatisticsReq, callOptions ...callopt.Option) (r *manage.UserStatisticsResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UserStatistic(ctx, Req)
+}
+
+func (p *kManageApiClient) GetWeeklyStats(ctx context.Context, Req *manage.GetWeeklyStatsReq, callOptions ...callopt.Option) (r *manage.GetWeeklyStatsResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetWeeklyStats(ctx, Req)
 }

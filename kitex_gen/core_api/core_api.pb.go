@@ -49,6 +49,7 @@ type ManageApi interface {
 	Forbidden(ctx context.Context, req *manage.ForbiddenUserReq) (res *manage.ForbiddenUserResp, err error)
 	ListFeedback(ctx context.Context, req *manage.ListFeedBackReq) (res *manage.ListFeedBackResp, err error)
 	UserStatistic(ctx context.Context, req *manage.UserStatisticsReq) (res *manage.UserStatisticsResp, err error)
+	GetWeeklyStats(ctx context.Context, req *manage.GetWeeklyStatsReq) (res *manage.GetWeeklyStatsResp, err error)
 }
 
 type SystemApi interface {
